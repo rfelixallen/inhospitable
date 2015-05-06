@@ -58,7 +58,7 @@ player_start_lines = (field_max_lines[0] / 4)
 player_start_cols = (field_max_cols[0] / 4)
 
 # Create Player Character
-p = Character.new(symb: '@', xlines: player_start_lines, ycols: player_start_cols, hp: 9, inventory: ["Radio"]) # Begin player in top, right corner
+p = Character.new(symb: '@', xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
 actors << p.symb.ord                                            # Add player symbol to array of actor symbols
 Ncurses.mvwaddstr(field, p.xlines, p.ycols, "#{p.symb}")        # Draw layer to map
 center(viewp,field,p.xlines,p.ycols)                            # Center map on player
@@ -75,10 +75,9 @@ borders(console)                            # Add borders to the console
 Ncurses.wrefresh(console)                   # Refresh console window with message
 
 # Set up HUD (Heads-Up-Display)
-weather = {"Cold" => 1, "Snow" => 2}
 borders(hud)                                
 Ncurses.mvwaddstr(hud, 1, 1, "Inhospitable")
-Ncurses.mvwaddstr(hud, 2, 1, "Weather: #{weather.key(1)}")
+Ncurses.mvwaddstr(hud, 2, 1, "Weather: #{p.weather.key(1)}")
 Ncurses.mvwaddstr(hud, 3, 1, "HP: #{p.hp}")
 Ncurses.mvwaddstr(hud, 4, 1, "Hunger: #{p.hunger}")
 Ncurses.mvwaddstr(hud, 5, 1, "Inventory:")

@@ -1,12 +1,13 @@
 class Character
-  attr_accessor :symb, :xlines, :ycols, :hp, :hunger, :inventory
+  attr_accessor :symb, :xlines, :ycols, :hp, :hunger, :inventory, :weather
   def initialize(options = {})
     self.symb = options[:symb] || '@'
     self.xlines = options[:xlines] || 2
     self.ycols = options[:ycols] || 2
     self.hp = options[:hp] || 3
     self.hunger = options[:hunger] || "10"
-    self.inventory = options[:inventory] || []
+    self.inventory = options[:inventory] || ["Radio"]
+    self.weather = options[:weather] || {"Cold" => 1, "Snow" => 2}
   end
 end
 
