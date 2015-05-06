@@ -75,14 +75,7 @@ borders(console)                            # Add borders to the console
 Ncurses.wrefresh(console)                   # Refresh console window with message
 
 # Set up HUD (Heads-Up-Display)
-borders(hud)                                
-Ncurses.mvwaddstr(hud, 1, 1, "Inhospitable")
-Ncurses.mvwaddstr(hud, 2, 1, "Weather: #{p.weather.key(1)}")
-Ncurses.mvwaddstr(hud, 3, 1, "HP: #{p.hp}")
-Ncurses.mvwaddstr(hud, 4, 1, "Hunger: #{p.hunger}")
-Ncurses.mvwaddstr(hud, 5, 1, "Inventory:")
-Ncurses.mvwaddstr(hud, 6, 1, " -#{p.inventory[0]}")
-Ncurses.wrefresh(hud)
+hud_on(hud,p)
 #################################################################################
 # Game Loop                                                                     #
 #################################################################################

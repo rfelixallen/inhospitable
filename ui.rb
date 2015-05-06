@@ -74,3 +74,14 @@ def message(window,message)
   Ncurses.mvwaddstr(window, 1, 2, "#{message}")
   Ncurses.wrefresh(window)
 end
+
+def hud_on(hud,player)
+  borders(hud)                                
+  Ncurses.mvwaddstr(hud, 1, 1, "Inhospitable")
+  Ncurses.mvwaddstr(hud, 2, 1, "Weather: #{player.weather.key(1)}")
+  Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
+  Ncurses.mvwaddstr(hud, 4, 1, "Hunger: #{player.hunger}")
+  Ncurses.mvwaddstr(hud, 5, 1, "Inventory:")
+  Ncurses.mvwaddstr(hud, 6, 1, " -#{player.inventory[0]}")
+  Ncurses.wrefresh(hud)
+end
