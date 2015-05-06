@@ -1,7 +1,5 @@
 require_relative 'ui'
 
-Class Building
-
 def test_terrain
 	puts "Terrain Loaded!"
 end
