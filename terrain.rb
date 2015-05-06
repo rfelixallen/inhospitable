@@ -7,13 +7,47 @@ end
 # Demo building
 def building(window, lines, cols)
   i = 1
-  Ncurses.mvwaddstr(window, lines, cols, "|=======|")
+  Ncurses.mvwaddstr(window, lines, cols, "|==========|")
   while i < 8
-    Ncurses.mvwaddstr(window, lines + i, cols, "|       |")
+    Ncurses.mvwaddstr(window, lines + i, cols, "|          |")
     i += 1
   end
-  Ncurses.mvwaddstr(window, lines + 4, cols, "|   $   |")
-  Ncurses.mvwaddstr(window, lines + 8, cols, "|==b d==|")
+  Ncurses.mvwaddstr(window, lines + 8, cols, "|== =======|")
+end
+
+def build(window, lines, cols, structure_array)
+  i = 0
+  structure_array.each do |x|
+  Ncurses.mvwaddstr(window, lines + i, cols, x)  
+  i += 1
+  end
+end
+
+
+def demo_bunker(window, lines, cols)
+  bunker = ["|==========|",
+            "|   |   |  |",
+            "|   |   |  |",
+            "|= === === |",
+            "|          |",
+            "|   |===== |",
+            "|   |      |",
+            "|          |",
+            "|   |      |",
+            "|== =======|"]
+build(window, lines, cols, bunker)
+=begin
+  Ncurses.mvwaddstr(window, lines, cols,      "|==========|")
+  Ncurses.mvwaddstr(window, lines + 1, cols,  "|   |   |  |")
+  Ncurses.mvwaddstr(window, lines + 2, cols,  "|   |   |  |")
+  Ncurses.mvwaddstr(window, lines + 3, cols,  "|= === === |")
+  Ncurses.mvwaddstr(window, lines + 4, cols,  "|          |")
+  Ncurses.mvwaddstr(window, lines + 5, cols,  "|   |===== |")
+  Ncurses.mvwaddstr(window, lines + 6, cols,  "|   |      |")
+  Ncurses.mvwaddstr(window, lines + 7, cols,  "|          |")
+  Ncurses.mvwaddstr(window, lines + 8, cols,  "|   |      |")
+  Ncurses.mvwaddstr(window, lines + 9, cols,  "|== =======|")
+=end
 end
 
 def draw_map(window)

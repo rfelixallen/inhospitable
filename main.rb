@@ -1,20 +1,6 @@
 require_relative 'library'
 require 'ncurses'
-include Ncurses
-
-##################################################################################
-# TODO                                                                           #
-#   *Refactor existing code, use header files                                    #
-#   *Refactor character and monster class to be children of new Actor class      #
-                                                                #
-##################################################################################
-# tests                                                                          #
-##################################################################################
-test_library
-test_ui
-test_terrain
-test_actors
-
+include Ncurses                                                                
 #################################################################################
 # Initialize                                                                    #
 #################################################################################
@@ -60,7 +46,7 @@ hud = Ncurses.newwin(hud_lines, hud_cols, 0, view_lines)
 # Included are 3 different map generation methods. Only one should be used.
 draw_map(field)         # Draws a simple map with one terrain type
 #generate_random(field) # Draws a map with x random characters, randomly chosen for each pixel.
-building(field,10,10)   # Adds a building to map. It overlays anything underneath it
+demo_bunker(field,10,10)   # Adds a building to map. It overlays anything underneath it
 
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 
