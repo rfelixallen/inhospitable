@@ -1,5 +1,7 @@
 require_relative 'ui'
 
+Class Building
+
 def test_terrain
 	puts "Terrain Loaded!"
 end
@@ -21,8 +23,7 @@ def build(window, lines, cols, structure_array)
   Ncurses.mvwaddstr(window, lines + i, cols, x)  
   i += 1
   end
-end
-
+end            
 
 def demo_bunker(window, lines, cols)
   bunker = ["|==========|",
@@ -36,18 +37,6 @@ def demo_bunker(window, lines, cols)
             "|   |      |",
             "|== =======|"]
 build(window, lines, cols, bunker)
-=begin
-  Ncurses.mvwaddstr(window, lines, cols,      "|==========|")
-  Ncurses.mvwaddstr(window, lines + 1, cols,  "|   |   |  |")
-  Ncurses.mvwaddstr(window, lines + 2, cols,  "|   |   |  |")
-  Ncurses.mvwaddstr(window, lines + 3, cols,  "|= === === |")
-  Ncurses.mvwaddstr(window, lines + 4, cols,  "|          |")
-  Ncurses.mvwaddstr(window, lines + 5, cols,  "|   |===== |")
-  Ncurses.mvwaddstr(window, lines + 6, cols,  "|   |      |")
-  Ncurses.mvwaddstr(window, lines + 7, cols,  "|          |")
-  Ncurses.mvwaddstr(window, lines + 8, cols,  "|   |      |")
-  Ncurses.mvwaddstr(window, lines + 9, cols,  "|== =======|")
-=end
 end
 
 def draw_map(window)

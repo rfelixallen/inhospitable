@@ -42,11 +42,8 @@ console = Ncurses.newwin(console_lines, console_cols, view_lines, 0)
 hud = Ncurses.newwin(hud_lines, hud_cols, 0, view_lines) 
 
 # Draw map
-# Ncurses uses the ascii decimal value of characters for input
-# Included are 3 different map generation methods. Only one should be used.
 draw_map(field)         # Draws a simple map with one terrain type
-#generate_random(field) # Draws a map with x random characters, randomly chosen for each pixel.
-demo_bunker(field,10,10)   # Adds a building to map. It overlays anything underneath it
+demo_bunker(field,10,10)   # Adds a building to map. It overlays anything underneath it         
 
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 
