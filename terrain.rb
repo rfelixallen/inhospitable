@@ -34,7 +34,7 @@ def demo_bunker(window, lines, cols)
             "|          |",
             "|   |      |",
             "|== =======|"]
-build(window, lines, cols, bunker)
+build(window, lines, cols, bunker)  
 end
 
 def draw_map(window)

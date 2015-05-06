@@ -44,6 +44,8 @@ hud = Ncurses.newwin(hud_lines, hud_cols, 0, view_lines)
 # Draw map
 draw_map(field)         # Draws a simple map with one terrain type
 demo_bunker(field,10,10)   # Adds a building to map. It overlays anything underneath it         
+b1 = Beacon.new(xlines: 11, ycols: 16)
+Ncurses.mvwaddstr(field, b1.xlines, b1.ycols, b1.symb)
 
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 
@@ -79,11 +81,12 @@ hud_on(hud,p)
 #################################################################################
 # Game Loop                                                                     #
 #################################################################################
-
+# Game Variables - Initial set and forget
 direction_steps = 0
 counter = 0   
 dice_roll = false
 
+# Begin Loop
 while p.hp > 0  # While Player hit points are above 0, keep playing
   input = Ncurses.getch
   case input
@@ -143,6 +146,8 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           nil
         end      
       center(viewp,field,p.xlines,p.ycols)      
+    when 114 # r
+      # Radio code goes here
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else

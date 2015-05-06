@@ -11,6 +11,17 @@ class Character
   end
 end
 
+class Beacon
+  attr_accessor :symb, :channel, :message, :xlines, :ycols
+  def initialize(options = {})    
+    self.symb = options[:symb] || 'A'
+    self.channel = options[:channel] || '1'
+    self.message = options[:message] || '..0123456789'
+    self.xlines = options[:xlines]
+    self.ycols = options[:ycols]
+  end
+end
+
 def test_actors
   puts "Actors Loaded!"
 end
