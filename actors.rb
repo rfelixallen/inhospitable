@@ -1,3 +1,5 @@
+require_relative 'ui'
+
 class Character
   attr_accessor :symb, :xlines, :ycols, :hp, :hunger, :inventory, :weather
   def initialize(options = {})
@@ -16,9 +18,44 @@ class Beacon
   def initialize(options = {})    
     self.symb = options[:symb] || 'A'
     self.channel = options[:channel] || '1'
-    self.message = options[:message] || '..0123456789'
+    self.message = options[:message] || "..0123456789"
     self.xlines = options[:xlines]
     self.ycols = options[:ycols]
+  end
+end
+
+def rx(text)
+  a = ("a".."z").to_a
+  b = ("A".."Z").to_a
+  c = ("0".."9").to_a
+  alphanumeric = []
+  a.each do |x|
+    alphanumeric << x
+  end
+  b.each do |x|
+    alphanumeric << x
+  end
+  c.each do |x|
+    alphanumeric << x
+  end
+  static = Array.new(62,"z")
+  key = Hash[alphanumeric.zip(static)]
+  text.each_char.inject("") { |encrypted, char| encrypted + key[char] }
+end 
+
+def static(beacon, clarity)
+  x = beacon.message
+  i = x.length
+ 
+end
+
+def transmission(window,beacon,player)
+  distance_from_player = [(player.xlines - beacon.xlines).abs,(player.ycols - beacon.ycols).abs]
+  case distance_from_player
+  when 0..25
+    message(console,"Radio: #{beacon.message}")
+  else
+    nil
   end
 end
 

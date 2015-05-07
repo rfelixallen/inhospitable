@@ -147,7 +147,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
         end      
       center(viewp,field,p.xlines,p.ycols)      
     when 114 # r
-      # Radio code goes here
+      message(console,"Radio: #{b1.message}")
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else
@@ -163,7 +163,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
   else
     distance_from_player = [(p.xlines - m.xlines).abs,(p.ycols - m.ycols).abs] # Get positive value of distance between monster and player
     if distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2 # if the monster is visible, chase player
-      message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing
+      #message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing
       mode_hunt(field, m, p, walkable, items, actors)
     else # If player is not visible, wander around
       if counter <= direction_steps
@@ -172,11 +172,11 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
          direction_steps = rand(10..25) # Meander long distances
          dice_roll = true
         end
-        message(console,"steps:#{direction_steps},count:#{counter},d6:#{d6}")  # Troubleshooting message for testing
+        #message(console,"steps:#{direction_steps},count:#{counter},d6:#{d6}")  # Troubleshooting message for testing
         mode_wander(field, m, p, walkable, items, actors,d6)
         counter += 1
       else
-        message(console,"Monster move reset") # Troubleshooting message for testing
+        #message(console,"Monster move reset") # Troubleshooting message for testing
         dice_roll = false
         counter = 0
         direction_steps = 0
