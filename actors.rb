@@ -81,14 +81,17 @@ end
 
 def get_distance(player, beacon)  
   distance_from_player = (player.xlines - beacon.xlines).abs + (player.ycols - beacon.ycols).abs
+  return distance_from_player
 end
 
 def get_distance_all_beacons(player, all_beacons)
-  # Make hash of beacons and their distances, then return beacon with shortest distance
-  distances = {} # "Beacon" => 10  
+  # Make hash of beacons and their distances, then return beacon with shortest distance  
+  distances = Hash[all_beacons.collect { |v| [v,get_distance(player,v)] }]
+=begin  
   all_beacons.each do |x|
-    distances = { x => get_distance(player,x) }
-  end
+    distances[:x] = get_distance(player,x) # this is making a symbol called x
+  end  
+=end  
   y = distances.values.min_by { |x| x }
   return distances.key(y)
 end
