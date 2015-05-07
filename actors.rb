@@ -79,6 +79,20 @@ def static(beacon, clarity)
   return a.join
 end
 
+def get_distance(player, beacon)  
+  distance_from_player = (player.xlines - beacon.xlines).abs + (player.ycols - beacon.ycols).abs
+end
+
+def get_distance_all_beacons(player, all_beacons)
+  # Make hash of beacons and their distances, then return beacon with shortest distance
+  distances = {} # "Beacon" => 10  
+  all_beacons.each do |x|
+    distances = { x => get_distance(player,x) }
+  end
+  y = distances.values.min_by { |x| x }
+  return distances.key(y)
+end
+
 def transmission(window,beacon,player)
   distance_from_player = (player.xlines - beacon.xlines).abs + (player.ycols - beacon.ycols).abs
   case distance_from_player

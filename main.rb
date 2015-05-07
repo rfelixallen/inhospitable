@@ -43,9 +43,18 @@ hud = Ncurses.newwin(hud_lines, hud_cols, 0, view_lines)
 
 # Draw map
 draw_map(field)         # Draws a simple map with one terrain type
+
+# Draw bunkers and beacons
+all_beacons = []
 demo_bunker(field,10,10)   # Adds a building to map. It overlays anything underneath it         
 b1 = Beacon.new(xlines: 11, ycols: 16)
+all_beacons << b1
 Ncurses.mvwaddstr(field, b1.xlines, b1.ycols, b1.symb)
+
+demo_bunker(field,field_lines - 21,field_cols - 21)   # Adds a building to map. It overlays anything underneath it         
+b2 = Beacon.new(xlines: field_lines - 20, ycols: field_cols - 15, message: "..HELP..HELP")
+all_beacons << b2
+Ncurses.mvwaddstr(field, b2.xlines, b2.ycols, b2.symb)
 
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 
@@ -146,9 +155,8 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           nil
         end      
       center(viewp,field,p.xlines,p.ycols)      
-    when 114 # r
-      
-      message(console,static(b1, transmission(field,b1,p)))
+    when 114 # r      
+      message(console,static(get_distance_all_beacons(p,all_beacons), transmission(field,b1,p)))
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else
