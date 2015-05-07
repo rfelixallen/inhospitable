@@ -147,7 +147,8 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
         end      
       center(viewp,field,p.xlines,p.ycols)      
     when 114 # r
-      message(console,"Radio: #{b1.message}")
+      #static(b1, "clear")
+      message(console,static(b1, "high"))
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else

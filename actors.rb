@@ -23,7 +23,7 @@ class Beacon
     self.ycols = options[:ycols]
   end
 end
-
+=begin
 def rx(text)
   a = ("a".."z").to_a
   b = ("A".."Z").to_a
@@ -42,11 +42,41 @@ def rx(text)
   key = Hash[alphanumeric.zip(static)]
   text.each_char.inject("") { |encrypted, char| encrypted + key[char] }
 end 
+=end
+def static(beacon, clarity) 
+  # Clarity must be between 1 and x
+  array = []
+  a = beacon.message.split("")
+  x = a.count
+  i = 0
+  case clarity
+  when "clear"
+    c = x
+  when "low"
+    c = 6
+  when "medium"
+    c = 3
+  when "high"
+    c = 2
+  else
+    nil
+  end
 
-def static(beacon, clarity)
-  x = beacon.message
-  i = x.length
- 
+  j = x / c # represents what % of message distorted 
+  while i < j   
+    z = rand(0..x)  
+    case z
+    when array.include?(z)
+      nil
+    else
+      array << z
+      puts "Random #{z}"
+      puts "a[z] => z"
+      a[z] = "z"  
+      i += 1
+    end
+  end  
+  return a.join
 end
 
 def transmission(window,beacon,player)
