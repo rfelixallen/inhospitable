@@ -51,15 +51,15 @@ def static(beacon, clarity)
   i = 0
   case clarity
   when "clear"
-    c = x
+    return a.join
   when "low"
-    c = 6
+    c = x
   when "medium"
     c = 3
   when "high"
     c = 2
   else
-    nil
+    c = 1
   end
 
   j = x / c # represents what % of message distorted 
@@ -80,12 +80,18 @@ def static(beacon, clarity)
 end
 
 def transmission(window,beacon,player)
-  distance_from_player = [(player.xlines - beacon.xlines).abs,(player.ycols - beacon.ycols).abs]
+  distance_from_player = (player.xlines - beacon.xlines).abs + (player.ycols - beacon.ycols).abs
   case distance_from_player
-  when 0..25
-    message(console,"Radio: #{beacon.message}")
+  when 0..24
+    return "clear"
+  when 25..49
+    return "low"
+  when 50..74
+    return "medium"
+  when 75..100
+    return "high"
   else
-    nil
+    return "far"
   end
 end
 
