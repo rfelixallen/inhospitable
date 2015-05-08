@@ -59,25 +59,31 @@ def static(beacon, clarity)
     c = 3
   when "high"
     c = 2
-  else
+  when "far"
     c = 1
+  else
+    c = nil
   end
 
-  j = x / c # represents what % of message distorted 
-  while i < j   
-    z = rand(0..x)  
-    case z
-    when array.include?(z)
-      nil
-    else
-      array << z
-      puts "Random #{z}"
-      puts "a[z] => z"
-      a[z] = "z"  
-      i += 1
-    end
-  end  
-  return a.join
+  if c == nil
+    return nil
+  else
+    j = x / c # represents what % of message distorted 
+    while i < j   
+      z = rand(0..x)  
+      case z
+      when array.include?(z)
+        nil
+      else
+        array << z
+        puts "Random #{z}"
+        puts "a[z] => z"
+        a[z] = "z"  
+        i += 1
+      end
+    end  
+    return a.join
+  end
 end
 
 def get_distance(player, beacon)  

@@ -27,10 +27,10 @@ Ncurses.refresh             # Refresh window to display cleared screen
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers
 # Demo game uses 4 windows: Field (aka game map), Viewport (aka what the player sees), Console and side HUD.
-field_lines = 100
-field_cols = 100
-view_lines = field_lines / 4
-view_cols = field_cols / 4
+field_lines = 200
+field_cols = 200
+view_lines = 25
+view_cols = 25
 hud_lines = view_lines
 hud_cols = 15
 console_lines = 3
