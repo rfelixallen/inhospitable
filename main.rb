@@ -158,7 +158,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
     when 114 # r      
       the_beacon = get_distance_all_beacons(p,all_beacons)
       if get_distance(p,the_beacon) < 101
-        message(console,static(the_beacon, transmission(field,the_beacon,p)))
+        message(console,"Radio: #{static(the_beacon, transmission(field,the_beacon,p))}")
       else
         message(console,"..zz..zZ..Zzz..")
       end
