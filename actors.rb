@@ -14,13 +14,14 @@ class Character
 end
 
 class Beacon
-  attr_accessor :symb, :channel, :message, :xlines, :ycols
+  attr_accessor :symb, :channel, :message, :xlines, :ycols, :active
   def initialize(options = {})    
     self.symb = options[:symb] || 'A'
     self.channel = options[:channel] || '1'
     self.message = options[:message] || "..0123456789"
     self.xlines = options[:xlines]
     self.ycols = options[:ycols]
+    self.active = options[:active] || true
   end
 end
 =begin
@@ -86,12 +87,14 @@ end
 
 def get_distance_all_beacons(player, all_beacons)
   # Make hash of beacons and their distances, then return beacon with shortest distance  
-  distances = Hash[all_beacons.collect { |v| [v,get_distance(player,v)] }]
-=begin  
+=begin
+  all_active_beacons = []
   all_beacons.each do |x|
-    distances[:x] = get_distance(player,x) # this is making a symbol called x
-  end  
-=end  
+    if x.active == true
+      all_active_beacons << x
+    end
+=end
+  distances = Hash[all_beacons.collect { |v| [v,get_distance(player,v)] }]
   y = distances.values.min_by { |x| x }
   return distances.key(y)
 end
