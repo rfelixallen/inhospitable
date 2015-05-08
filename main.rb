@@ -59,7 +59,7 @@ Ncurses.mvwaddstr(field, b2.xlines, b2.ycols, b2.symb)
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 
 items = [36]        # Array contains ascii decimal value of all items on ground
-walkable = [32,126] # Array contains ascii decimal value of all walkable terrain
+walkable = [32,88,126] # ' ', '~', 'X'
 
 # Setup Actors
 field_max_lines = []
@@ -175,7 +175,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
     distance_from_player = [(p.xlines - m.xlines).abs,(p.ycols - m.ycols).abs] # Get positive value of distance between monster and player
     if distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2 # if the monster is visible, chase player
       #message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing
-      mode_hunt(field, m, p, walkable, items, actors)
+      mode_hunt(field,hud, m, p, walkable, items, actors)
     else # If player is not visible, wander around
       if counter <= direction_steps
         if dice_roll == false
@@ -184,7 +184,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
          dice_roll = true
         end
         #message(console,"steps:#{direction_steps},count:#{counter},d6:#{d6}")  # Troubleshooting message for testing
-        mode_wander(field, m, p, walkable, items, actors,d6)
+        mode_wander(field,hud, m, p, walkable, items, actors,d6)
         counter += 1
       else
         #message(console,"Monster move reset") # Troubleshooting message for testing

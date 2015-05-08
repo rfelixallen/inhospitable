@@ -163,7 +163,7 @@ def attack(x)
 end
 
 # Modes
-def mode_wander(window, character, player, walkable, items, actors, d6)
+def mode_wander(window, hud, character, player, walkable, items, actors, d6)
   # Move Left
   if d6 == 0
     check1 = check_movement(window,character.xlines,character.ycols - 1,walkable,items,actors) # Left
@@ -171,6 +171,8 @@ def mode_wander(window, character, player, walkable, items, actors, d6)
       move_character_y(window,character,-1)
     elsif check1 == 2
       attack(player)
+      Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
+      Ncurses.wrefresh(hud)
     else
       nil
     end
@@ -182,6 +184,8 @@ def mode_wander(window, character, player, walkable, items, actors, d6)
       move_character_y(window,character,1)
     elsif check2 == 2
       attack(player)
+      Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
+      Ncurses.wrefresh(hud)
     else
       nil
     end                  
@@ -193,6 +197,8 @@ def mode_wander(window, character, player, walkable, items, actors, d6)
       move_character_x(window,character,-1)
     elsif check3 == 2
       attack(player)
+      Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
+      Ncurses.wrefresh(hud)
     else
       nil
     end                           
@@ -204,6 +210,8 @@ def mode_wander(window, character, player, walkable, items, actors, d6)
       move_character_x(window,character,1)
     elsif check4 == 2
       attack(player)
+      Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
+      Ncurses.wrefresh(hud)
     else
       nil
     end        
@@ -213,7 +221,7 @@ def mode_wander(window, character, player, walkable, items, actors, d6)
 end
 
 # This mode causes the character to hunt the player.
-def mode_hunt(window, character, player, walkable, items, actors)
+def mode_hunt(window, hud, character, player, walkable, items, actors)
   flip = rand(2)
   if flip == 0        
     check1 = check_movement(window,character.xlines,character.ycols - 1,walkable,items,actors) # Left
@@ -227,6 +235,8 @@ def mode_hunt(window, character, player, walkable, items, actors)
         move_character_y(window,character,-1)
       elsif check1 == 2
         attack(player)
+        Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
+      Ncurses.wrefresh(hud)
       else
         nil
       end              
@@ -237,6 +247,8 @@ def mode_hunt(window, character, player, walkable, items, actors)
         move_character_y(window,character,1)
       elsif check2 == 2
         attack(player)
+        Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
+        Ncurses.wrefresh(hud)
       else
         nil
       end              
@@ -247,6 +259,8 @@ def mode_hunt(window, character, player, walkable, items, actors)
         move_character_x(window,character,-1)
       elsif check3 == 2
         attack(player)
+        Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
+        Ncurses.wrefresh(hud)
       else
         nil
       end                    
@@ -257,6 +271,8 @@ def mode_hunt(window, character, player, walkable, items, actors)
         move_character_x(window,character,1)
       elsif check4 == 2
         attack(player)
+        Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
+        Ncurses.wrefresh(hud)
       else
         nil
       end          
@@ -273,6 +289,8 @@ def mode_hunt(window, character, player, walkable, items, actors)
         move_character_x(window,character,-1)
       elsif check3 == 2
         attack(player)
+        Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
+        Ncurses.wrefresh(hud)
       else
         nil
       end                    
@@ -283,6 +301,8 @@ def mode_hunt(window, character, player, walkable, items, actors)
         move_character_x(window,character,1)
       elsif check4 == 2
         attack(player)
+        Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
+        Ncurses.wrefresh(hud)
       else
         nil
       end
@@ -293,6 +313,8 @@ def mode_hunt(window, character, player, walkable, items, actors)
         move_character_y(window,character,-1)
       elsif check1 == 2
         attack(player)
+        Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
+        Ncurses.wrefresh(hud)
       else
         nil
       end              
@@ -303,6 +325,8 @@ def mode_hunt(window, character, player, walkable, items, actors)
         move_character_y(window,character,1)
       elsif check2 == 2
         attack(player)
+        Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
+        Ncurses.wrefresh(hud)
       else
         nil
       end          
