@@ -157,8 +157,11 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
       center(viewp,field,p.xlines,p.ycols)      
     when 114 # r      
       the_beacon = get_distance_all_beacons(p,all_beacons)
-      #message(console,the_beacon.message) # For Testing
-      message(console,static(the_beacon, transmission(field,the_beacon,p)))
+      if get_distance(p,the_beacon) < 101
+        message(console,static(the_beacon, transmission(field,the_beacon,p)))
+      else
+        message(console,"..zz..zZ..Zzz..")
+      end
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else
