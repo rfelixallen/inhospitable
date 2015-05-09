@@ -26,27 +26,26 @@ class Beacon
 end
 
 class Item
-  attr_accessor :symb, :name, :type, :count
+  attr_accessor :symb, :name, :type, #:count
   def initialize(options = {})
     self.symb = options[:symb]
     self.name = options[:name]
     self.type = options[:type] # "Food", "Medkit"
-    self.count = options[:count] || 1
+    #self.count = options[:count] || 1
   end
 end
 
-def update_inventory(hud, item, modifier)
-  x = item.type
-  y = player.inventory[x]
-
-  case x 
-  when x.type == "Food"
+def update_inventory(hud, item)
+  case item 
+  when 102
+    y = player.inventory["Food"]
     y += 1
     Ncurses.mvwaddstr(hud, 7, 1, " -Food: #{y}")
     Ncurses.wrefresh(hud)
-  when x.type == "Medkit"
+  when 109
+    y = player.inventory["Medkit"]
     y += 1
-    Ncurses.mvwaddstr(hud, 7, 1, " -Food: #{y}")
+    Ncurses.mvwaddstr(hud, 8, 1, " -Medkit: #{y}")
     Ncurses.wrefresh(hud)
   else
     nil
@@ -150,7 +149,7 @@ def check_movement(window,xlines,ycols,walkable,items,actors)
       elsif actors.include?(step)
         return 2
       elsif items.include?(step)
-        return 3
+        return step
       else
         return false
       end

@@ -56,9 +56,15 @@ b2 = Beacon.new(xlines: field_lines - 20, ycols: field_cols - 15, message: "..HE
 all_beacons << b2
 Ncurses.mvwaddstr(field, b2.xlines, b2.ycols, b2.symb)
 
+=begin
+# Define item types
+food = Item.new("f", "Beans", "Food")
+medkit = Item.new("m", "First Aid Kit", "Medkit")
+=end
+
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 
-items = [36]        # Array contains ascii decimal value of all items on ground
+items = [102,109]        # Array contains ascii decimal value of all items on ground
 walkable = [32,88,126] # ' ', '~', 'X'
 
 # Setup Actors
@@ -106,9 +112,8 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
           move_character_x(field,p,-1)
         elsif check == 2
           attack(m)
-        elsif check == 3
-          Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
-          Ncurses.wrefresh(hud)
+        elsif check == 102 || 109
+          update_inventory(hud, check)
           move_character_x(field,p,-1)
         else # No valid move          
           nil
@@ -120,9 +125,8 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
           move_character_x(field,p,1)
         elsif check == 2
           attack(m)
-        elsif check == 3
-          Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
-          Ncurses.wrefresh(hud)
+        elsif check == 102 || 109
+          update_inventory(hud, check)
           move_character_x(field,p,1)
         else # No valid move
           nil
@@ -134,9 +138,8 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
           move_character_y(field,p,1)          
         elsif check == 2
           attack(m)          
-        elsif check == 3
-          Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
-          Ncurses.wrefresh(hud)
+        elsif check == 102 || 109
+          update_inventory(hud, check)
           move_character_y(field,p,1)          
         else # No valid move
           nil
@@ -148,9 +151,8 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
           move_character_y(field,p,-1)          
         elsif check == 2
           attack(m)        
-        elsif check == 3
-          Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
-          Ncurses.wrefresh(hud)
+        elsif check == 102 || 109
+          update_inventory(hud, check)
           move_character_y(field,p,-1)          
         else # No valid move
           nil
