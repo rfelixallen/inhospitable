@@ -7,7 +7,7 @@ class Character
     self.xlines = options[:xlines] || 2
     self.ycols = options[:ycols] || 2
     self.hp = options[:hp] || 3
-    self.hunger = options[:hunger] || "10"
+    self.hunger = options[:hunger] || 9
     self.inventory = options[:inventory] || ["Radio"]
     self.weather = options[:weather] || {"Cold" => 1, "Snow" => 2}
   end
@@ -24,26 +24,7 @@ class Beacon
     self.active = options[:active] || true
   end
 end
-=begin
-def rx(text)
-  a = ("a".."z").to_a
-  b = ("A".."Z").to_a
-  c = ("0".."9").to_a
-  alphanumeric = []
-  a.each do |x|
-    alphanumeric << x
-  end
-  b.each do |x|
-    alphanumeric << x
-  end
-  c.each do |x|
-    alphanumeric << x
-  end
-  static = Array.new(62,"z")
-  key = Hash[alphanumeric.zip(static)]
-  text.each_char.inject("") { |encrypted, char| encrypted + key[char] }
-end 
-=end
+
 def static(beacon, clarity) 
   # Clarity must be between 1 and x
   array = []

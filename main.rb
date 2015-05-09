@@ -94,9 +94,10 @@ hud_on(hud,p)
 direction_steps = 0
 counter = 0   
 dice_roll = false
+hunger_count = 0
 
 # Begin Loop
-while p.hp > 0  # While Player hit points are above 0, keep playing
+while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0, keep playing
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
@@ -196,6 +197,17 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
         direction_steps = 0
       end
     end
+  end
+
+  # Starvation
+  if hunger_count <= 50
+    hunger_count += 1
+  else
+    p.hunger -= 1
+    hunger_count = 0
+    message(console,"Your stomach growls")
+    Ncurses.mvwaddstr(hud, 4, 1, "Hunger: #{p.hunger}")
+    Ncurses.wrefresh(hud)
   end
 end
 Ncurses.clear
