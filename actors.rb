@@ -18,7 +18,7 @@ class Beacon
   def initialize(options = {})    
     self.symb = options[:symb] || 'A'
     self.channel = options[:channel] || '1'
-    self.message = options[:message] || "..0123456789"
+    self.message = options[:message] || "01234567890123456789"
     self.xlines = options[:xlines]
     self.ycols = options[:ycols]
     self.active = options[:active] || true
@@ -35,17 +35,15 @@ class Item
   end
 end
 
-def update_inventory(hud, item, player)
+def update_inventory(hud, item, player, modifier)
   case item 
   when 102
-    y = player.inventory["Food"]
-    y += 1
-    Ncurses.mvwaddstr(hud, 7, 1, " -Food: #{y}")
+    player.inventory["Food"] += modifier
+    Ncurses.mvwaddstr(hud, 7, 1, " -Food: #{player.inventory["Food"]}")
     Ncurses.wrefresh(hud)
   when 109
-    y = player.inventory["Medkit"]
-    y += 1
-    Ncurses.mvwaddstr(hud, 8, 1, " -Medkit: #{y}")
+    player.inventory["Medkit"] += modifier
+    Ncurses.mvwaddstr(hud, 8, 1, " -Medkit: #{player.inventory["Medkit"]}")
     Ncurses.wrefresh(hud)
   else
     nil

@@ -114,8 +114,7 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
           attack(m)
         elsif check == 3
           step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols)
-          message(console,"#{step}")
-          update_inventory(hud, step, p)
+          update_inventory(hud, step, p, 1)
           move_character_x(field,p,-1)
         else # No valid move          
           nil
@@ -129,8 +128,7 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
           attack(m)
         elsif check == 3
           step = Ncurses.mvwinch(field, p.xlines + 1, p.ycols)
-          message(console,"#{step}")
-          update_inventory(hud, step, p)
+          update_inventory(hud, step, p, 1)
           move_character_x(field,p,1)
         else # No valid move
           nil
@@ -144,7 +142,7 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
           attack(m)          
         elsif check == 3
           step = Ncurses.mvwinch(field, p.xlines, p.ycols + 1)
-          update_inventory(hud, step, p)
+          update_inventory(hud, step, p, 1)
           move_character_y(field,p,1)          
         else # No valid move
           nil
@@ -158,7 +156,7 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
           attack(m)        
         elsif check == 3
           step = Ncurses.mvwinch(field, p.xlines, p.ycols - 1)
-          update_inventory(hud, step, p)
+          update_inventory(hud, step, p, 1)
           move_character_y(field,p,-1)          
         else # No valid move
           nil
@@ -170,6 +168,26 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
         message(console,"Radio: #{static(the_beacon, transmission(field,the_beacon,p))}")
       else
         message(console,"..zz..zZ..Zzz..")
+      end
+    when 102
+      food = p.inventory["Food"]
+      if food > 0
+        update_inventory(hud, 102, p, -1)
+        p.hunger += 1
+        Ncurses.mvwaddstr(hud, 4, 1, "Hunger: #{p.hunger}")
+        Ncurses.wrefresh(hud)
+      else
+        message(console, "You have no food to eat.")
+      end
+    when 109
+      medkit = p.inventory["Medkit"]
+      if medkit > 0
+        p.hp += 1
+        update_inventory(hud, 109, p, -1)        
+        Ncurses.mvwaddstr(hud, 3, 1, "HP: #{p.hp}")
+        Ncurses.wrefresh(hud)
+      else
+        message(console, "You have no medkits.")
       end
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
