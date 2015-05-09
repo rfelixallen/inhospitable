@@ -26,7 +26,7 @@ end
 def demo_bunker(window, lines, cols)
   bunker = ["|==========|",
             "|   |   |  |",
-            "|   |   |  |",
+            "|m  |   |f |",
             "|= === === |",
             "|          |",
             "|   |===== |",

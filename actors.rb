@@ -35,7 +35,7 @@ class Item
   end
 end
 
-def update_inventory(hud, item)
+def update_inventory(hud, item, player)
   case item 
   when 102
     y = player.inventory["Food"]
@@ -148,10 +148,8 @@ def check_movement(window,xlines,ycols,walkable,items,actors)
         return 1
       elsif actors.include?(step)
         return 2
-      elsif items.include?(step)
+      else items.include?(step)
         return step
-      else
-        return false
       end
     else
       return false
