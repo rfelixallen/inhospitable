@@ -8,7 +8,7 @@ class Character
     self.ycols = options[:ycols] || 2
     self.hp = options[:hp] || 3
     self.hunger = options[:hunger] || 9
-    self.inventory = options[:inventory] || ["Radio"]
+    self.inventory = options[:inventory] || {"Radio" => 1, "Food" => 0, "Medkit" => 0}
     self.weather = options[:weather] || {"Cold" => 1, "Snow" => 2}
   end
 end
@@ -30,15 +30,27 @@ class Item
   def initialize(options = {})
     self.symb = options[:symb]
     self.name = options[:name]
-    self.type = options[:type]
+    self.type = options[:type] # "Food", "Medkit"
     self.count = options[:count] || 1
   end
 end
 
 def update_inventory(hud, item, modifier)
-  x = item
+  x = item.type
+  y = player.inventory[x]
+
   case x 
-  when 1
+  when x.type == "Food"
+    y += 1
+    Ncurses.mvwaddstr(hud, 7, 1, " -Food: #{y}")
+    Ncurses.wrefresh(hud)
+  when x.type == "Medkit"
+    y += 1
+    Ncurses.mvwaddstr(hud, 7, 1, " -Food: #{y}")
+    Ncurses.wrefresh(hud)
+  else
+    nil
+  end
 end
 
 def static(beacon, clarity) 
