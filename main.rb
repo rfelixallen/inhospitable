@@ -108,13 +108,14 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
   case input
     when KEY_UP, 119 # Move Up
       check = check_movement(field,p.xlines - 1,p.ycols,walkable,items,actors)
-      message(console,"#{check}")
         if check == 1      
           move_character_x(field,p,-1)
         elsif check == 2
           attack(m)
-        elsif check == 102 || 109
-          update_inventory(hud, check, p)
+        elsif check == 3
+          step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols)
+          message(console,"#{step}")
+          update_inventory(hud, step, p)
           move_character_x(field,p,-1)
         else # No valid move          
           nil
@@ -126,8 +127,10 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
           move_character_x(field,p,1)
         elsif check == 2
           attack(m)
-        elsif check == 102 || 109
-          update_inventory(hud, check, p)
+        elsif check == 3
+          step = Ncurses.mvwinch(field, p.xlines + 1, p.ycols)
+          message(console,"#{step}")
+          update_inventory(hud, step, p)
           move_character_x(field,p,1)
         else # No valid move
           nil
@@ -139,8 +142,9 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
           move_character_y(field,p,1)          
         elsif check == 2
           attack(m)          
-        elsif check == 102 || 109
-          update_inventory(hud, check, p)
+        elsif check == 3
+          step = Ncurses.mvwinch(field, p.xlines, p.ycols + 1)
+          update_inventory(hud, step, p)
           move_character_y(field,p,1)          
         else # No valid move
           nil
@@ -152,8 +156,9 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
           move_character_y(field,p,-1)          
         elsif check == 2
           attack(m)        
-        elsif check == 102 || 109
-          update_inventory(hud, check, p)
+        elsif check == 3
+          step = Ncurses.mvwinch(field, p.xlines, p.ycols - 1)
+          update_inventory(hud, step, p)
           move_character_y(field,p,-1)          
         else # No valid move
           nil

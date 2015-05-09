@@ -148,8 +148,10 @@ def check_movement(window,xlines,ycols,walkable,items,actors)
         return 1
       elsif actors.include?(step)
         return 2
-      else items.include?(step)
-        return step
+      elsif items.include?(step)
+        return 3
+      else 
+        return nil
       end
     else
       return false
