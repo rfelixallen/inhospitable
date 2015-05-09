@@ -25,6 +25,22 @@ class Beacon
   end
 end
 
+class Item
+  attr_accessor :symb, :name, :type, :count
+  def initialize(options = {})
+    self.symb = options[:symb]
+    self.name = options[:name]
+    self.type = options[:type]
+    self.count = options[:count] || 1
+  end
+end
+
+def update_inventory(hud, item, modifier)
+  x = item
+  case x 
+  when 1
+end
+
 def static(beacon, clarity) 
   # Clarity must be between 1 and x
   array = []
