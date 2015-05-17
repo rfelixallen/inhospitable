@@ -2,7 +2,6 @@
 a simple of survival in a cold wasteland
 
 TODO for Extra Features
-* Make bundle file
 * Perlin noise map generation
 * Fix attack method for multiple enemies
 * Add in Color
