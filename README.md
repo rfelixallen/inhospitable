@@ -4,8 +4,15 @@ a simple of survival in a cold wasteland
 TODO
 * Dynamic map generation
 * Populate bunker with random items and enemies
+* Fix attack method to use against multiple targets
+* Add in Color
+* Add in Main Menu
+* Add in Save/Load 
 
 Log
+5/12/15
+-I ran into a problem with how attacks work. For a demo, I hard coded in attacking rules against the monster, but the code directly attacks the single monster. I need to find a way to attack any monster. Ideally, mvwinch would return the object variable, but Ruby doesnt work like that.
+
 5/8/15
 -Added in code for picking up food and medkits, and then for using them. Code isnt great, and I opted not to try and fix a problem. For example, right now when the player moves, the game checks what the next tile is. Right now, if it detects a monster, it attacks the only monster that was created. I'll need away to distinguish from any monster.
 
