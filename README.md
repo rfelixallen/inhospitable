@@ -1,15 +1,17 @@
 # inhospitable
 a simple of survival in a cold wasteland
 
-TODO
-* Dynamic map generation
-* Populate bunker with random items and enemies
-* Fix attack method to use against multiple targets
+TODO for Extra Features
+* Perlin noise map generation
+* Fix attack method for multiple enemies
 * Add in Color
 * Add in Main Menu
 * Add in Save/Load 
 
 Log
+5/17/15
+-I am very happy with the progress I have made with this. I feel that I finally have something I am ready to show people. This is not at all the final product, but I may shelve it for the time being so I can focus on new projects.
+
 5/12/15
 -I ran into a problem with how attacks work. For a demo, I hard coded in attacking rules against the monster, but the code directly attacks the single monster. I need to find a way to attack any monster. Ideally, mvwinch would return the object variable, but Ruby doesnt work like that.
 
