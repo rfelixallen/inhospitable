@@ -114,7 +114,7 @@ dice_roll = false
 hunger_count = 0
 
 # Begin Loop
-while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0, keep playing
+while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
@@ -249,6 +249,7 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
   end
 end
 
+# Starved or died
 if p.hp == 0 || p.hunger == 0
   Ncurses.clear
   Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "You have died.")
@@ -256,8 +257,17 @@ if p.hp == 0 || p.hunger == 0
   Ncurses.getch
 end
 
+# Collected all the tokens
+if p.inventory["Token"] == 2
+  Ncurses.clear
+  Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "You collected all the tokens.")
+  Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 1, sd_lines[0] / 2, "You have been rescued!")  
+  Ncurses.wrefresh(stdscr)
+  Ncurses.napms(4000)
+end
+
 Ncurses.clear
 Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Good Bye!")
 Ncurses.wrefresh(stdscr)
-Ncurses.getch
+Ncurses.napms(4000)
 Ncurses.endwin
