@@ -8,7 +8,7 @@ class Character
     self.ycols = options[:ycols] || 2
     self.hp = options[:hp] || 3
     self.hunger = options[:hunger] || 9
-    self.inventory = options[:inventory] || {"Radio" => 1, "Food" => 0, "Medkit" => 0}
+    self.inventory = options[:inventory] || {"Radio" => 1, "Food" => 0, "Medkit" => 0, "Token" => 0}
     self.weather = options[:weather] || {"Cold" => 1, "Snow" => 2}
     @id = id
   end
@@ -48,6 +48,10 @@ end
 
 def update_inventory(hud, item, player, modifier)
   case item 
+  when 42 
+    player.inventory["Token"] += modifier
+    Ncurses.mvwaddstr(hud, 9, 1, " -Token: #{player.inventory["Token"]}")
+    Ncurses.wrefresh(hud)
   when 102
     player.inventory["Food"] += modifier
     Ncurses.mvwaddstr(hud, 7, 1, " -(F)ood: #{player.inventory["Food"]}")

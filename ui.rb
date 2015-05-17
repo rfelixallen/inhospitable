@@ -85,5 +85,6 @@ def hud_on(hud,player)
   Ncurses.mvwaddstr(hud, 6, 1, " -(R)adio")
   Ncurses.mvwaddstr(hud, 7, 1, " -(F)ood: #{player.inventory["Food"]}")
   Ncurses.mvwaddstr(hud, 8, 1, " -(M)edkit: #{player.inventory["Medkit"]}")
+  Ncurses.mvwaddstr(hud, 9, 1, " -Tokens: #{player.inventory["Token"]}")  
   Ncurses.wrefresh(hud)
 end

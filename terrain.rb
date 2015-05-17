@@ -25,7 +25,7 @@ end
 
 def demo_bunker(window, lines, cols)
   bunker = ["|==========|",
-            "|   |   |  |",
+            "|   |  *|  |",
             "|   |   |  |",
             "|= === === |",
             "|          |",
@@ -35,8 +35,8 @@ def demo_bunker(window, lines, cols)
             "|          |",
             "|== =======|"]
   build(window, lines, cols, bunker)
-  med_count = rand(1..2)
-  food_count = rand(1..2)
+  med_count = rand(0..1)
+  food_count = rand(2..5)
   i = 5
   while i < 9
     j = 1

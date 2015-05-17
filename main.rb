@@ -49,14 +49,14 @@ all_beacons = []
 bunker_x = rand(2..(field_lines - 11))
 bunker_y = rand(2..(field_cols - 11))
 demo_bunker(field,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
-b1 = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 7)
+b1 = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 6)
 all_beacons << b1
 Ncurses.mvwaddstr(field, b1.xlines, b1.ycols, b1.symb)
 
 bunker_x = rand(2..(field_lines - 11))
 bunker_y = rand(2..(field_cols - 11))
 demo_bunker(field,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
-b2 = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 7, message: "HELPHELPHELP")
+b2 = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 6, message: "HELPHELPHELP")
 all_beacons << b2
 Ncurses.mvwaddstr(field, b2.xlines, b2.ycols, b2.symb)
 
@@ -68,7 +68,7 @@ medkit = Item.new("m", "First Aid Kit", "Medkit")
 
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 
-items = [102,109]        # Array contains ascii decimal value of all items on ground
+items = [42,102,109]        # Array contains ascii decimal value of all items on ground
 walkable = [32,88,126] # ' ', '~', 'X'
 actor_index = []
 
@@ -123,7 +123,6 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
           move_character_x(field,p,-1)
         elsif check == 2
           #return object ID
-
           attack(m)
         elsif check == 3
           step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols)
