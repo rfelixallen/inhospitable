@@ -46,13 +46,17 @@ draw_map(field)         # Draws a simple map with one terrain type
 
 # Draw bunkers and beacons
 all_beacons = []
-demo_bunker(field,10,10)   # Adds a building to map. It overlays anything underneath it         
-b1 = Beacon.new(xlines: 11, ycols: 16)
+bunker_x = rand(2..(field_lines - 11))
+bunker_y = rand(2..(field_cols - 11))
+demo_bunker(field,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
+b1 = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 7)
 all_beacons << b1
 Ncurses.mvwaddstr(field, b1.xlines, b1.ycols, b1.symb)
 
-demo_bunker(field,field_lines - 21,field_cols - 21)   # Adds a building to map. It overlays anything underneath it         
-b2 = Beacon.new(xlines: field_lines - 20, ycols: field_cols - 15, message: "HELPHELPHELP")
+bunker_x = rand(2..(field_lines - 11))
+bunker_y = rand(2..(field_cols - 11))
+demo_bunker(field,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
+b2 = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 7, message: "HELPHELPHELP")
 all_beacons << b2
 Ncurses.mvwaddstr(field, b2.xlines, b2.ycols, b2.symb)
 
@@ -119,6 +123,7 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
           move_character_x(field,p,-1)
         elsif check == 2
           #return object ID
+
           attack(m)
         elsif check == 3
           step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols)
@@ -244,6 +249,14 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
     Ncurses.wrefresh(hud)
   end
 end
+
+if p.hp == 0 || p.hunger == 0
+  Ncurses.clear
+  Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "You have died.")
+  Ncurses.wrefresh(stdscr)
+  Ncurses.getch
+end
+
 Ncurses.clear
 Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Good Bye!")
 Ncurses.wrefresh(stdscr)
