@@ -1,7 +1,7 @@
 require_relative 'ui'
 
 class Character
-  attr_accessor :symb, :xlines, :ycols, :hp, :hunger, :inventory, :weather
+  attr_accessor :symb, :xlines, :ycols, :hp, :hunger, :inventory, :weather, :id
   def initialize(options = {})
     self.symb = options[:symb] || '@'
     self.xlines = options[:xlines] || 2
@@ -10,6 +10,7 @@ class Character
     self.hunger = options[:hunger] || 9
     self.inventory = options[:inventory] || {"Radio" => 1, "Food" => 0, "Medkit" => 0}
     self.weather = options[:weather] || {"Cold" => 1, "Snow" => 2}
+    @id = id
   end
 end
 
@@ -35,15 +36,25 @@ class Item
   end
 end
 
+def check_actors(window, actors, coord)
+  actor_coord = []
+  actors.each do |x|
+    actor_coord << [x.xlines,x.ycols]
+  end
+  actor_coord.each do |y|
+    coord.eql?(y)
+end
+end
+
 def update_inventory(hud, item, player, modifier)
   case item 
   when 102
     player.inventory["Food"] += modifier
-    Ncurses.mvwaddstr(hud, 7, 1, " -Food: #{player.inventory["Food"]}")
+    Ncurses.mvwaddstr(hud, 7, 1, " -(F)ood: #{player.inventory["Food"]}")
     Ncurses.wrefresh(hud)
   when 109
     player.inventory["Medkit"] += modifier
-    Ncurses.mvwaddstr(hud, 8, 1, " -Medkit: #{player.inventory["Medkit"]}")
+    Ncurses.mvwaddstr(hud, 8, 1, " -(M)edkit: #{player.inventory["Medkit"]}")
     Ncurses.wrefresh(hud)
   else
     nil
@@ -103,13 +114,6 @@ end
 
 def get_distance_all_beacons(player, all_beacons)
   # Make hash of beacons and their distances, then return beacon with shortest distance  
-=begin
-  all_active_beacons = []
-  all_beacons.each do |x|
-    if x.active == true
-      all_active_beacons << x
-    end
-=end
   distances = Hash[all_beacons.collect { |v| [v,get_distance(player,v)] }]
   y = distances.values.min_by { |x| x }
   return distances.key(y)
@@ -129,10 +133,6 @@ def transmission(window,beacon,player)
   else
     return "far"
   end
-end
-
-def test_actors
-  puts "Actors Loaded!"
 end
 
 def check_movement(window,xlines,ycols,walkable,items,actors)

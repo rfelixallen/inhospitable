@@ -52,7 +52,7 @@ all_beacons << b1
 Ncurses.mvwaddstr(field, b1.xlines, b1.ycols, b1.symb)
 
 demo_bunker(field,field_lines - 21,field_cols - 21)   # Adds a building to map. It overlays anything underneath it         
-b2 = Beacon.new(xlines: field_lines - 20, ycols: field_cols - 15, message: "..HELP..HELP")
+b2 = Beacon.new(xlines: field_lines - 20, ycols: field_cols - 15, message: "HELPHELPHELP")
 all_beacons << b2
 Ncurses.mvwaddstr(field, b2.xlines, b2.ycols, b2.symb)
 
@@ -66,6 +66,7 @@ medkit = Item.new("m", "First Aid Kit", "Medkit")
 actors = []         # Array will contain ascii decimal value of actor symbols 
 items = [102,109]        # Array contains ascii decimal value of all items on ground
 walkable = [32,88,126] # ' ', '~', 'X'
+actor_index = []
 
 # Setup Actors
 field_max_lines = []
@@ -76,19 +77,25 @@ player_start_cols = (field_max_cols[0] / 4)
 
 # Create Player Character
 p = Character.new(symb: '@', xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
-actors << p.symb.ord                                            # Add player symbol to array of actor symbols
+p.id = p.object_id
+actors << p.symb.ord
+actor_index.push(p.id)                                     # Add player symbol to array of actor symbols
 Ncurses.mvwaddstr(field, p.xlines, p.ycols, "#{p.symb}")        # Draw layer to map
 center(viewp,field,p.xlines,p.ycols)                            # Center map on player
 
 # Create Monster
 m = Character.new(symb: 'M', xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
-actors << m.symb.ord                                                    # Add player symbol to array of actor symbols
+m.id = m.object_id
+actors << m.symb.ord                                                # Add player symbol to array of actor symbols
+actor_index.push(m.id)
 Ncurses.mvwaddstr(field, m.xlines, m.ycols, "#{m.symb}")                # Draw Monster to map
 Ncurses.wrefresh(viewp) # Update viewport with all previous changes
 
+actor_locations = {}
+actor_locations = {m => [m.xlines,m.ycols]}
+
 # Set up Console
 borders(console)                            # Add borders to the console
-#Ncurses.mvwaddstr(console, 1, 2, "Hello!")  # Add a test message to confirm console works
 Ncurses.wrefresh(console)                   # Refresh console window with message
 
 # Set up HUD (Heads-Up-Display)
@@ -111,6 +118,7 @@ while p.hp > 0 && p.hunger > 0  # While Player hit points and hunger are above 0
         if check == 1      
           move_character_x(field,p,-1)
         elsif check == 2
+          #return object ID
           attack(m)
         elsif check == 3
           step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols)
