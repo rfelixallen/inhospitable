@@ -26,15 +26,35 @@ end
 def demo_bunker(window, lines, cols)
   bunker = ["|==========|",
             "|   |   |  |",
-            "|m  |   |f |",
+            "|   |   |  |",
             "|= === === |",
             "|          |",
-            "|   |===== |",
-            "|   |      |",
             "|          |",
-            "|   |      |",
+            "|          |",
+            "|          |",
+            "|          |",
             "|== =======|"]
-build(window, lines, cols, bunker)  
+  build(window, lines, cols, bunker)
+  med_count = rand(1..2)
+  food_count = rand(1..2)
+  i = 5
+  while i < 9
+    j = 1
+    d = rand(1..3)
+    while j < 11
+      if d == 1 and med_count > 0
+        Ncurses.mvwaddstr(window, lines + i, cols + j, "m")
+        med_count -= 1
+      elsif d == 2 and food_count > 0
+        Ncurses.mvwaddstr(window, lines + i, cols + j, "f")
+        food_count -= 1
+      else
+        Ncurses.mvwaddstr(window, lines + i, cols + j, " ")
+      end
+      j += 1
+    end
+    i += 1
+  end
 end
 
 def draw_map(window)
