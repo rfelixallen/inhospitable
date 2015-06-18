@@ -12,18 +12,6 @@ Ncurses.cbreak              # Only accept a single character of input
 Ncurses.stdscr              # Initialize Standard Screen, which uses dimensions of current Terminal window
 Ncurses.keypad(stdscr,true) # Use expanded keyboard characters
 
-sd_cols = []                # Standard Screen column aka y
-sd_lines = []               # Standard Screen lines aka x
-Ncurses.getmaxyx(stdscr,sd_cols,sd_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
-
-# Welcome Screen
-Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Welcome to Move!")
-Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2 + 1, sd_lines[0] / 2, "rows = #{sd_cols[0]}, rows = #{sd_lines[0]}")
-Ncurses.refresh             # Refresh window to display new text
-Ncurses.getch               # Wait for user input
-Ncurses.clear               # Clear the screen once player is ready to proceed
-Ncurses.refresh             # Refresh window to display cleared screen
-
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers
 # Demo game uses 4 windows: Field (aka game map), Viewport (aka what the player sees), Console and side HUD.
@@ -40,6 +28,20 @@ field = Ncurses.newwin(field_lines, field_cols, 0, 0)
 viewp = Ncurses.derwin(field,view_lines, view_cols, 0, 0) # Must not exceed size of terminal or else crash
 console = Ncurses.newwin(console_lines, console_cols, view_lines, 0) 
 hud = Ncurses.newwin(hud_lines, hud_cols, 0, view_lines) 
+
+sd_cols = []                # Standard Screen column aka y
+sd_lines = []               # Standard Screen lines aka x
+Ncurses.getmaxyx(stdscr,sd_cols,sd_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
+
+# Welcome Screen
+Ncurses.mvwaddstr(stdscr, 2, 2, "Welcome to Inhospitable!")
+Ncurses.mvwaddstr(stdscr, 3, 3, "Terminal window must be at least these dimensions:")
+Ncurses.mvwaddstr(stdscr, 4, 3, "Rows = #{view_lines}, Columns = #{view_cols}")
+Ncurses.mvwaddstr(stdscr, 5, 3, "Your Terminal: Rows = #{sd_lines[0]}, Columns = #{sd_cols[0]}")
+Ncurses.refresh             # Refresh window to display new text
+Ncurses.getch               # Wait for user input
+Ncurses.clear               # Clear the screen once player is ready to proceed
+Ncurses.refresh             # Refresh window to display cleared screen
 
 # Draw map
 draw_map(field)         # Draws a simple map with one terrain type
@@ -269,5 +271,5 @@ end
 Ncurses.clear
 Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Good Bye!")
 Ncurses.wrefresh(stdscr)
-Ncurses.napms(4000)
+Ncurses.napms(1000)
 Ncurses.endwin
