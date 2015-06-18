@@ -15,6 +15,9 @@ Ncurses.keypad(stdscr,true) # Use expanded keyboard characters
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers
 # Demo game uses 4 windows: Field (aka game map), Viewport (aka what the player sees), Console and side HUD.
+sd_cols = []                # Standard Screen column aka y
+sd_lines = []               # Standard Screen lines aka x
+Ncurses.getmaxyx(stdscr,sd_cols,sd_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
 field_lines = 200
 field_cols = 200
 view_lines = 25
@@ -28,10 +31,6 @@ field = Ncurses.newwin(field_lines, field_cols, 0, 0)
 viewp = Ncurses.derwin(field,view_lines, view_cols, 0, 0) # Must not exceed size of terminal or else crash
 console = Ncurses.newwin(console_lines, console_cols, view_lines, 0) 
 hud = Ncurses.newwin(hud_lines, hud_cols, 0, view_lines) 
-
-sd_cols = []                # Standard Screen column aka y
-sd_lines = []               # Standard Screen lines aka x
-Ncurses.getmaxyx(stdscr,sd_cols,sd_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
 
 # Welcome Screen
 Ncurses.mvwaddstr(stdscr, 2, 2, "Welcome to Inhospitable!")
