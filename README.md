@@ -7,8 +7,12 @@ TODO for Extra Features
 * Add in Color
 * Add in Main Menu
 * Add in Save/Load 
+* Pop up windows
 
 Log
+6/17/15
+-Had a month long break. Made some quick cosmetic changes with the intro text and tweaked hunger values. For this game to be finished, I need to be able to add in more monsters.
+
 5/17/15
 -I am very happy with the progress I have made with this. I feel that I finally have something I am ready to show people. This is not at all the final product, but I may shelve it for the time being so I can focus on new projects.
 

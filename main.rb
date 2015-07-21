@@ -7,10 +7,23 @@ include Ncurses
 
 Ncurses.initscr             # Start Ncurses
 Ncurses.noecho              # Do not show keyboard input at cursor location
+#Ncurses.start_color
 Ncurses.curs_set(0)         # Disable blinking cursor
 Ncurses.cbreak              # Only accept a single character of input
 Ncurses.stdscr              # Initialize Standard Screen, which uses dimensions of current Terminal window
 Ncurses.keypad(stdscr,true) # Use expanded keyboard characters
+
+=begin
+# Initialize Color Pairs
+# Assumes everything has black background.
+colors = Ncurses.COLORS
+color_i = 0
+colors.times do |fg|
+  Ncurses.init_pair(color_i, fg, 0)
+  color_i += 1
+end
+=end
+
 
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers
@@ -42,8 +55,18 @@ Ncurses.getch               # Wait for user input
 Ncurses.clear               # Clear the screen once player is ready to proceed
 Ncurses.refresh             # Refresh window to display cleared screen
 
+objects = []
+
 # Draw map
-draw_map(field)         # Draws a simple map with one terrain type
+#draw_map(field)         # Draws a simple map with one terrain type
+snow = Tile.new(name: "Snow", symb: "~", code: 1, color: "WHITE", blocked: true)
+wall_horizontal = Tile.new(name: "Wall_Horizontal", code: 2, symb: "=", color: "YELLOW", blocked: true)
+wall_vertical = Tile.new(name: "Wall_Vertical", code: 3, symb: "|", color: "Yellow", blocked: true)
+all_tile = []
+all_tile.concat([snow, wall_horizontal, wall_vertical])
+#objects << snow
+#draw_map_tiles(field, snow)
+draw_map_tiles(field, all_tile[0])
 
 # Draw bunkers and beacons
 all_beacons = []
@@ -69,9 +92,9 @@ medkit = Item.new("m", "First Aid Kit", "Medkit")
 
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 
+characters = [64,77] # Array with hard coded character numbers
 items = [42,102,109]        # Array contains ascii decimal value of all items on ground
-walkable = [32,88,126] # ' ', '~', 'X'
-actor_index = []
+walkable = [32,88,126, 288] # ' ', '~', 'X' #somehow 288 became space
 
 # Setup Actors
 field_max_lines = []
@@ -80,24 +103,19 @@ Ncurses.getmaxyx(field,field_max_cols,field_max_lines)   # Get Max Y,X of Field
 player_start_lines = (field_max_lines[0] / 4)
 player_start_cols = (field_max_cols[0] / 4)
 
-# Create Player Character
+# Create Player Actor
 p = Character.new(symb: '@', xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
-p.id = p.object_id
-actors << p.symb.ord
-actor_index.push(p.id)                                     # Add player symbol to array of actor symbols
-Ncurses.mvwaddstr(field, p.xlines, p.ycols, "#{p.symb}")        # Draw layer to map
-center(viewp,field,p.xlines,p.ycols)                            # Center map on player
+#p = Character.new(xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
+actors << p
+#actor_index.push(p.id)                                     # Add player symbol to array of actor symbols
+#Ncurses.mvwaddstr(field, p.xlines, p.ycols, "#{p.symb}")        # Draw layer to map
+
 
 # Create Monster
 m = Character.new(symb: 'M', xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
-m.id = m.object_id
-actors << m.symb.ord                                                # Add player symbol to array of actor symbols
-actor_index.push(m.id)
-Ncurses.mvwaddstr(field, m.xlines, m.ycols, "#{m.symb}")                # Draw Monster to map
-Ncurses.wrefresh(viewp) # Update viewport with all previous changes
-
-actor_locations = {}
-actor_locations = {m => [m.xlines,m.ycols]}
+#m = Character.new('M', xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
+actors << m
+actors.each { |actor| actor.draw(field)}  # Add all actors to the map
 
 # Set up Console
 borders(console)                            # Add borders to the console
@@ -105,6 +123,8 @@ Ncurses.wrefresh(console)                   # Refresh console window with messag
 
 # Set up HUD (Heads-Up-Display)
 hud_on(hud,p)
+center(viewp,field,p.xlines,p.ycols)                            # Center map on player
+Ncurses.wrefresh(viewp)
 #################################################################################
 # Game Loop                                                                     #
 #################################################################################
@@ -113,67 +133,25 @@ direction_steps = 0
 counter = 0   
 dice_roll = false
 hunger_count = 0
-
+counter = 0 #wander counter for monster
+direction_steps = rand(10..25) # Meander long distances
 # Begin Loop
 while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
+  Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{p.ycols},#{p.xlines}]")
+  Ncurses.wrefresh(hud)
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
-      check = check_movement(field,p.xlines - 1,p.ycols,walkable,items,actors)
-        if check == 1      
-          move_character_x(field,p,-1)
-        elsif check == 2
-          #return object ID
-          attack(m)
-        elsif check == 3
-          step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols)
-          update_inventory(hud, step, p, 1)
-          move_character_x(field,p,-1)
-        else # No valid move          
-          nil
-        end      
+      check_space(field,hud,-1,0,p,walkable,items,actors)                  
       center(viewp,field,p.xlines,p.ycols)      
-    when KEY_DOWN, 115 # Move Down
-      check = check_movement(field,p.xlines + 1,p.ycols,walkable,items,actors)      
-        if check == 1      
-          move_character_x(field,p,1)
-        elsif check == 2
-          attack(m)
-        elsif check == 3
-          step = Ncurses.mvwinch(field, p.xlines + 1, p.ycols)
-          update_inventory(hud, step, p, 1)
-          move_character_x(field,p,1)
-        else # No valid move
-          nil
-        end      
-      center(viewp,field,p.xlines,p.ycols)      
+    when KEY_DOWN, 115 # Move Down      
+      check_space(field,hud,1,0,p,walkable,items,actors)                  
+      center(viewp,field,p.xlines,p.ycols)     
     when KEY_RIGHT, 100 # Move Right 
-      check = check_movement(field,p.xlines,p.ycols + 1,walkable,items,actors)      
-        if check == 1      
-          move_character_y(field,p,1)          
-        elsif check == 2
-          attack(m)          
-        elsif check == 3
-          step = Ncurses.mvwinch(field, p.xlines, p.ycols + 1)
-          update_inventory(hud, step, p, 1)
-          move_character_y(field,p,1)          
-        else # No valid move
-          nil
-        end      
+      check_space(field,hud,0,1,p,walkable,items,actors)     
       center(viewp,field,p.xlines,p.ycols)      
   when KEY_LEFT, 97 # Move Left   
-      check = check_movement(field,p.xlines,p.ycols - 1,walkable,items,actors)      
-        if check == 1      
-          move_character_y(field,p,-1)          
-        elsif check == 2
-          attack(m)        
-        elsif check == 3
-          step = Ncurses.mvwinch(field, p.xlines, p.ycols - 1)
-          update_inventory(hud, step, p, 1)
-          move_character_y(field,p,-1)          
-        else # No valid move
-          nil
-        end      
+      check_space(field,hud,0,-1,p,walkable,items,actors)          
       center(viewp,field,p.xlines,p.ycols)      
     when 114 # r      
       the_beacon = get_distance_all_beacons(p,all_beacons)
@@ -217,20 +195,19 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
   else
     distance_from_player = [(p.xlines - m.xlines).abs,(p.ycols - m.ycols).abs] # Get positive value of distance between monster and player
     if distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2 # if the monster is visible, chase player
-      #message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing
-      mode_hunt(field,hud, m, p, walkable, items, actors)
+      message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing      
+      mode_hunt2(field,hud, m, p, walkable, items, actors)      
     else # If player is not visible, wander around
-      if counter <= direction_steps
-        if dice_roll == false
-         d6 = rand(6)
+      if counter < direction_steps
+        if dice_roll == false         
          direction_steps = rand(10..25) # Meander long distances
          dice_roll = true
         end
-        #message(console,"steps:#{direction_steps},count:#{counter},d6:#{d6}")  # Troubleshooting message for testing
-        mode_wander(field,hud, m, p, walkable, items, actors,d6)
+        message(console,"steps:#{direction_steps},count:#{counter}")  # Troubleshooting message for testing        
+        mode_wander2(field,hud, m, p, walkable, items, actors)        
         counter += 1
       else
-        #message(console,"Monster move reset") # Troubleshooting message for testing
+        message(console,"Monster move reset") # Troubleshooting message for testing
         dice_roll = false
         counter = 0
         direction_steps = 0
@@ -239,7 +216,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
   end
 
   # Starvation
-  if hunger_count <= 50
+  if hunger_count <= 100
     hunger_count += 1
   else
     p.hunger -= 1
@@ -250,22 +227,39 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
   end
 end
 
+# End Screen
+
+
 # Starved or died
-if p.hp == 0 || p.hunger == 0
-  Ncurses.clear
-  Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "You have died.")
-  Ncurses.wrefresh(stdscr)
-  Ncurses.getch
+if p.hp == 0 || p.hunger == 0 || p.inventory["Token"] == 2
+  if p.hp == 0 || p.hunger == 0
+    Ncurses.clear
+    Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "You have died in the cold wastes.")
+    Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 1, sd_lines[0] / 2, "Abiit nemine salutato.")
+    Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 2, sd_lines[0] / 2, "Press 'q' to quit") 
+    Ncurses.wrefresh(stdscr)
+    input = Ncurses.getch
+    case input
+        when KEY_F2, 113, 81 # Quit Game with F2, q or Q
+          #break
+    end
+  end
+  if p.inventory["Token"] == 2
+    Ncurses.clear
+    Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "You collected all the tokens.")
+    Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 1, sd_lines[0] / 2, "You have been rescued!") 
+    Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 2, sd_lines[0] / 2, "Press 'q' to quit") 
+    Ncurses.wrefresh(stdscr)
+    input = Ncurses.getch
+    case input
+        when KEY_F2, 113, 81 # Quit Game with F2, q or Q
+    #break
+    end
+  end
 end
 
 # Collected all the tokens
-if p.inventory["Token"] == 2
-  Ncurses.clear
-  Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "You collected all the tokens.")
-  Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 1, sd_lines[0] / 2, "You have been rescued!")  
-  Ncurses.wrefresh(stdscr)
-  Ncurses.napms(4000)
-end
+
 
 Ncurses.clear
 Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Good Bye!")

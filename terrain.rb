@@ -1,5 +1,19 @@
 require_relative 'ui'
 
+#index of tile types with character, colorcode
+=begin
+h = {:a => "val1", :b => "val2", :c => "val3"}
+keys = h.keys
+
+h[keys[0]] # "val1"
+h[keys[2]] # "val3"
+
+tiletype = [
+  ('~', 7), # Snow, white
+  ('|', 3), # Wall, Yellow
+]
+=end
+
 def test_terrain
 	puts "Terrain Loaded!"
 end
@@ -57,6 +71,53 @@ def demo_bunker(window, lines, cols)
   end
 end
 
+def demo_bunker2(window, lines, cols, all_tiles)
+  pallette = all_tiles
+  bunker = ["322222222223",
+            "3   3   3  3",
+            "3   3   3  3",
+            "32 222 222 3",
+            "3          3",
+            "3          3",
+            "3          3",
+            "3          3",
+            "3          3",
+            "322 22222223"]
+  t = 0
+  r = bunker.count
+  while t < r
+    q = bunker[i].scan(/./).uniq!
+    t += 1
+  end
+=begin
+  tiles = bunker1.scan(/./).uniq!
+  pallette.each do |x|
+    bunker = bunker.gsub()
+  bunker = bunker.gsub("3", "#{pallette[2].symb}")
+=end
+  build(window, lines, cols, bunker)
+  med_count = rand(0..1)
+  food_count = rand(2..5)
+  i = 5
+  while i < 9
+    j = 1
+    d = rand(1..3)
+    while j < 11
+      if d == 1 and med_count > 0
+        Ncurses.mvwaddstr(window, lines + i, cols + j, "m")
+        med_count -= 1
+      elsif d == 2 and food_count > 0
+        Ncurses.mvwaddstr(window, lines + i, cols + j, "f")
+        food_count -= 1
+      else
+        Ncurses.mvwaddstr(window, lines + i, cols + j, " ")
+      end
+      j += 1
+    end
+    i += 1
+  end
+end
+
 def draw_map(window)
   borders(window)
 
@@ -68,8 +129,27 @@ def draw_map(window)
   Ncurses.getmaxyx(window,w_y,w_x)
   while i < w_x[0] - 1
     j = 1
-    while j < w_y[0] - 1
+    while j < w_y[0] - 1    
       Ncurses.mvwaddstr(window, i, j, "~")
+      j += 1
+    end
+    i += 1
+  end
+end
+
+def draw_map_tiles(window, tile)
+  borders(window)
+
+  # Draw Terrain
+  # Draw snow on every tile
+  i = 1
+  w_y = []
+  w_x = []
+  Ncurses.getmaxyx(window,w_y,w_x)
+  while i < w_x[0] - 1
+    j = 1
+    while j < w_y[0] - 1    
+      Ncurses.mvwaddstr(window, i, j, tile.symb)
       j += 1
     end
     i += 1

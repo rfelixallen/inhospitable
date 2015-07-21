@@ -1,0 +1,10 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ncurses-ruby (1.2.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ncurses-ruby
