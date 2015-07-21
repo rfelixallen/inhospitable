@@ -5,6 +5,9 @@ TODO for Extra Features
 * Perlin noise map generation
 * Add in Color
 * Add in Main Menu
+** Make all entries visible
+** Make Menu its own window
+** Enter keyboard command in main window to return to menu
 * Add in Save/Load 
 
 Log

@@ -6,11 +6,11 @@ end
 
 def drawmenu(item)
   c = 0
-  mainmenu = "Main Menu"
+  mainmenu = "Inhospitable - Main Menu"
   menu = ["NEW GAME", "QUIT"]
   Ncurses.clear
   Ncurses.addstr(mainmenu)
-  while c < 6
+  while c < 2 # set to total menu items, start at 0
     if c == item
       Ncurses.attron(A_REVERSE)
       Ncurses.mvaddstr(3 + (c * 2), 20, menu[c])
@@ -19,6 +19,7 @@ def drawmenu(item)
     c += 1
   end
   Ncurses.mvaddstr(17,25,"Use arrow keys to move, Enter to select:")
+  Ncurses.mvaddstr(18,25,"Version 0.5 - RFAllen 2015")
   Ncurses.refresh
 end
 

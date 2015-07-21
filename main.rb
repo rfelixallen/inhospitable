@@ -44,7 +44,7 @@ while key != 113
       menuitem = 1
       #break
     end
-  when KEY_ENTER,012,013,015
+  when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
     if menuitem == 0
       key = 113
     elsif menuitem == 1
