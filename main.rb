@@ -25,13 +25,11 @@ end
 =end
 
 # Main Menu
-main_menu = Ncurses.newwin(100, 55, 0, 0)
 menuitem = 0
-drawmenu(main_menu,menuitem)
-Ncurses.wrefresh(main_menu)
+drawmenu(menuitem)
 key = 0
 while key != 113
-  drawmenu(main_menu,menuitem)
+  drawmenu(menuitem)
   key = Ncurses.getch
   case key
   when KEY_DOWN
