@@ -3,15 +3,13 @@ a simple of survival in a cold wasteland
 
 TODO for Extra Features
 * Perlin noise map generation
-* Fix attack method for multiple enemies
 * Add in Color
 * Add in Main Menu
 * Add in Save/Load 
-* Pop up windows
 
 Log
-6/17/15
--Had a month long break. Made some quick cosmetic changes with the intro text and tweaked hunger values. For this game to be finished, I need to be able to add in more monsters.
+7/20/15
+-Went on a trip and spent about 8 hours working on new code. On the productive side, I condensed the movement code, and reworked movement space checking. I can also now add more monsters! Less productive experiments include fiddling with color and making tiles into objects.
 
 5/17/15
 -I am very happy with the progress I have made with this. I feel that I finally have something I am ready to show people. This is not at all the final product, but I may shelve it for the time being so I can focus on new projects.
