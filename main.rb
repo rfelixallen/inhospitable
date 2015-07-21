@@ -25,11 +25,13 @@ end
 =end
 
 # Main Menu
+main_menu = Ncurses.newwin(100, 55, 0, 0)
 menuitem = 0
-drawmenu(menuitem)
+drawmenu(main_menu,menuitem)
+Ncurses.wrefresh(main_menu)
 key = 0
 while key != 113
-  drawmenu(menuitem)
+  drawmenu(main_menu,menuitem)
   key = Ncurses.getch
   case key
   when KEY_DOWN
@@ -45,9 +47,9 @@ while key != 113
       #break
     end
   when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
-    if menuitem == 0
+    if menuitem == 0 # Play Game
       key = 113
-    elsif menuitem == 1
+    elsif menuitem == 1 # Quit Game
       Ncurses.clear
       Ncurses.endwin
       exit

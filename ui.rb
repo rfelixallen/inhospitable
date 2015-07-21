@@ -4,23 +4,31 @@ def test_ui
 	puts "UI Loaded!"
 end
 
-def drawmenu(item)
+def drawmenu(window,item)
   c = 0
   mainmenu = "Inhospitable - Main Menu"
   menu = ["NEW GAME", "QUIT"]
-  Ncurses.clear
-  Ncurses.addstr(mainmenu)
+  #Ncurses.clear
+  Ncurses.mvwaddstr(window,0,2,"Inhospitable - Main Menu")
+  Ncurses.wrefresh(window)
+  
+  while c < 2
+    Ncurses.mvwaddstr(window,3 + (c * 2), 20, menu[c])
+    Ncurses.wrefresh(window)
+    c += 1
+  end
+
   while c < 2 # set to total menu items, start at 0
     if c == item
-      Ncurses.attron(A_REVERSE)
-      Ncurses.mvaddstr(3 + (c * 2), 20, menu[c])
-      Ncurses.attroff(A_REVERSE)
+      Ncurses.wattron(window,A_REVERSE)
+      Ncurses.mvwaddstr(window,3 + (c * 2), 20, menu[c])
+      Ncurses.wattroff(window,A_REVERSE)
     end
     c += 1
   end
-  Ncurses.mvaddstr(17,25,"Use arrow keys to move, Enter to select:")
-  Ncurses.mvaddstr(18,25,"Version 0.5 - RFAllen 2015")
-  Ncurses.refresh
+  Ncurses.mvwaddstr(window,17,2,"Use arrow keys to move, Enter to select:")
+  Ncurses.mvwaddstr(window,18,2,"Version 0.5 - RFAllen 2015")
+  Ncurses.wrefresh(window)
 end
 
 def borders(window)
