@@ -4,6 +4,24 @@ def test_ui
 	puts "UI Loaded!"
 end
 
+def drawmenu(item)
+  c = 0
+  mainmenu = "Main Menu"
+  menu = ["NEW GAME", "QUIT"]
+  Ncurses.clear
+  Ncurses.addstr(mainmenu)
+  while c < 6
+    if c == item
+      Ncurses.attron(A_REVERSE)
+      Ncurses.mvaddstr(3 + (c * 2), 20, menu[c])
+      Ncurses.attroff(A_REVERSE)
+    end
+    c += 1
+  end
+  Ncurses.mvaddstr(17,25,"Use arrow keys to move, Enter to select:")
+  Ncurses.refresh
+end
+
 def borders(window)
   # Draws borders and fills all game map tiles with snow.
   i = 1

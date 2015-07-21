@@ -24,6 +24,41 @@ colors.times do |fg|
 end
 =end
 
+# Main Menu
+menuitem = 0
+drawmenu(menuitem)
+key = 0
+while key != 113
+  drawmenu(menuitem)
+  key = Ncurses.getch
+  case key
+  when KEY_DOWN
+    menuitem += 1
+    if (menuitem > 1) 
+      menuitem = 0
+      #break
+    end
+  when KEY_UP
+    menuitem -= 1
+    if (menuitem < 0) 
+      menuitem = 1
+      #break
+    end
+  when KEY_ENTER,012,013,015
+    if menuitem == 0
+      key = 113
+    elsif menuitem == 1
+      Ncurses.clear
+      Ncurses.endwin
+      exit
+    else
+      Ncurses.flash
+    end
+  else
+    Ncurses.flash
+  end
+end
+Ncurses.clear
 
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers
@@ -64,6 +99,8 @@ wall_horizontal = Tile.new(name: "Wall_Horizontal", code: 2, symb: "=", color: "
 wall_vertical = Tile.new(name: "Wall_Vertical", code: 3, symb: "|", color: "Yellow", blocked: true)
 all_tile = []
 all_tile.concat([snow, wall_horizontal, wall_vertical])
+
+# Experiments with tiles as objects
 #objects << snow
 #draw_map_tiles(field, snow)
 draw_map_tiles(field, all_tile[0])
