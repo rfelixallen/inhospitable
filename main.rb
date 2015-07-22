@@ -290,10 +290,8 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
 end
 
 # End Screen
-
-
-# Starved or died
 if p.hp == 0 || p.hunger == 0 || p.inventory["Token"] == 2
+  # Starved or died
   if p.hp == 0 || p.hunger == 0
     Ncurses.clear
     Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "You have died in the cold wastes.")
@@ -301,8 +299,11 @@ if p.hp == 0 || p.hunger == 0 || p.inventory["Token"] == 2
     Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 2, sd_lines[0] / 2, "Press any key to quit") 
     Ncurses.wrefresh(stdscr)
     input = Ncurses.getch
+    Ncurses.endwin
+    Ncurses.clear
     exit
   end
+  # Collected all the tokens
   if p.inventory["Token"] == 2
     Ncurses.clear
     Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "You collected all the tokens.")
@@ -310,18 +311,15 @@ if p.hp == 0 || p.hunger == 0 || p.inventory["Token"] == 2
     Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 2, sd_lines[0] / 2, "Press 'q' to quit") 
     Ncurses.wrefresh(stdscr)
     input = Ncurses.getch
-    case input
-        when KEY_F2, 113, 81 # Quit Game with F2, q or Q
-    #break
-    end
+    Ncurses.endwin
+    Ncurses.clear
+    exit
   end
 end
-
-# Collected all the tokens
-
 
 Ncurses.clear
 Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Good Bye!")
 Ncurses.wrefresh(stdscr)
 Ncurses.napms(1000)
+Ncurses.getch
 Ncurses.endwin
