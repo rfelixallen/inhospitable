@@ -2,15 +2,18 @@
 a simple of survival in a cold wasteland
 
 TODO for Extra Features
+* Fix Combat
 * Perlin noise map generation
 * Add in Color
 * Add in Main Menu
 ** Make all entries visible
-** Make Menu its own window
 ** Enter keyboard command in main window to return to menu
 * Add in Save/Load 
 
 Log
+7/21/15
+-Built a janky menu for playing the game or quitting.
+
 7/20/15
 -Went on a trip and spent about 8 hours working on new code. On the productive side, I condensed the movement code, and reworked movement space checking. I can also now add more monsters! Less productive experiments include fiddling with color and making tiles into objects.
 
