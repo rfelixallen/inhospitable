@@ -92,9 +92,9 @@ def check_actors(window, actors, coord)
 end
 end
 
-def check_target(actors, character)
+def check_target(actors, characterxlines, characterycols)
   actors.each do |actor|
-    if (actor.xlines == character.xlines)  && (actor.ycols == character.ycols)
+    if (actor.xlines == characterxlines)  && (actor.ycols == characterycols)
        attack(actor)
     end               
   end
@@ -109,7 +109,7 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors)
       if walkable.include?(step) 
         character.move(window,xl,yc)
       elsif actors.include?(step)
-        check_target(actors,character)       
+        check_target(actors,character.xlines + xl, character.ycols + yc)       
       elsif items.include?(step)
         update_inventory(hud, step, character, 1)          
         character.move(window, xl, yc)
