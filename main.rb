@@ -187,9 +187,11 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
     when KEY_RIGHT, 100 # Move Right 
       check_space(field,hud,0,1,p,walkable,items,actors)     
       center(viewp,field,p.xlines,p.ycols)      
-  when KEY_LEFT, 97 # Move Left   
+    when KEY_LEFT, 97 # Move Left   
       check_space(field,hud,0,-1,p,walkable,items,actors)          
       center(viewp,field,p.xlines,p.ycols)      
+    when 32 # Spacebar, dont move
+      center(viewp,field,p.xlines,p.ycols)
     when 114 # r      
       the_beacon = get_distance_all_beacons(p,all_beacons)
       if get_distance(p,the_beacon) < 101
@@ -232,7 +234,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
   else
     distance_from_player = [(p.xlines - m.xlines).abs,(p.ycols - m.ycols).abs] # Get positive value of distance between monster and player
     if distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2 # if the monster is visible, chase player
-      message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing      
+      #message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing      
       mode_hunt2(field,hud, m, p, walkable, items, actors)      
     else # If player is not visible, wander around
       if counter < direction_steps
@@ -240,11 +242,11 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
          direction_steps = rand(10..25) # Meander long distances
          dice_roll = true
         end
-        message(console,"steps:#{direction_steps},count:#{counter}")  # Troubleshooting message for testing        
+        #message(console,"steps:#{direction_steps},count:#{counter}")  # Troubleshooting message for testing        
         mode_wander2(field,hud, m, p, walkable, items, actors)        
         counter += 1
       else
-        message(console,"Monster move reset") # Troubleshooting message for testing
+        #message(console,"Monster move reset") # Troubleshooting message for testing
         dice_roll = false
         counter = 0
         direction_steps = 0
