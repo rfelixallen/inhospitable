@@ -94,27 +94,20 @@ def check_actors(window, actors, coord)
 end
 end
 =end
-def check_target(actors, characterxlines, characterycols)
-  actors.each do |actor|
-    if (actor.xlines == characterxlines)  && (actor.ycols == characterycols)
-       attack(actor)
-    end               
-  end
-end
-
-def attack(x)
-    x.hp -= 1
-end
 
 def check_space(window,hud,xl,yc,character,walkable,items,actors)
     window_max_lines = []
     window_max_cols = []
     Ncurses.getmaxyx(window,window_max_cols,window_max_lines)   # Get Max Y,X of window
     step = Ncurses.mvwinch(window, character.xlines + xl, character.ycols + yc)
+    symbcodes = []
+    actors.each do |x|
+      symbcodes << x.symbcode
+    end
     if ((character.xlines + xl) > 0 and (character.ycols + yc) > 0 and (character.xlines + xl) < (window_max_lines[0] - 1) and (character.ycols + yc) < (window_max_cols[0] - 1))
       if walkable.include?(step) 
         character.move(window,xl,yc)
-      elsif actors.include?(step)
+      elsif symbcodes.include?(step)
         check_target(actors,character.xlines + xl, character.ycols + yc)       
       elsif items.include?(step)
         update_inventory(hud, step, character, 1)          
@@ -125,6 +118,18 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors)
     else
       return false
     end
+end
+
+def check_target(actors, characterxlines, characterycols)
+  actors.each do |actor|
+    if (actor.xlines == characterxlines)  && (actor.ycols == characterycols)
+       attack(actor)
+    end               
+  end
+end
+
+def attack(x)
+    x.hp -= 1
 end
 
 =begin

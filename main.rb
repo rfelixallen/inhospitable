@@ -128,8 +128,8 @@ medkit = Item.new("m", "First Aid Kit", "Medkit")
 =end
 
 # Define Actors, Items and Terrain
-#actors = []         # Array will contain ascii decimal value of actor symbols 
-actors = [64,77,320,333] # Array with hard coded character numbers
+actors = []         # Array will contain ascii decimal value of actor symbols 
+#actors = [64,77,320,333] # Array with hard coded character numbers
 items = [42,102,109]        # Array contains ascii decimal value of all items on ground
 walkable = [32,88,126, 288] # ' ', '~', 'X' #somehow 288 became space
 
@@ -299,13 +299,10 @@ if p.hp == 0 || p.hunger == 0 || p.inventory["Token"] == 2
     Ncurses.clear
     Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "You have died in the cold wastes.")
     Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 1, sd_lines[0] / 2, "Abiit nemine salutato.")
-    Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 2, sd_lines[0] / 2, "Press 'q' to quit") 
+    Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 2, sd_lines[0] / 2, "Press any key to quit") 
     Ncurses.wrefresh(stdscr)
     input = Ncurses.getch
-    case input
-        when KEY_F2, 113, 81 # Quit Game with F2, q or Q
-          #break
-    end
+    exit
   end
   if p.inventory["Token"] == 2
     Ncurses.clear
