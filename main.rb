@@ -129,7 +129,7 @@ medkit = Item.new("m", "First Aid Kit", "Medkit")
 
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 
-characters = [64,77] # Array with hard coded character numbers
+characters = [64,77,320,333] # Array with hard coded character numbers
 items = [42,102,109]        # Array contains ascii decimal value of all items on ground
 walkable = [32,88,126, 288] # ' ', '~', 'X' #somehow 288 became space
 
@@ -159,7 +159,7 @@ borders(console)                            # Add borders to the console
 Ncurses.wrefresh(console)                   # Refresh console window with message
 
 # Set up HUD (Heads-Up-Display)
-hud_on(hud,p)
+hud_on(hud,p,m)
 center(viewp,field,p.xlines,p.ycols)                            # Center map on player
 Ncurses.wrefresh(viewp)
 #################################################################################
@@ -175,23 +175,44 @@ direction_steps = rand(10..25) # Meander long distances
 # Begin Loop
 while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{p.ycols},#{p.xlines}]")
+  Ncurses.mvwaddstr(hud, 10, 1, "M Pos: [#{m.ycols},#{m.xlines}]") # Troubleshooting
   Ncurses.wrefresh(hud)
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
-      check_space(field,hud,-1,0,p,walkable,items,actors)                  
-      center(viewp,field,p.xlines,p.ycols)      
+      step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols) # Troubleshooting
+      message(console,"Step: #{step}")  # Troubleshooting
+      check_space(field,hud,-1,0,p,walkable,items,actors) 
+      center(viewp,field,p.xlines,p.ycols)
+      Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
+      Ncurses.wrefresh(hud)       # Troubleshooting
     when KEY_DOWN, 115 # Move Down      
+      step = Ncurses.mvwinch(field, p.xlines + 1, p.ycols) # Troubleshooting
+      message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,1,0,p,walkable,items,actors)                  
-      center(viewp,field,p.xlines,p.ycols)     
+      center(viewp,field,p.xlines,p.ycols)   
+      Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
+      Ncurses.wrefresh(hud)       # Troubleshooting  
     when KEY_RIGHT, 100 # Move Right 
+      step = Ncurses.mvwinch(field, p.xlines, p.ycols + 1) # Troubleshooting
+      message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,0,1,p,walkable,items,actors)     
-      center(viewp,field,p.xlines,p.ycols)      
+      center(viewp,field,p.xlines,p.ycols)  
+      Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
+      Ncurses.wrefresh(hud)       # Troubleshooting    
     when KEY_LEFT, 97 # Move Left   
+      step = Ncurses.mvwinch(field, p.xlines, p.ycols - 1) # Troubleshooting
+      message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,0,-1,p,walkable,items,actors)          
-      center(viewp,field,p.xlines,p.ycols)      
+      center(viewp,field,p.xlines,p.ycols) 
+      Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
+      Ncurses.wrefresh(hud)       # Troubleshooting     
     when 32 # Spacebar, dont move
       center(viewp,field,p.xlines,p.ycols)
+      Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
+      Ncurses.wrefresh(hud)       # Troubleshooting
+    when 101 # e # Troubleshooting
+      attack(m)
     when 114 # r      
       the_beacon = get_distance_all_beacons(p,all_beacons)
       if get_distance(p,the_beacon) < 101

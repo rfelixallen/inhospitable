@@ -81,7 +81,7 @@ class Tile < Actor
     self.blocked = options[:blocked] || true
   end
 end
-
+=begin
 def check_actors(window, actors, coord)
   actor_coord = []
   actors.each do |x|
@@ -91,13 +91,17 @@ def check_actors(window, actors, coord)
     coord.eql?(y)
 end
 end
-
+=end
 def check_target(actors, characterxlines, characterycols)
   actors.each do |actor|
     if (actor.xlines == characterxlines)  && (actor.ycols == characterycols)
        attack(actor)
     end               
   end
+end
+
+def attack(x)
+    x.hp -= 1
 end
 
 def check_space(window,hud,xl,yc,character,walkable,items,actors)
@@ -160,10 +164,6 @@ def update_inventory(hud, item, player, modifier)
   else
     nil
   end
-end
-
-def attack(x)
-    x.hp -= 1
 end
 
 def static(beacon, clarity) 
