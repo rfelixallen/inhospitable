@@ -1,9 +1,10 @@
 require_relative 'ui'
 
 class Actor
-  attr_accessor :symb, :color, :xlines, :ycols, :blocked #:hp, :hunger, :inventory#, :weather
+  attr_accessor :symb, :symbcode, :color, :xlines, :ycols, :blocked #:hp, :hunger, :inventory#, :weather
   def initialize(options = {})
     self.symb = options[:symb] || '@'
+    self.symbcode = 320 # Should be whatever the ascii code for symb is 
     self.color = options[:color] || 1 # White
     self.xlines = options[:xlines] || 2
     self.ycols = options[:ycols] || 2
@@ -34,6 +35,7 @@ class Character < Actor
   attr_accessor :hp, :hunger, :inventory
     def initialize(options = {})
     self.symb = options[:symb] || '@'
+    self.symbcode = 320 # Should be whatever the ascii code for symb is 
     self.color = options[:color] || 1 # White
     self.xlines = options[:xlines] || 2
     self.ycols = options[:ycols] || 2

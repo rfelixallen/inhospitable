@@ -128,8 +128,8 @@ medkit = Item.new("m", "First Aid Kit", "Medkit")
 =end
 
 # Define Actors, Items and Terrain
-actors = []         # Array will contain ascii decimal value of actor symbols 
-characters = [64,77,320,333] # Array with hard coded character numbers
+#actors = []         # Array will contain ascii decimal value of actor symbols 
+actors = [64,77,320,333] # Array with hard coded character numbers
 items = [42,102,109]        # Array contains ascii decimal value of all items on ground
 walkable = [32,88,126, 288] # ' ', '~', 'X' #somehow 288 became space
 
@@ -141,7 +141,7 @@ player_start_lines = (field_max_lines[0] / 4)
 player_start_cols = (field_max_cols[0] / 4)
 
 # Create Player Actor
-p = Character.new(symb: '@', xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
+p = Character.new(symb: '@', symbcode: 320, xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
 #p = Character.new(xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
 actors << p
 #actor_index.push(p.id)                                     # Add player symbol to array of actor symbols
@@ -149,10 +149,12 @@ actors << p
 
 
 # Create Monster
-m = Character.new(symb: 'M', xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
+m = Character.new(symb: 'M', symbcode: 333, xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
 #m = Character.new('M', xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
 actors << m
-actors.each { |actor| actor.draw(field)}  # Add all actors to the map
+#actors.each { |actor| actor.draw(field)}  # Add all actors to the map
+p.draw(field)
+m.draw(field)
 
 # Set up Console
 borders(console)                            # Add borders to the console
@@ -183,28 +185,28 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
     when KEY_UP, 119 # Move Up
       step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols) # Troubleshooting
       message(console,"Step: #{step}")  # Troubleshooting
-      check_space(field,hud,-1,0,p,walkable,items,characters) 
+      check_space(field,hud,-1,0,p,walkable,items,actors) 
       center(viewp,field,p.xlines,p.ycols)
       Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
       Ncurses.wrefresh(hud)       # Troubleshooting
     when KEY_DOWN, 115 # Move Down      
       step = Ncurses.mvwinch(field, p.xlines + 1, p.ycols) # Troubleshooting
       message(console,"Step: #{step}")  # Troubleshooting
-      check_space(field,hud,1,0,p,walkable,items,characters)                  
+      check_space(field,hud,1,0,p,walkable,items,actors)                  
       center(viewp,field,p.xlines,p.ycols)   
       Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
       Ncurses.wrefresh(hud)       # Troubleshooting  
     when KEY_RIGHT, 100 # Move Right 
       step = Ncurses.mvwinch(field, p.xlines, p.ycols + 1) # Troubleshooting
       message(console,"Step: #{step}")  # Troubleshooting
-      check_space(field,hud,0,1,p,walkable,items,characters)     
+      check_space(field,hud,0,1,p,walkable,items,actors)     
       center(viewp,field,p.xlines,p.ycols)  
       Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
       Ncurses.wrefresh(hud)       # Troubleshooting    
     when KEY_LEFT, 97 # Move Left   
       step = Ncurses.mvwinch(field, p.xlines, p.ycols - 1) # Troubleshooting
       message(console,"Step: #{step}")  # Troubleshooting
-      check_space(field,hud,0,-1,p,walkable,items,characters)          
+      check_space(field,hud,0,-1,p,walkable,items,actors)          
       center(viewp,field,p.xlines,p.ycols) 
       Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
       Ncurses.wrefresh(hud)       # Troubleshooting     
@@ -257,7 +259,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
     distance_from_player = [(p.xlines - m.xlines).abs,(p.ycols - m.ycols).abs] # Get positive value of distance between monster and player
     if distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2 # if the monster is visible, chase player
       #message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing      
-      mode_hunt2(field,hud, m, p, walkable, items, characters)      
+      mode_hunt2(field,hud, m, p, walkable, items, actors)      
     else # If player is not visible, wander around
       if counter < direction_steps
         if dice_roll == false         
@@ -265,7 +267,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
          dice_roll = true
         end
         #message(console,"steps:#{direction_steps},count:#{counter}")  # Troubleshooting message for testing        
-        mode_wander2(field,hud, m, p, walkable, items, characters)        
+        mode_wander2(field,hud, m, p, walkable, items, actors)        
         counter += 1
       else
         #message(console,"Monster move reset") # Troubleshooting message for testing
