@@ -108,7 +108,7 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors)
       if walkable.include?(step) 
         character.move(window,xl,yc)
       elsif symbcodes.include?(step)
-        check_target(actors,character.xlines + xl, character.ycols + yc)       
+        check_target(actors,character,xl,yc)       
       elsif items.include?(step)
         update_inventory(hud, step, character, 1)          
         character.move(window, xl, yc)
@@ -120,9 +120,10 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors)
     end
 end
 
-def check_target(actors, characterxlines, characterycols)
+def check_target(actors,character,xl,yc)
+  
   actors.each do |actor|
-    if (actor.xlines == characterxlines)  && (actor.ycols == characterycols)
+    if (actor.xlines == character.xlines + xl)  && (actor.ycols == character.ycols + yc)
        attack(actor)
     end               
   end

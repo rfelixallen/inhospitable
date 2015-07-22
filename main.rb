@@ -174,7 +174,6 @@ dice_roll = false
 hunger_count = 0
 counter = 0 #wander counter for monster
 direction_steps = rand(10..25) # Meander long distances
-#message(console, "Actors: #{actors[0].}")
 # Begin Loop
 while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{p.ycols},#{p.xlines}]")
