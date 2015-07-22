@@ -172,6 +172,7 @@ dice_roll = false
 hunger_count = 0
 counter = 0 #wander counter for monster
 direction_steps = rand(10..25) # Meander long distances
+#message(console, "Actors: #{actors[0].}")
 # Begin Loop
 while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{p.ycols},#{p.xlines}]")
@@ -182,28 +183,28 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
     when KEY_UP, 119 # Move Up
       step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols) # Troubleshooting
       message(console,"Step: #{step}")  # Troubleshooting
-      check_space(field,hud,-1,0,p,walkable,items,actors) 
+      check_space(field,hud,-1,0,p,walkable,items,characters) 
       center(viewp,field,p.xlines,p.ycols)
       Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
       Ncurses.wrefresh(hud)       # Troubleshooting
     when KEY_DOWN, 115 # Move Down      
       step = Ncurses.mvwinch(field, p.xlines + 1, p.ycols) # Troubleshooting
       message(console,"Step: #{step}")  # Troubleshooting
-      check_space(field,hud,1,0,p,walkable,items,actors)                  
+      check_space(field,hud,1,0,p,walkable,items,characters)                  
       center(viewp,field,p.xlines,p.ycols)   
       Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
       Ncurses.wrefresh(hud)       # Troubleshooting  
     when KEY_RIGHT, 100 # Move Right 
       step = Ncurses.mvwinch(field, p.xlines, p.ycols + 1) # Troubleshooting
       message(console,"Step: #{step}")  # Troubleshooting
-      check_space(field,hud,0,1,p,walkable,items,actors)     
+      check_space(field,hud,0,1,p,walkable,items,characters)     
       center(viewp,field,p.xlines,p.ycols)  
       Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
       Ncurses.wrefresh(hud)       # Troubleshooting    
     when KEY_LEFT, 97 # Move Left   
       step = Ncurses.mvwinch(field, p.xlines, p.ycols - 1) # Troubleshooting
       message(console,"Step: #{step}")  # Troubleshooting
-      check_space(field,hud,0,-1,p,walkable,items,actors)          
+      check_space(field,hud,0,-1,p,walkable,items,characters)          
       center(viewp,field,p.xlines,p.ycols) 
       Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
       Ncurses.wrefresh(hud)       # Troubleshooting     
@@ -256,7 +257,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
     distance_from_player = [(p.xlines - m.xlines).abs,(p.ycols - m.ycols).abs] # Get positive value of distance between monster and player
     if distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2 # if the monster is visible, chase player
       #message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing      
-      mode_hunt2(field,hud, m, p, walkable, items, actors)      
+      mode_hunt2(field,hud, m, p, walkable, items, characters)      
     else # If player is not visible, wander around
       if counter < direction_steps
         if dice_roll == false         
@@ -264,7 +265,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
          dice_roll = true
         end
         #message(console,"steps:#{direction_steps},count:#{counter}")  # Troubleshooting message for testing        
-        mode_wander2(field,hud, m, p, walkable, items, actors)        
+        mode_wander2(field,hud, m, p, walkable, items, characters)        
         counter += 1
       else
         #message(console,"Monster move reset") # Troubleshooting message for testing
