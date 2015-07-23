@@ -2,8 +2,6 @@
 a simple of survival in a cold wasteland
 
 TODO for Extra Features
-* Fix Combat
-** Human can attack monster by walking into it
 * Perlin noise map generation
 * Random Bunker Generation
 * Add in Color
@@ -14,10 +12,11 @@ TODO for Extra Features
 
 Log
 7/22/15
--I kinda half fixed combat. The monster can attack me, but I cant attack it the way I want. I added in a way to hit him so I could test combat. My best guess right now is that when the main game loop executes, the player code to attack either gets ignored, or is targeting the wrong thing. 
+-Fixed combat :) Problem stemmed from poorly implimented symbcode class attributes.
 
 7/21/15
 -Built a janky menu for playing the game or quitting.
+-I kinda half fixed combat. The monster can attack me, but I cant attack it the way I want. I added in a way to hit him so I could test combat. My best guess right now is that when the main game loop executes, the player code to attack either gets ignored, or is targeting the wrong thing. 
 
 7/20/15
 -Went on a trip and spent about 8 hours working on new code. On the productive side, I condensed the movement code, and reworked movement space checking. I can also now add more monsters! Less productive experiments include fiddling with color and making tiles into objects.
