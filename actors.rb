@@ -17,10 +17,11 @@ class Actor
   end
 
   def draw(window)
-    Ncurses.init_pair(1, self.color, 0)
-    window.attron(Ncurses.COLOR_PAIR(1))
+    #Ncurses.init_pair(1, self.color, 0)
+    #window.attron(Ncurses.COLOR_PAIR(1))
     Ncurses.mvwaddstr(window, self.xlines, self.ycols, "#{self.symb}")
     #window.attroff(Ncurses.COLOR_PAIR(1))
+    #Ncurses.wrefresh(window)
   end
 
   def move(window,lines,cols)
@@ -113,7 +114,7 @@ def check_target(hud,actors,character,xl,yc)
   actors.each do |actor|
     if (actor.xlines == character.xlines + xl) and (actor.ycols == character.ycols + yc)
        attack(actor)
-       message(hud,"Attacked #{actor.symb}")
+       #message(hud,"Attacked #{actor.symb}")
     end               
   end
 end

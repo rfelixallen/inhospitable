@@ -141,7 +141,7 @@ player_start_lines = (field_max_lines[0] / 4)
 player_start_cols = (field_max_cols[0] / 4)
 
 # Create Player Actor
-p = Character.new(symb: '@', symbcode: 320, xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
+p = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
 #p = Character.new(xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
 actors << p
 #actor_index.push(p.id)                                     # Add player symbol to array of actor symbols
@@ -149,12 +149,12 @@ actors << p
 
 
 # Create Monster
-m = Character.new(symb: 'M', symbcode: 333, xlines: player_start_cols + 1, ycols: player_start_lines, hp: 3) # Begin Monster near player, but out of sight
+m = Character.new(symb: 'M', symbcode: 77, xlines: player_start_cols + 1, ycols: player_start_lines, hp: 3) # Begin Monster near player, but out of sight
 #m = Character.new('M', xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
 actors << m
-#actors.each { |actor| actor.draw(field)}  # Add all actors to the map
-p.draw(field)
-m.draw(field)
+actors.each { |actor| actor.draw(field)}  # Add all actors to the map
+#p.draw(field)
+#m.draw(field)
 
 # Set up Console
 borders(console)                            # Add borders to the console
@@ -177,7 +177,9 @@ direction_steps = rand(10..25) # Meander long distances
 # Begin Loop
 while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{p.ycols},#{p.xlines}]")
+  Ncurses.mvwaddstr(hud, 10, 1, "M Pos: [#{m.ycols},#{m.xlines}]") # Troubleshooting
   Ncurses.wrefresh(hud)
+  Ncurses.wrefresh(viewp)
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
@@ -275,8 +277,6 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
         direction_steps = 0
       end
     end
-    Ncurses.mvwaddstr(hud, 10, 1, "M Pos: [#{m.ycols},#{m.xlines}]") # Troubleshooting
-    Ncurses.wrefresh(hud)
 #=end    
   end
 
