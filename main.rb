@@ -141,7 +141,7 @@ player_start_lines = (field_max_lines[0] / 4)
 player_start_cols = (field_max_cols[0] / 4)
 
 # Create Player Actor
-p = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
+p = Character.new(symb: '@', symbcode: '64', xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
 #p = Character.new(xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
 actors << p
 #actor_index.push(p.id)                                     # Add player symbol to array of actor symbols
@@ -149,7 +149,7 @@ actors << p
 
 
 # Create Monster
-m = Character.new(symb: 'M', symbcode: 77, xlines: player_start_cols + 1, ycols: player_start_lines, hp: 3) # Begin Monster near player, but out of sight
+m = Character.new(symb: 'M', symbcode: '77', xlines: player_start_cols + 1, ycols: player_start_lines, hp: 3) # Begin Monster near player, but out of sight
 #m = Character.new('M', xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
 actors << m
 actors.each { |actor| actor.draw(field)}  # Add all actors to the map
