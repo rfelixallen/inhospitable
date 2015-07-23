@@ -1,4 +1,5 @@
 require_relative 'ui'
+require_relative 'actors'
 
 #index of tile types with character, colorcode
 =begin
@@ -116,6 +117,26 @@ def demo_bunker2(window, lines, cols, all_tiles)
     end
     i += 1
   end
+end
+
+def cantor_pairing(n, m)
+    (n + m) * (n + m + 1) / 2 + m
+end
+
+def make_beacon(all_beacons,bunker_x,bunker_y)
+  b1 = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 6)
+  all_beacons << b1
+  variable_name = Random.new(cantor_pairing(bunker_x,bunker_y))
+  instance_variable_set("@#{variable_name}", :something)
+end
+
+def make_bunker(window)
+  w_y = []
+  w_x = []
+  Ncurses.getmaxyx(window,w_y,w_x)
+  bunker_x = rand(2..(w_x[0] - 11)) # subtract total height of predefined structure
+  bunker_y = rand(2..(w_y[0] - 11)) # subtract total width of predefined structure
+  demo_bunker(window,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
 end
 
 def draw_map(window)

@@ -107,12 +107,15 @@ draw_map_tiles(field, all_tile[0])
 
 # Draw bunkers and beacons
 all_beacons = []
+=begin
 bunker_x = rand(2..(field_lines - 11))
 bunker_y = rand(2..(field_cols - 11))
 demo_bunker(field,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
-b1 = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 6)
-all_beacons << b1
-Ncurses.mvwaddstr(field, b1.xlines, b1.ycols, b1.symb)
+=end
+make_bunker(field)
+#b1 = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 6)
+#all_beacons << b1
+#Ncurses.mvwaddstr(field, b1.xlines, b1.ycols, b1.symb)
 
 bunker_x = rand(2..(field_lines - 11))
 bunker_y = rand(2..(field_cols - 11))
