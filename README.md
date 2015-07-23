@@ -3,7 +3,9 @@ a simple of survival in a cold wasteland
 
 TODO for Extra Features
 * Fix Combat
+** Human can attack monster by walking into it
 * Perlin noise map generation
+* Random Bunker Generation
 * Add in Color
 * Add in Main Menu
 ** Make all entries visible
@@ -11,6 +13,9 @@ TODO for Extra Features
 * Add in Save/Load 
 
 Log
+7/22/15
+-I kinda half fixed combat. The monster can attack me, but I cant attack it the way I want. I added in a way to hit him so I could test combat. My best guess right now is that when the main game loop executes, the player code to attack either gets ignored, or is targeting the wrong thing. 
+
 7/21/15
 -Built a janky menu for playing the game or quitting.
 
