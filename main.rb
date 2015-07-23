@@ -254,6 +254,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
   if m.hp <= 0
     Ncurses.mvwaddstr(field, m.xlines, m.ycols, "X") # Turn into dead body
     Ncurses.wrefresh(viewp)
+=begin
   else
     distance_from_player = [(p.xlines - m.xlines).abs,(p.ycols - m.ycols).abs] # Get positive value of distance between monster and player
     if distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2 # if the monster is visible, chase player
@@ -275,6 +276,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
         direction_steps = 0
       end
     end
+=end    
   end
 
   # Starvation
