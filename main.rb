@@ -149,7 +149,7 @@ actors << p
 
 
 # Create Monster
-m = Character.new(symb: 'M', symbcode: 333, xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
+m = Character.new(symb: 'M', symbcode: 333, xlines: player_start_cols + 1, ycols: player_start_lines, hp: 3) # Begin Monster near player, but out of sight
 #m = Character.new('M', xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
 actors << m
 #actors.each { |actor| actor.draw(field)}  # Add all actors to the map
@@ -177,7 +177,6 @@ direction_steps = rand(10..25) # Meander long distances
 # Begin Loop
 while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{p.ycols},#{p.xlines}]")
-  Ncurses.mvwaddstr(hud, 10, 1, "M Pos: [#{m.ycols},#{m.xlines}]") # Troubleshooting
   Ncurses.wrefresh(hud)
   input = Ncurses.getch
   case input
@@ -254,7 +253,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
   if m.hp <= 0
     Ncurses.mvwaddstr(field, m.xlines, m.ycols, "X") # Turn into dead body
     Ncurses.wrefresh(viewp)
-=begin
+#=begin
   else
     distance_from_player = [(p.xlines - m.xlines).abs,(p.ycols - m.ycols).abs] # Get positive value of distance between monster and player
     if distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2 # if the monster is visible, chase player
@@ -276,7 +275,9 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit p
         direction_steps = 0
       end
     end
-=end    
+    Ncurses.mvwaddstr(hud, 10, 1, "M Pos: [#{m.ycols},#{m.xlines}]") # Troubleshooting
+    Ncurses.wrefresh(hud)
+#=end    
   end
 
   # Starvation
