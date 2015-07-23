@@ -4,7 +4,7 @@ class Actor
   attr_accessor :symb, :symbcode, :color, :xlines, :ycols, :blocked #:hp, :hunger, :inventory#, :weather
   def initialize(options = {})
     self.symb = options[:symb] || '@'
-    self.symbcode = options[:color] || 64 # Should be whatever the ascii code for symb is 
+    self.symbcode = options[:symbcode] || 64 # Should be whatever the ascii code for symb is 
     self.color = options[:color] || 1 # White
     self.xlines = options[:xlines] || 2
     self.ycols = options[:ycols] || 2
@@ -36,7 +36,7 @@ class Character < Actor
   attr_accessor :hp, :symbcode, :hunger, :inventory
     def initialize(options = {})
     self.symb = options[:symb] || '@'
-    self.symbcode = options[:color] || 64 # Should be whatever the ascii code for symb is 
+    self.symbcode = options[:symbcode] || 64 # Should be whatever the ascii code for symb is 
     self.color = options[:color] || 1 # White
     self.xlines = options[:xlines] || 2
     self.ycols = options[:ycols] || 2
@@ -90,22 +90,24 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors)
     window_max_cols = []
     Ncurses.getmaxyx(window,window_max_cols,window_max_lines)   # Get Max Y,X of window
     step = Ncurses.mvwinch(window, character.xlines + xl, character.ycols + yc)
-    message(hud,"step: #{step}")
-    Ncurses.getch
+    #message(hud,"step: #{step}")
+    #Ncurses.getch
     symbcodes = []
     actors.each do |x|
+      #message(hud,"sc: #{x.symb}")
+      #Ncurses.getch
       symbcodes << x.symbcode
     end
-    message(hud,"symbc: #{symbcodes}")
-    Ncurses.getch
+    #message(hud,"symbc: #{symbcodes}")
+    #Ncurses.getch
     if ((character.xlines + xl) > 0 and (character.ycols + yc) > 0 and (character.xlines + xl) < (window_max_lines[0] - 1) and (character.ycols + yc) < (window_max_cols[0] - 1))
       if walkable.include?(step) 
-          message(hud,"mv: #{character.symb}")
-          Ncurses.getch
+          #message(hud,"mv: #{character.symb}")
+          #Ncurses.getch
         character.move(window,xl,yc)
       elsif symbcodes.include?(step)
-          message(hud,"ck_tar: #{character.symb}")
-          Ncurses.getch
+          #message(hud,"ck_tar: #{character.symb}")
+          #Ncurses.getch
         check_target(hud,actors,character,xl,yc)       
       elsif items.include?(step)
         update_inventory(hud, step, character, 1)          
@@ -119,8 +121,8 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors)
 end
 
 def check_target(hud,actors,character,xl,yc)
-  message(hud,"atk: #{character.symb}")
-  Ncurses.getch
+  #message(hud,"atk: #{character.symb}")
+  #Ncurses.getch
   actors.each do |actor|
     if (actor.xlines == character.xlines + xl) and (actor.ycols == character.ycols + yc)
        attack(actor)

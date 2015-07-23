@@ -105,7 +105,7 @@ def hud_on(hud,player,monster)
   Ncurses.mvwaddstr(hud, 7, 1, " -(F)ood: #{player.inventory["Food"]}")
   Ncurses.mvwaddstr(hud, 8, 1, " -(M)edkit: #{player.inventory["Medkit"]}")
   Ncurses.mvwaddstr(hud, 9, 1, " -Tokens: #{player.inventory["Token"]}")  
-  Ncurses.mvwaddstr(hud, 10, 1, "M Pos: [#{monster.ycols},#{monster.xlines}]") # Troubleshooting
-  Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{monster.hp}")  
+  #Ncurses.mvwaddstr(hud, 10, 1, "M Pos: [#{monster.ycols},#{monster.xlines}]") # Troubleshooting
+  #Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{monster.hp}")  
   Ncurses.wrefresh(hud)
 end

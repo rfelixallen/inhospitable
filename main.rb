@@ -141,7 +141,7 @@ player_start_lines = (field_max_lines[0] / 4)
 player_start_cols = (field_max_cols[0] / 4)
 
 # Create Player Actor
-p = Character.new(symb: '@', symbcode: '64', xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
+p = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
 #p = Character.new(xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
 actors << p
 #actor_index.push(p.id)                                     # Add player symbol to array of actor symbols
@@ -149,7 +149,7 @@ actors << p
 
 
 # Create Monster
-m = Character.new(symb: 'M', symbcode: '77', xlines: player_start_cols + 1, ycols: player_start_lines, hp: 3) # Begin Monster near player, but out of sight
+m = Character.new(symb: 'M', symbcode: 77, xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
 #m = Character.new('M', xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
 actors << m
 actors.each { |actor| actor.draw(field)}  # Add all actors to the map
@@ -177,45 +177,45 @@ direction_steps = rand(10..25) # Meander long distances
 # Begin Loop
 while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{p.ycols},#{p.xlines}]")
-  Ncurses.mvwaddstr(hud, 10, 1, "M Pos: [#{m.ycols},#{m.xlines}]") # Troubleshooting
+  #Ncurses.mvwaddstr(hud, 10, 1, "M Pos: [#{m.ycols},#{m.xlines}]") # Troubleshooting
   Ncurses.wrefresh(hud)
-  Ncurses.wrefresh(viewp)
+  Ncurses.wrefresh(viewp) # Fixed Monster location
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
-      step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols) # Troubleshooting
-      message(console,"Step: #{step}")  # Troubleshooting
+      #step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols) # Troubleshooting
+      #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,-1,0,p,walkable,items,actors) 
       center(viewp,field,p.xlines,p.ycols)
-      Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
-      Ncurses.wrefresh(hud)       # Troubleshooting
+      #Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
+      #Ncurses.wrefresh(hud)       # Troubleshooting
     when KEY_DOWN, 115 # Move Down      
-      step = Ncurses.mvwinch(field, p.xlines + 1, p.ycols) # Troubleshooting
-      message(console,"Step: #{step}")  # Troubleshooting
+      #step = Ncurses.mvwinch(field, p.xlines + 1, p.ycols) # Troubleshooting
+      #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,1,0,p,walkable,items,actors)                  
       center(viewp,field,p.xlines,p.ycols)   
-      Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
-      Ncurses.wrefresh(hud)       # Troubleshooting  
+      #Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
+      #Ncurses.wrefresh(hud)       # Troubleshooting  
     when KEY_RIGHT, 100 # Move Right 
-      step = Ncurses.mvwinch(field, p.xlines, p.ycols + 1) # Troubleshooting
-      message(console,"Step: #{step}")  # Troubleshooting
+      #step = Ncurses.mvwinch(field, p.xlines, p.ycols + 1) # Troubleshooting
+      #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,0,1,p,walkable,items,actors)     
       center(viewp,field,p.xlines,p.ycols)  
-      Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
-      Ncurses.wrefresh(hud)       # Troubleshooting    
+      #Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
+      #Ncurses.wrefresh(hud)       # Troubleshooting    
     when KEY_LEFT, 97 # Move Left   
-      step = Ncurses.mvwinch(field, p.xlines, p.ycols - 1) # Troubleshooting
-      message(console,"Step: #{step}")  # Troubleshooting
+      #step = Ncurses.mvwinch(field, p.xlines, p.ycols - 1) # Troubleshooting
+      #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,0,-1,p,walkable,items,actors)          
       center(viewp,field,p.xlines,p.ycols) 
-      Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
-      Ncurses.wrefresh(hud)       # Troubleshooting     
+      #Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
+      #Ncurses.wrefresh(hud)       # Troubleshooting     
     when 32 # Spacebar, dont move
       center(viewp,field,p.xlines,p.ycols)
-      Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
-      Ncurses.wrefresh(hud)       # Troubleshooting
-    when 101 # e # Troubleshooting
-      attack(m)
+      #Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
+      #Ncurses.wrefresh(hud)       # Troubleshooting
+    #when 101 # e # Troubleshooting
+      #attack(m)
     when 114 # r      
       the_beacon = get_distance_all_beacons(p,all_beacons)
       if get_distance(p,the_beacon) < 101
