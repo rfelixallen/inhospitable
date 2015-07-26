@@ -126,7 +126,15 @@ if bunker_test == 0
   Ncurses.mvwaddstr(field, b2.xlines, b2.ycols, b2.symb)
 elsif bunker_test == 1
   # Bunker Generations method
-  make_bunker(field,all_beacons)
+  bunker_area_with_space = (view_lines * view_cols) + 11 # 11 is the area of the demo bunker
+  total_bunkers = ((field_lines * field_cols) / bunker_area_with_space) # This will return round number because of floats
+  bunker_start = 0
+  while bunker_start <= total_bunkers
+    make_bunker(field,all_beacons)
+    bunker_start += 1
+  end
+  #puts "#{bunker_start} total bunkers generated"
+  #puts all_beacons
 else
   puts "No Bunker generation specified."
 end
@@ -184,7 +192,7 @@ hunger_count = 0
 counter = 0 #wander counter for monster
 direction_steps = rand(10..25) # Meander long distances
 # Begin Loop
-while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < 2  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
+while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{p.ycols},#{p.xlines}]")
   #Ncurses.mvwaddstr(hud, 10, 1, "M Pos: [#{m.ycols},#{m.xlines}]") # Troubleshooting
   Ncurses.wrefresh(hud)

@@ -140,7 +140,7 @@ def make_beacon(window,all_beacons,bunker_x,bunker_y)
   variable_name = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 6, message: message)
   Ncurses.mvwaddstr(window, variable_name.xlines, variable_name.ycols, variable_name.symb)
   all_beacons << variable_name
-  puts "Beacon: #{variable_name}"
+  #puts "Beacon: #{variable_name}"
 end
 
 def draw_map(window)
