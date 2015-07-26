@@ -4,7 +4,7 @@ include Ncurses
 #################################################################################
 # Initialize                                                                    #
 #################################################################################
-
+puts "The Game has Started!"
 Ncurses.initscr             # Start Ncurses
 Ncurses.noecho              # Do not show keyboard input at cursor location
 #Ncurses.start_color
@@ -107,23 +107,29 @@ draw_map_tiles(field, all_tile[0])
 
 # Draw bunkers and beacons
 all_beacons = []
-=begin
-bunker_x = rand(2..(field_lines - 11))
-bunker_y = rand(2..(field_cols - 11))
-demo_bunker(field,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
-=end
-make_bunker(field)
-#b1 = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 6)
-#all_beacons << b1
-#Ncurses.mvwaddstr(field, b1.xlines, b1.ycols, b1.symb)
+bunker_test = 1
+if bunker_test == 0
+  #Bunker 1
+  bunker_x = rand(2..(field_lines - 11))
+  bunker_y = rand(2..(field_cols - 11))
+  demo_bunker(field,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
+  b1 = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 6)
+  all_beacons << b1
+  Ncurses.mvwaddstr(field, b1.xlines, b1.ycols, b1.symb)
 
-bunker_x = rand(2..(field_lines - 11))
-bunker_y = rand(2..(field_cols - 11))
-demo_bunker(field,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
-b2 = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 6, message: "HELPHELPHELP")
-all_beacons << b2
-Ncurses.mvwaddstr(field, b2.xlines, b2.ycols, b2.symb)
-
+  # Bunker 2
+  bunker_x = rand(2..(field_lines - 11))
+  bunker_y = rand(2..(field_cols - 11))
+  demo_bunker(field,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
+  b2 = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 6, message: "HELPHELPHELP")
+  all_beacons << b2
+  Ncurses.mvwaddstr(field, b2.xlines, b2.ycols, b2.symb)
+elsif bunker_test == 1
+  # Bunker Generations method
+  make_bunker(field,all_beacons)
+else
+  puts "No Bunker generation specified."
+end
 =begin
 # Define item types
 food = Item.new("f", "Beans", "Food")
@@ -328,4 +334,5 @@ Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Good Bye!")
 Ncurses.wrefresh(stdscr)
 Ncurses.napms(1000)
 Ncurses.getch
+puts "The Game has quit!"
 Ncurses.endwin

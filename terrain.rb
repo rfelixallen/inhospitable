@@ -119,24 +119,28 @@ def demo_bunker2(window, lines, cols, all_tiles)
   end
 end
 
+# Create unique number from two other numbers
 def cantor_pairing(n, m)
     (n + m) * (n + m + 1) / 2 + m
 end
 
-def make_beacon(all_beacons,bunker_x,bunker_y)
-  b1 = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 6)
-  all_beacons << b1
-  variable_name = Random.new(cantor_pairing(bunker_x,bunker_y))
-  instance_variable_set("@#{variable_name}", :something)
-end
-
-def make_bunker(window)
+def make_bunker(window,all_beacons)
   w_y = []
   w_x = []
   Ncurses.getmaxyx(window,w_y,w_x)
   bunker_x = rand(2..(w_x[0] - 11)) # subtract total height of predefined structure
   bunker_y = rand(2..(w_y[0] - 11)) # subtract total width of predefined structure
   demo_bunker(window,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
+  make_beacon(window,all_beacons,bunker_x,bunker_y)
+end
+
+def make_beacon(window,all_beacons,bunker_x,bunker_y)
+  variable_name = Random.new(cantor_pairing(bunker_x,bunker_y))
+  message = "Broadcast #{cantor_pairing(bunker_x,bunker_y)}"
+  variable_name = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 6, message: message)
+  Ncurses.mvwaddstr(window, variable_name.xlines, variable_name.ycols, variable_name.symb)
+  all_beacons << variable_name
+  puts "Beacon: #{variable_name}"
 end
 
 def draw_map(window)
