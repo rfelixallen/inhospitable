@@ -193,6 +193,7 @@ dice_roll = false
 hunger_count = 0
 counter = 0 #wander counter for monster
 direction_steps = rand(10..25) # Meander long distances
+player_visible = 1
 # Begin Loop
 while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{p.ycols},#{p.xlines}]")
@@ -235,6 +236,12 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
       #Ncurses.wrefresh(hud)       # Troubleshooting
     #when 101 # e # Troubleshooting
       #attack(m)
+    when 104 # h
+      if player_visible == 1
+        player_visible = 0
+      elsif player_visible == 0
+        player_visible = 1
+      end
     when 114 # r      
       the_beacon = get_distance_all_beacons(p,all_beacons)
       if get_distance(p,the_beacon) < 101
@@ -277,7 +284,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
       Ncurses.wrefresh(viewp)
     else
       distance_from_player = [(p.xlines - rawr.xlines).abs,(p.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
-      if distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2 # if the monster is visible, chase player
+      if player_visible == 1 and (distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2) # if the monster is visible, chase player
         #message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing      
         mode_hunt2(field,hud, rawr, p, walkable, items, actors)      
       else # If player is not visible, wander around
