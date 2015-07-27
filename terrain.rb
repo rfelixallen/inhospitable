@@ -124,12 +124,23 @@ def cantor_pairing(n, m)
     (n + m) * (n + m + 1) / 2 + m
 end
 
-def make_bunker(window,all_beacons)
+def make_bunker(window,all_beacons,all_bunkers)
   w_y = []
   w_x = []
+  i = 0
+  j = 0
   Ncurses.getmaxyx(window,w_y,w_x)
   bunker_x = rand(2..(w_x[0] - 11)) # subtract total height of predefined structure
   bunker_y = rand(2..(w_y[0] - 11)) # subtract total width of predefined structure
+  while i <= 11
+    while j <= 11
+      all_bunkers << [bunker_x + i, bunker_y + j]
+      j += 1
+    end
+    i += 1
+  end
+
+
   demo_bunker(window,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
   make_beacon(window,all_beacons,bunker_x,bunker_y)
 end
