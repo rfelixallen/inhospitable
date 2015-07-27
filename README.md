@@ -11,6 +11,9 @@ TODO for Extra Features
 * Add in Save/Load 
 
 Log
+7/26/15
+-I figured out how to make n bunkers and n beacons randomly generate and not overlap. The next step is to play test the right size of the map, the right starvation count and the appropriate distance between bunkers. One thing I need to do before that is redo monster code so that the game will create and move n monsters.
+
 7/22/15
 -Fixed combat :) Problem stemmed from poorly implimented symbcode class attributes.
 
