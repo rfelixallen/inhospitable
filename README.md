@@ -3,7 +3,7 @@ a simple of survival in a cold wasteland
 
 TODO for Extra Features
 * Perlin noise map generation
-* Random Bunker Generation with monsters
+* Accomodate multiple monsters + spawn in bunkers
 * Add in Color
 * Add in Main Menu
 ** Make all entries visible
