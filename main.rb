@@ -4,7 +4,7 @@ include Ncurses
 #################################################################################
 # Initialize                                                                    #
 #################################################################################
-puts "The Game has Started!"
+#puts "The Game has Started!"
 Ncurses.initscr             # Start Ncurses
 Ncurses.noecho              # Do not show keyboard input at cursor location
 #Ncurses.start_color
@@ -107,6 +107,7 @@ draw_map_tiles(field, all_tile[0])
 
 # Draw bunkers and beacons
 all_beacons = []
+all_bunkers = []
 bunker_test = 1
 if bunker_test == 0
   #Bunker 1
@@ -130,7 +131,7 @@ elsif bunker_test == 1
   total_bunkers = ((field_lines * field_cols) / bunker_area_with_space) # This will return round number because of floats
   bunker_start = 0
   while bunker_start <= total_bunkers
-    make_bunker(field,all_beacons)
+    make_bunker(field,all_beacons,all_bunkers)
     bunker_start += 1
   end
   #puts "#{bunker_start} total bunkers generated"
@@ -342,5 +343,5 @@ Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Good Bye!")
 Ncurses.wrefresh(stdscr)
 Ncurses.napms(1000)
 Ncurses.getch
-puts "The Game has quit!"
+#puts "The Game has quit!"
 Ncurses.endwin
