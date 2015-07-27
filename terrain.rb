@@ -124,7 +124,7 @@ def cantor_pairing(n, m)
     (n + m) * (n + m + 1) / 2 + m
 end
 
-def make_bunker(window,all_beacons,all_bunkers)
+def make_bunker(window,all_beacons,all_bunkers,all_monsters)
   success = 0
   w_y = []
   w_x = []
@@ -153,6 +153,12 @@ def make_bunker(window,all_beacons,all_bunkers)
       success = 1
       demo_bunker(window,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
       make_beacon(window,all_beacons,bunker_x,bunker_y)
+      monster_x = bunker_x + 10
+      monster_y = bunker_y + 10
+      monster = cantor_pairing(monster_x,monster_y)
+      monster = Character.new(symb: 'M', symbcode: 77, xlines: monster_x, ycols: monster_y, hp: 3)
+      all_monsters << monster
+
     end
   end
 end
