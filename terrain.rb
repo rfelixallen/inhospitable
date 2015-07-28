@@ -208,13 +208,14 @@ end
 def generate_random(window)
   borders(window)
   # Draws random characters to each tile
-  i = 1
   w_y = []
   w_x = []
   Ncurses.getmaxyx(window,w_y,w_x)
-  while i < w_x[0] - 1
-    j = 1
-    while j < w_y[0] - 1
+  
+  i = 1
+  j = 1
+  for i in 1..(w_x[0] - 1)
+    for j in 1..(w_y[0] - 1)
       dice = rand(4)
       case dice 
       when 0
@@ -226,8 +227,6 @@ def generate_random(window)
       else
         Ncurses.mvwaddstr(window, i, j, "~")
       end
-    j += 1
     end
-    i += 1
   end
 end
