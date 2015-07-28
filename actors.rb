@@ -102,12 +102,12 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors)
     #Ncurses.getch
     if ((character.xlines + xl) > 0 and (character.ycols + yc) > 0 and (character.xlines + xl) < (window_max_lines[0] - 1) and (character.ycols + yc) < (window_max_cols[0] - 1))
       if walkable.include?(step) 
-          #message(hud,"mv: #{character.symb}")
-          #Ncurses.getch
+     #     message(hud,"mv: #{character.symb}")
+     #     Ncurses.getch
         character.move(window,xl,yc)
       elsif symbcodes.include?(step)
-          #message(hud,"ck_tar: #{character.symb}")
-          #Ncurses.getch
+      #    message(hud,"ck_tar: #{character.symb}")
+      #    Ncurses.getch
         check_target(hud,actors,character,xl,yc)       
       elsif items.include?(step)
         update_inventory(hud, step, character, 1)          
