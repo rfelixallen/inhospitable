@@ -4,7 +4,7 @@ include Ncurses
 #################################################################################
 # Initialize                                                                    #
 #################################################################################
-#puts "The Game has Started!"
+
 Ncurses.initscr             # Start Ncurses
 Ncurses.noecho              # Do not show keyboard input at cursor location
 #Ncurses.start_color
@@ -98,9 +98,13 @@ wall_horizontal = Tile.new(name: "Wall_Horizontal", code: 2, symb: "=", color: "
 wall_vertical = Tile.new(name: "Wall_Vertical", code: 3, symb: "|", color: "Yellow", blocked: true)
 all_tile = []
 all_tile.concat([snow, wall_horizontal, wall_vertical])
+=begin
+# Define item types
+food = Item.new("f", "Beans", "Food")
+medkit = Item.new("m", "First Aid Kit", "Medkit")
+=end
 
 # Experiments with tiles as objects
-#objects << snow
 #draw_map(field)         # Draws a simple map with one terrain type
 #draw_map_tiles(field, snow)
 #draw_map_tiles(field, all_tile[0])
@@ -108,14 +112,12 @@ generate_random(field)
 
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 
-#actors = [64,77,320,333] # Array with hard coded character numbers
 items = [42,102,109]        # Array contains ascii decimal value of all items on ground
 walkable = [32,88,126, 288] # ' ', '~', 'X' #somehow 288 became space
 
 # Draw bunkers and beacons
 all_beacons = []
 all_bunkers = []
-#all_monsters = []
 bunker_test = 1
 if bunker_test == 0
   #Bunker 1
@@ -142,16 +144,9 @@ elsif bunker_test == 1
     make_bunker(field,all_beacons,all_bunkers,actors)
     bunker_start += 1
   end
-  #puts "#{bunker_start} total bunkers generated"
-  #puts all_beacons
 else
   puts "No Bunker generation specified."
 end
-=begin
-# Define item types
-food = Item.new("f", "Beans", "Food")
-medkit = Item.new("m", "First Aid Kit", "Medkit")
-=end
 
 # Setup Actors
 field_max_lines = []
@@ -161,21 +156,9 @@ player_start_lines = (field_max_lines[0] / 4)
 player_start_cols = (field_max_cols[0] / 4)
 
 # Create Player Actor
-p = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
-#p = Character.new(xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
+p = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_cols, hp: 9)
 actors << p
-#actor_index.push(p.id)                                     # Add player symbol to array of actor symbols
-#Ncurses.mvwaddstr(field, p.xlines, p.ycols, "#{p.symb}")        # Draw layer to map
-
-# Create Monster
-#m = Character.new(symb: 'M', symbcode: 77, xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
-#m = Character.new('M', xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
-#all_monsters << m
-#actors << m
 actors.each { |actor| actor.draw(field)}  # Add all actors to the map
-#all_monsters.each { |actor| actor.draw(field)}  # Add all actors to the map
-#p.draw(field)
-#m.draw(field)
 
 # Set up Console
 borders(console)                            # Add borders to the console
@@ -188,6 +171,7 @@ Ncurses.wrefresh(viewp)
 #################################################################################
 # Game Loop                                                                     #
 #################################################################################
+
 # Game Variables - Initial set and forget
 direction_steps = 0
 counter = 0   
@@ -196,6 +180,7 @@ hunger_count = 0
 counter = 0 #wander counter for monster
 direction_steps = rand(10..25) # Meander long distances
 player_visible = 1
+
 # Begin Loop
 while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{p.ycols},#{p.xlines}]")
@@ -209,33 +194,23 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
       #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,-1,0,p,walkable,items,actors) 
       center(viewp,field,p.xlines,p.ycols)
-      #Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
-      #Ncurses.wrefresh(hud)       # Troubleshooting
     when KEY_DOWN, 115 # Move Down      
       #step = Ncurses.mvwinch(field, p.xlines + 1, p.ycols) # Troubleshooting
       #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,1,0,p,walkable,items,actors)                  
       center(viewp,field,p.xlines,p.ycols)   
-      #Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
-      #Ncurses.wrefresh(hud)       # Troubleshooting  
     when KEY_RIGHT, 100 # Move Right 
       #step = Ncurses.mvwinch(field, p.xlines, p.ycols + 1) # Troubleshooting
       #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,0,1,p,walkable,items,actors)     
-      center(viewp,field,p.xlines,p.ycols)  
-      #Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
-      #Ncurses.wrefresh(hud)       # Troubleshooting    
+      center(viewp,field,p.xlines,p.ycols)    
     when KEY_LEFT, 97 # Move Left   
       #step = Ncurses.mvwinch(field, p.xlines, p.ycols - 1) # Troubleshooting
       #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,0,-1,p,walkable,items,actors)          
-      center(viewp,field,p.xlines,p.ycols) 
-      #Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
-      #Ncurses.wrefresh(hud)       # Troubleshooting     
+      center(viewp,field,p.xlines,p.ycols)     
     when 32 # Spacebar, dont move
       center(viewp,field,p.xlines,p.ycols)
-      #Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{m.hp}") # Troubleshooting
-      #Ncurses.wrefresh(hud)       # Troubleshooting
     #when 101 # e # Troubleshooting
       #attack(m)
     when 104 # h
@@ -353,5 +328,4 @@ Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Good Bye!")
 Ncurses.wrefresh(stdscr)
 Ncurses.napms(1000)
 Ncurses.getch
-#puts "The Game has quit!"
 Ncurses.endwin
