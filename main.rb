@@ -114,7 +114,7 @@ walkable = [32,88,126, 288] # ' ', '~', 'X' #somehow 288 became space
 # Draw bunkers and beacons
 all_beacons = []
 all_bunkers = []
-all_monsters = []
+#all_monsters = []
 bunker_test = 1
 if bunker_test == 0
   #Bunker 1
@@ -138,7 +138,7 @@ elsif bunker_test == 1
   total_bunkers = ((field_lines * field_cols) / bunker_area_with_space) # This will return round number because of floats
   bunker_start = 0
   while bunker_start <= total_bunkers
-    make_bunker(field,all_beacons,all_bunkers,all_monsters,actors)
+    make_bunker(field,all_beacons,all_bunkers,actors)
     bunker_start += 1
   end
   #puts "#{bunker_start} total bunkers generated"
@@ -172,7 +172,7 @@ actors << p
 #all_monsters << m
 #actors << m
 actors.each { |actor| actor.draw(field)}  # Add all actors to the map
-all_monsters.each { |actor| actor.draw(field)}  # Add all actors to the map
+#all_monsters.each { |actor| actor.draw(field)}  # Add all actors to the map
 #p.draw(field)
 #m.draw(field)
 
