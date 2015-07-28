@@ -3,7 +3,6 @@ a simple game of survival in a cold wasteland
 
 TODO for Extra Features
 * Refactor Inventory code
-* Fix monster wander code
 * Perlin noise map generation
 * Add in Color
 * Add in Main Menu
@@ -14,7 +13,7 @@ TODO for Extra Features
 
 Log
 7/27/15
--Today I finished the code to make multiple monsters spawn with a certain % in each bunker.
+-Today I finished the code to make multiple monsters spawn with a certain % in each bunker. I also cleaned up terrain generation and monster item pickup code
 
 7/26/15
 -I figured out how to make n bunkers and n beacons randomly generate and not overlap. The next step is to play test the right size of the map, the right starvation count and the appropriate distance between bunkers. One thing I need to do before that is redo monster code so that the game will create and move n monsters.

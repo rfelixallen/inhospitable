@@ -34,20 +34,35 @@ while key != 113
   case key
   when KEY_DOWN
     menuitem += 1
-    if (menuitem > 1) 
+    if (menuitem > 2) 
       menuitem = 0
       #break
     end
   when KEY_UP
     menuitem -= 1
     if (menuitem < 0) 
-      menuitem = 1
+      menuitem = 2
       #break
     end
   when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
     if menuitem == 0 # Play Game
       key = 113
-    elsif menuitem == 1 # Quit Game
+    elsif menuitem == 1 # Instructions
+      Ncurses.clear
+      Ncurses.mvaddstr(0,2,"Inhospitable - Instructions")
+      Ncurses.mvaddstr(2,2,"Arrow Keys - Up, Down, Left, Right")
+      Ncurses.mvaddstr(3,2,"R - Use Radio")
+      Ncurses.mvaddstr(4,2,"F - Eat Food - icon (f)")
+      Ncurses.mvaddstr(5,2,"M - Use Medkit - icon (m)")
+      Ncurses.mvaddstr(6,2,"Q - Quit Game")
+      Ncurses.mvaddstr(7,2,"Spacebar - Skip Movement")
+      Ncurses.mvaddstr(8,2,"Use Radio to find Bunkers with supplies!")
+      Ncurses.mvaddstr(9,2,"Walk into Monsters to attack - icon (M)")
+      Ncurses.mvaddstr(10,2,"Collect all Tokens to finish game")
+      Ncurses.mvaddstr(12,2,"Press any key to return to menu")
+      Ncurses.refresh
+      Ncurses.getch
+    elsif menuitem == 2 # Quit Game
       Ncurses.clear
       Ncurses.endwin
       exit
