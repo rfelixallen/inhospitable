@@ -3,6 +3,7 @@ a simple game of survival in a cold wasteland
 
 TODO for Extra Features
 * Refactor Inventory code
+* Fix monster wander code
 * Perlin noise map generation
 * Add in Color
 * Add in Main Menu
