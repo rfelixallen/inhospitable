@@ -259,7 +259,7 @@ def mode_wander2(window, hud, character, player, walkable, items, actors) # New 
 end
 
 def mode_hunt2(window, hud, character, player, walkable, items, actors) # New Hunt
-  flip = rand(2)
+  flip = rand.round
   if flip == 0    
     if character.ycols > player.ycols 
       check_space(window,hud,0,-1,character,walkable,items,actors) # Move Left
