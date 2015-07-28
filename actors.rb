@@ -236,7 +236,7 @@ end
 
 # Modes
 def mode_wander2(window, hud, character, player, walkable, items, actors) # New Wander Method
-  d4 = rand(4)
+  d4 = rand(0..3)
   if d4 == 0
     check_space(window,hud,0,-1,character,walkable,items,actors) # Move Left
     Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
@@ -249,7 +249,7 @@ def mode_wander2(window, hud, character, player, walkable, items, actors) # New 
     check_space(window,hud,-1,0,character,walkable,items,actors) # Move Up
     Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
     Ncurses.wrefresh(hud)    
-  elsif d4 == 4
+  elsif d4 == 3
     check_space(window,hud,1,0,character,walkable,items,actors) # Move Down
     Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
     Ncurses.wrefresh(hud)    
