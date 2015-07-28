@@ -145,19 +145,26 @@ def update_inventory(hud, item, player, modifier)
   case item 
   when 42 
     player.inventory["Token"] += modifier
-    Ncurses.mvwaddstr(hud, 9, 1, " -Token: #{player.inventory["Token"]}")
-    Ncurses.wrefresh(hud)
+    #Ncurses.mvwaddstr(hud, 9, 1, " -Token: #{player.inventory["Token"]}")
+    #Ncurses.wrefresh(hud)
   when 102
     player.inventory["Food"] += modifier
-    Ncurses.mvwaddstr(hud, 7, 1, " -(F)ood: #{player.inventory["Food"]}")
-    Ncurses.wrefresh(hud)
+    #Ncurses.mvwaddstr(hud, 7, 1, " -(F)ood: #{player.inventory["Food"]}")
+    #Ncurses.wrefresh(hud)
   when 109
     player.inventory["Medkit"] += modifier
-    Ncurses.mvwaddstr(hud, 8, 1, " -(M)edkit: #{player.inventory["Medkit"]}")
-    Ncurses.wrefresh(hud)
+    #Ncurses.mvwaddstr(hud, 8, 1, " -(M)edkit: #{player.inventory["Medkit"]}")
+    #Ncurses.wrefresh(hud)
   else
     nil
   end
+end
+
+def update_hud_inventory(hud, player)
+    Ncurses.mvwaddstr(hud, 7, 1, " -(F)ood: #{player.inventory["Food"]}")
+    Ncurses.mvwaddstr(hud, 8, 1, " -(M)edkit: #{player.inventory["Medkit"]}")
+    Ncurses.mvwaddstr(hud, 9, 1, " -Token: #{player.inventory["Token"]}")
+    Ncurses.wrefresh(hud)
 end
 
 def static(beacon, clarity) 
