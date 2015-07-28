@@ -105,6 +105,12 @@ all_tile.concat([snow, wall_horizontal, wall_vertical])
 #draw_map_tiles(field, snow)
 draw_map_tiles(field, all_tile[0])
 
+# Define Actors, Items and Terrain
+actors = []         # Array will contain ascii decimal value of actor symbols 
+#actors = [64,77,320,333] # Array with hard coded character numbers
+items = [42,102,109]        # Array contains ascii decimal value of all items on ground
+walkable = [32,88,126, 288] # ' ', '~', 'X' #somehow 288 became space
+
 # Draw bunkers and beacons
 all_beacons = []
 all_bunkers = []
@@ -132,7 +138,7 @@ elsif bunker_test == 1
   total_bunkers = ((field_lines * field_cols) / bunker_area_with_space) # This will return round number because of floats
   bunker_start = 0
   while bunker_start <= total_bunkers
-    make_bunker(field,all_beacons,all_bunkers,all_monsters)
+    make_bunker(field,all_beacons,all_bunkers,all_monsters,actors)
     bunker_start += 1
   end
   #puts "#{bunker_start} total bunkers generated"
@@ -145,12 +151,6 @@ end
 food = Item.new("f", "Beans", "Food")
 medkit = Item.new("m", "First Aid Kit", "Medkit")
 =end
-
-# Define Actors, Items and Terrain
-actors = []         # Array will contain ascii decimal value of actor symbols 
-#actors = [64,77,320,333] # Array with hard coded character numbers
-items = [42,102,109]        # Array contains ascii decimal value of all items on ground
-walkable = [32,88,126, 288] # ' ', '~', 'X' #somehow 288 became space
 
 # Setup Actors
 field_max_lines = []
@@ -167,11 +167,12 @@ actors << p
 #Ncurses.mvwaddstr(field, p.xlines, p.ycols, "#{p.symb}")        # Draw layer to map
 
 # Create Monster
-m = Character.new(symb: 'M', symbcode: 77, xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
+#m = Character.new(symb: 'M', symbcode: 77, xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
 #m = Character.new('M', xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
-all_monsters << m
-actors << m
+#all_monsters << m
+#actors << m
 actors.each { |actor| actor.draw(field)}  # Add all actors to the map
+all_monsters.each { |actor| actor.draw(field)}  # Add all actors to the map
 #p.draw(field)
 #m.draw(field)
 
@@ -180,7 +181,7 @@ borders(console)                            # Add borders to the console
 Ncurses.wrefresh(console)                   # Refresh console window with message
 
 # Set up HUD (Heads-Up-Display)
-hud_on(hud,p,m)
+hud_on(hud,p)
 center(viewp,field,p.xlines,p.ycols)                            # Center map on player
 Ncurses.wrefresh(viewp)
 #################################################################################
