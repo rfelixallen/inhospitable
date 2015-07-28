@@ -93,7 +93,7 @@ Ncurses.refresh             # Refresh window to display cleared screen
 objects = []
 
 # Draw map
-#draw_map(field)         # Draws a simple map with one terrain type
+draw_map(field)         # Draws a simple map with one terrain type
 snow = Tile.new(name: "Snow", symb: "~", code: 1, color: "WHITE", blocked: true)
 wall_horizontal = Tile.new(name: "Wall_Horizontal", code: 2, symb: "=", color: "YELLOW", blocked: true)
 wall_vertical = Tile.new(name: "Wall_Vertical", code: 3, symb: "|", color: "Yellow", blocked: true)
@@ -103,7 +103,7 @@ all_tile.concat([snow, wall_horizontal, wall_vertical])
 # Experiments with tiles as objects
 #objects << snow
 #draw_map_tiles(field, snow)
-draw_map_tiles(field, all_tile[0])
+#draw_map_tiles(field, all_tile[0])
 
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 
