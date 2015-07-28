@@ -153,13 +153,7 @@ def make_bunker(window,all_beacons,all_bunkers,actors)
       success = 1
       demo_bunker(window,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
       make_beacon(window,all_beacons,bunker_x,bunker_y)
-      monster_x = bunker_x + 1
-      monster_y = bunker_y + 1
-      monster = cantor_pairing(monster_x,monster_y)
-      monster = Character.new(symb: 'M', symbcode: 77, xlines: monster_x, ycols: monster_y, hp: 3)
-      #all_monsters << monster
-      actors << monster
-
+      make_monster(bunker_x + 1, bunker_y + 1,actors)
     end
   end
 end
@@ -170,7 +164,12 @@ def make_beacon(window,all_beacons,bunker_x,bunker_y)
   variable_name = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 6, message: message)
   Ncurses.mvwaddstr(window, variable_name.xlines, variable_name.ycols, variable_name.symb)
   all_beacons << variable_name
-  #puts "Beacon: #{variable_name}"
+end
+
+def make_monster(monster_x,monster_y,actors)
+      monster = cantor_pairing(monster_x,monster_y)
+      monster = Character.new(symb: 'M', symbcode: 77, xlines: monster_x, ycols: monster_y, hp: 3)
+      actors << monster
 end
 
 def draw_map(window)
