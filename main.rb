@@ -279,7 +279,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
     end
 
   # Monsters Move
-  all_monsters.each do |rawr|  
+  actors.except(p).each do |rawr|  
     if rawr.hp <= 0
       Ncurses.mvwaddstr(field, rawr.xlines, rawr.ycols, "X") # Turn into dead body
       Ncurses.wrefresh(viewp)

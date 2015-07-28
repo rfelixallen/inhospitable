@@ -1,5 +1,11 @@
 require_relative 'ui'
 
+class Array
+   def except(value)
+     self - [value]
+   end
+ end
+
 class Actor
   attr_accessor :symb, :symbcode, :color, :xlines, :ycols, :blocked #:hp, :hunger, :inventory#, :weather
   def initialize(options = {})
