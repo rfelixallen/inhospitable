@@ -105,10 +105,10 @@ medkit = Item.new("m", "First Aid Kit", "Medkit")
 =end
 
 # Experiments with tiles as objects
-#draw_map(field)         # Draws a simple map with one terrain type
+draw_map(field)         # Draws a simple map with one terrain type
 #draw_map_tiles(field, snow)
 #draw_map_tiles(field, all_tile[0])
-generate_random(field)
+#generate_random(field)
 
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 
@@ -263,8 +263,10 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
       distance_from_player = [(p.xlines - rawr.xlines).abs,(p.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
       if player_visible == 1 and (distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2) # if the monster is visible, chase player
         #message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing      
-        mode_hunt2(field,hud, rawr, p, walkable, items, actors)      
+        mode_hunt2(field,hud, rawr, p, walkable, items, actors)            
       else # If player is not visible, wander around
+        mode_wander2(field,hud, rawr, p, walkable, items, actors)   
+=begin        
         if counter < direction_steps
           if dice_roll == false         
            direction_steps = rand(10..25) # Meander long distances
@@ -279,6 +281,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
           counter = 0
           direction_steps = 0
         end
+=end        
       end  
     end
   end
