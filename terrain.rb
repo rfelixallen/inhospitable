@@ -153,7 +153,10 @@ def make_bunker(window,all_beacons,all_bunkers,actors)
       success = 1
       demo_bunker(window,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
       make_beacon(window,all_beacons,bunker_x,bunker_y)
-      make_monster(bunker_x + 1, bunker_y + 1,actors)
+      flip = rand.round
+        if flip == 1
+          make_monster(bunker_x + 1, bunker_y + 1,actors)
+        end
     end
   end
 end
