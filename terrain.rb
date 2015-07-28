@@ -188,34 +188,20 @@ def draw_map(window)
       Ncurses.mvwaddstr(window, i, j, "~")
     end
   end
-=begin  
-  while i < w_x[0] - 1
-    j = 1
-    while j < w_y[0] - 1    
-      Ncurses.mvwaddstr(window, i, j, "~")
-      j += 1
-    end
-    i += 1
-  end
-=end  
 end
 
 def draw_map_tiles(window, tile)
   borders(window)
-
-  # Draw Terrain
-  # Draw snow on every tile
-  i = 1
   w_y = []
   w_x = []
   Ncurses.getmaxyx(window,w_y,w_x)
-  while i < w_x[0] - 1
-    j = 1
-    while j < w_y[0] - 1    
-      Ncurses.mvwaddstr(window, i, j, tile.symb)
-      j += 1
+  
+  i = 1
+  j = 1
+  for i in 1..(w_x[0] - 1)
+    for j in 1..(w_y[0] - 1)
+      Ncurses.mvwaddstr(window, i, j, "#{tile.symb}")
     end
-    i += 1
   end
 end
 
