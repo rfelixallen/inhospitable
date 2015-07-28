@@ -1,5 +1,5 @@
 # inhospitable
-a simple of survival in a cold wasteland
+a simple game of survival in a cold wasteland
 
 TODO for Extra Features
 * Refactor Inventory code
