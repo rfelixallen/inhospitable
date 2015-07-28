@@ -145,16 +145,10 @@ def update_inventory(hud, item, player, modifier)
   case item 
   when 42 
     player.inventory["Token"] += modifier
-    #Ncurses.mvwaddstr(hud, 9, 1, " -Token: #{player.inventory["Token"]}")
-    #Ncurses.wrefresh(hud)
   when 102
     player.inventory["Food"] += modifier
-    #Ncurses.mvwaddstr(hud, 7, 1, " -(F)ood: #{player.inventory["Food"]}")
-    #Ncurses.wrefresh(hud)
   when 109
     player.inventory["Medkit"] += modifier
-    #Ncurses.mvwaddstr(hud, 8, 1, " -(M)edkit: #{player.inventory["Medkit"]}")
-    #Ncurses.wrefresh(hud)
   else
     nil
   end

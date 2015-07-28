@@ -185,7 +185,6 @@ player_visible = 1
 while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{p.ycols},#{p.xlines}]")
   update_hud_inventory(hud, p)
-  #Ncurses.mvwaddstr(hud, 10, 1, "M Pos: [#{m.ycols},#{m.xlines}]") # Troubleshooting
   Ncurses.wrefresh(hud)
   Ncurses.wrefresh(viewp) # Fixed Monster location
   input = Ncurses.getch
