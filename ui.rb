@@ -94,7 +94,7 @@ def message(window,message)
   Ncurses.wrefresh(window)
 end
 
-def hud_on(hud,player,monster)
+def hud_on(hud,player)
   borders(hud)                                
   Ncurses.mvwaddstr(hud, 1, 1, "Inhospitable")
   Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{player.ycols},#{player.xlines}]")
@@ -105,7 +105,5 @@ def hud_on(hud,player,monster)
   Ncurses.mvwaddstr(hud, 7, 1, " -(F)ood: #{player.inventory["Food"]}")
   Ncurses.mvwaddstr(hud, 8, 1, " -(M)edkit: #{player.inventory["Medkit"]}")
   Ncurses.mvwaddstr(hud, 9, 1, " -Tokens: #{player.inventory["Token"]}")  
-  #Ncurses.mvwaddstr(hud, 10, 1, "M Pos: [#{monster.ycols},#{monster.xlines}]") # Troubleshooting
-  #Ncurses.mvwaddstr(hud, 11, 1, "M HP: #{monster.hp}")  
   Ncurses.wrefresh(hud)
 end
