@@ -10,7 +10,9 @@ def drawmenu(item)
   Ncurses.clear
   Ncurses.mvaddstr(0,2,"Inhospitable - Main Menu")
   Ncurses.refresh
-
+  for i in 0..2
+    Ncurses.mvaddstr(3 + (i * 2), 20, menu[i])
+  end
   while c <= menu.count # set to total menu items, start at 0
     if c == item
       Ncurses.attron(A_REVERSE)
