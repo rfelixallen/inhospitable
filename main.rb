@@ -23,44 +23,7 @@ colors.times do |fg|
   color_i += 1
 end
 =end
-
-# Main Menu
-menuitem = 0
-drawmenu(menuitem)
-key = 0
-while key != 113
-  drawmenu(menuitem)
-  key = Ncurses.getch
-  case key
-  when KEY_DOWN
-    menuitem += 1
-    if (menuitem > 2) 
-      menuitem = 0
-      #break
-    end
-  when KEY_UP
-    menuitem -= 1
-    if (menuitem < 0) 
-      menuitem = 2
-      #break
-    end
-  when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
-    if menuitem == 0 # Play Game
-      key = 113
-    elsif menuitem == 1 # Instructions
-      menu_instructions
-    elsif menuitem == 2 # Quit Game
-      Ncurses.clear
-      Ncurses.endwin
-      exit
-    else
-      Ncurses.flash
-    end
-  else
-    Ncurses.flash
-  end
-end
-Ncurses.clear
+main_menu
 
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers
