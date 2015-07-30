@@ -6,12 +6,13 @@ TODO for Extra Features
 * Perlin noise map generation
 * Add in Color
 * Add in Main Menu
-** Make all entries visible
 ** Enter keyboard command in main window to return to menu
-** Add a help menu for keyboard keys
 * Add in Save/Load 
 
 Log
+7/29/15
+-Updated Menu so that the text fully displays, and there is also a help menu for instructions.
+
 7/27/15
 -Today I finished the code to make multiple monsters spawn with a certain % in each bunker. I also cleaned up terrain generation and monster item pickup code
 
