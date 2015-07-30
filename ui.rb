@@ -6,7 +6,7 @@ end
 
 def drawmenu(item)
   c = 0
-  menu = ["NEW GAME", "INSTRUCTIONS", "QUIT"]
+  menu = ["PLAY GAME", "INSTRUCTIONS", "QUIT"]
   Ncurses.clear
   Ncurses.mvaddstr(0,2,"Inhospitable - Main Menu")
   Ncurses.refresh
@@ -49,6 +49,8 @@ while key != 113
   when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
     if menuitem == 0 # Play Game
       key = 113
+      Ncurses.clear
+      Ncurses.refresh
     elsif menuitem == 1 # Instructions
       menu_instructions
     elsif menuitem == 2 # Quit Game

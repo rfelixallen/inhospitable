@@ -23,7 +23,6 @@ colors.times do |fg|
   color_i += 1
 end
 =end
-main_menu
 
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers
@@ -125,18 +124,6 @@ p = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: pl
 actors << p
 actors.each { |actor| actor.draw(field)}  # Add all actors to the map
 
-# Set up Console
-borders(console)                            # Add borders to the console
-Ncurses.wrefresh(console)                   # Refresh console window with message
-
-# Set up HUD (Heads-Up-Display)
-hud_on(hud,p)
-center(viewp,field,p.xlines,p.ycols)                            # Center map on player
-Ncurses.wrefresh(viewp)
-#################################################################################
-# Game Loop                                                                     #
-#################################################################################
-
 # Game Variables - Initial set and forget
 direction_steps = 0
 counter = 0   
@@ -145,12 +132,43 @@ hunger_count = 0
 counter = 0 #wander counter for monster
 direction_steps = rand(10..25) # Meander long distances
 player_visible = 1
+menu_active = 1
+#start_ui = 1
 
-# Begin Loop
+borders(console)                            # Add borders to the console
+Ncurses.wrefresh(console)                   # Refresh console window with message
+# Set up HUD (Heads-Up-Display)
+hud_on(hud,p)
+center(viewp,field,p.xlines,p.ycols)        # Center map on player
+Ncurses.wrefresh(viewp)
+
+#################################################################################
+# Game Loop                                                                     #
+#################################################################################
 while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
-  Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{p.ycols},#{p.xlines}]")
-  update_hud_inventory(hud, p)
+  if menu_active == 1
+    main_menu
+    menu_active = 0
+    start_ui = 1
+  end
+=begin  
+  if start_ui == 1
+    # Set up Console
+    borders(console)                            # Add borders to the console
+    Ncurses.wrefresh(console)                   # Refresh console window with message
+    # Set up HUD (Heads-Up-Display)
+    hud_on(hud,p)
+    center(viewp,field,p.xlines,p.ycols)        # Center map on player
+    Ncurses.wrefresh(viewp)
+    start_ui = 0
+  end
+=end
+  #Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{p.ycols},#{p.xlines}]")
+  #update_hud_inventory(hud, p)
+  hud_on(hud,p)
+  borders(console) 
   Ncurses.wrefresh(hud)
+  Ncurses.wrefresh(console)
   Ncurses.wrefresh(viewp) # Fixed Monster location
   input = Ncurses.getch
   case input
@@ -211,6 +229,8 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
       else
         message(console, "You have no medkits.")
       end
+    when 49
+      menu_active = 1
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else
