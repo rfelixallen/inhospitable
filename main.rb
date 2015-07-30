@@ -141,7 +141,6 @@ Ncurses.wrefresh(console)                   # Refresh console window with messag
 hud_on(hud,p)
 center(viewp,field,p.xlines,p.ycols)        # Center map on player
 Ncurses.wrefresh(viewp)
-
 #################################################################################
 # Game Loop                                                                     #
 #################################################################################
@@ -149,27 +148,13 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
   if menu_active == 1
     main_menu
     menu_active = 0
-    start_ui = 1
   end
-=begin  
-  if start_ui == 1
-    # Set up Console
-    borders(console)                            # Add borders to the console
-    Ncurses.wrefresh(console)                   # Refresh console window with message
-    # Set up HUD (Heads-Up-Display)
-    hud_on(hud,p)
-    center(viewp,field,p.xlines,p.ycols)        # Center map on player
-    Ncurses.wrefresh(viewp)
-    start_ui = 0
-  end
-=end
-  #Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{p.ycols},#{p.xlines}]")
-  #update_hud_inventory(hud, p)
   hud_on(hud,p)
   borders(console) 
   Ncurses.wrefresh(hud)
   Ncurses.wrefresh(console)
   Ncurses.wrefresh(viewp) # Fixed Monster location
+  
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
@@ -229,7 +214,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
       else
         message(console, "You have no medkits.")
       end
-    when 49
+    when 49 # 1 - Main Menu
       menu_active = 1
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
