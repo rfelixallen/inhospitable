@@ -2,7 +2,9 @@ require_relative 'library'
 require 'ncurses'
 include Ncurses                                                                
 
-File.open("inhospitable_log.txt", "w"){ |somefile| somefile.puts "#{Time.now} - Game Launched"}
+inhospitableLog = File.open("inhospitable_log.txt", "w")
+inhospitableLog.puts "#{Time.now} - Game Launched"
+inhospitableLog.close
 
 #################################################################################
 # Initialize                                                                    #
