@@ -148,6 +148,10 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
   if menu_active == 1
     main_menu
     menu_active = 0
+    Ncurses.mvwaddstr(stdscr, 2, 2, "Returning to game...")
+    Ncurses.refresh
+    Ncurses.napms(1000)
+    #Ncurses.getch
   end
   hud_on(hud,p)
   borders(console) 
@@ -224,50 +228,51 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
       Ncurses.wrefresh(console) 
     end
 
-  # Monsters Move
-  actors.except(p).each do |rawr|  
-    if rawr.hp <= 0
-      Ncurses.mvwaddstr(field, rawr.xlines, rawr.ycols, "X") # Turn into dead body
-      Ncurses.wrefresh(viewp)
-    else
-      distance_from_player = [(p.xlines - rawr.xlines).abs,(p.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
-      if player_visible == 1 and (distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2) # if the monster is visible, chase player
-        #message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing      
-        mode_hunt2(field,hud, rawr, p, walkable, items, actors)            
-      else # If player is not visible, wander around
-        mode_wander2(field,hud, rawr, p, walkable, items, actors)   
+if menu_active == 0
+    # Monsters Move
+    actors.except(p).each do |rawr|  
+      if rawr.hp <= 0
+        Ncurses.mvwaddstr(field, rawr.xlines, rawr.ycols, "X") # Turn into dead body
+        Ncurses.wrefresh(viewp)
+      else
+        distance_from_player = [(p.xlines - rawr.xlines).abs,(p.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
+        if player_visible == 1 and (distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2) # if the monster is visible, chase player
+          #message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing      
+          mode_hunt2(field,hud, rawr, p, walkable, items, actors)            
+        else # If player is not visible, wander around
+          mode_wander2(field,hud, rawr, p, walkable, items, actors)   
 =begin        
-        if counter < direction_steps
-          if dice_roll == false         
-           direction_steps = rand(10..25) # Meander long distances
-           dice_roll = true
+          if counter < direction_steps
+            if dice_roll == false         
+             direction_steps = rand(10..25) # Meander long distances
+             dice_roll = true
+            end
+            #message(console,"steps:#{direction_steps},count:#{counter}")  # Troubleshooting message for testing        
+            mode_wander2(field,hud, rawr, p, walkable, items, actors)        
+            counter += 1
+          else
+            #message(console,"Monster move reset") # Troubleshooting message for testing
+            dice_roll = false
+            counter = 0
+            direction_steps = 0
           end
-          #message(console,"steps:#{direction_steps},count:#{counter}")  # Troubleshooting message for testing        
-          mode_wander2(field,hud, rawr, p, walkable, items, actors)        
-          counter += 1
-        else
-          #message(console,"Monster move reset") # Troubleshooting message for testing
-          dice_roll = false
-          counter = 0
-          direction_steps = 0
-        end
 =end        
-      end  
+        end  
+      end
+    end
+
+    # Starvation
+    if hunger_count <= 100
+      hunger_count += 1
+    else
+      p.hunger -= 1
+      hunger_count = 0
+      message(console,"Your stomach growls")
+      Ncurses.mvwaddstr(hud, 4, 1, "Hunger: #{p.hunger}")
+      Ncurses.wrefresh(hud)
     end
   end
-
-  # Starvation
-  if hunger_count <= 100
-    hunger_count += 1
-  else
-    p.hunger -= 1
-    hunger_count = 0
-    message(console,"Your stomach growls")
-    Ncurses.mvwaddstr(hud, 4, 1, "Hunger: #{p.hunger}")
-    Ncurses.wrefresh(hud)
-  end
 end
-
 # End Screen
 if p.hp == 0 || p.hunger == 0 || p.inventory["Token"] == 2
   # Starved or died
