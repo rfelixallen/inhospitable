@@ -166,3 +166,15 @@ def hud_on(hud,player)
   Ncurses.mvwaddstr(hud, 9, 1, " -Tokens: #{player.inventory["Token"]}")  
   Ncurses.wrefresh(hud)
 end
+
+def log_w(somefile,message)
+somefile = File.open("#{somefile}.txt", "w")
+somefile.puts "#{message}"
+somefile.close
+end
+
+def log_a(somefile,message)
+somefile = File.open("#{somefile}.txt", "a")
+somefile.puts "#{message}"
+somefile.close
+end
