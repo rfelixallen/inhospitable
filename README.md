@@ -5,10 +5,8 @@ TODO for Extra Features
 * Refactor Inventory code
 * Perlin noise map generation
 * Add in Color
-* Add in Main Menu
-** Enter keyboard command in main window to return to menu
 * Add in Save/Load 
-* UI Fixes
+* Terrain Fixes
 ** Prevent Player from starting inside an unwalkable position
 
 Log
