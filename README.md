@@ -8,8 +8,13 @@ TODO for Extra Features
 * Add in Main Menu
 ** Enter keyboard command in main window to return to menu
 * Add in Save/Load 
+* UI Fixes
+** Prevent Player from starting inside an unwalkable position
 
 Log
+8/2/15
+-Fixed the menu bug that would not redraw map until user input while also processing an enemy turn.
+
 7/29/15
 -Updated Menu so that the text fully displays, and there is also a help menu for instructions.
 
