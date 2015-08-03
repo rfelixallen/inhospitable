@@ -1,13 +1,14 @@
 # inhospitable
 a simple game of survival in a cold wasteland
 
-TODO for Extra Features
+TODO
+Features
 * Perlin noise map generation
 * Add in Color
 * Play test distance between bunkers and starvation 
-* Fixes
-** Prevent Player from starting inside an unwalkable position
-** Add in more informative logging
+Fixes
+* Prevent Player from starting inside an unwalkable position
+* Add in more informative logging
 
 Log
 8/2/15
