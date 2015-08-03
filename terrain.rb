@@ -185,7 +185,11 @@ def draw_map(window)
   j = 1
   for i in 1..(w_x[0] - 1)
     for j in 1..(w_y[0] - 1)
+      Ncurses.attrset(Ncurses.COLOR_PAIR(1))
       Ncurses.mvwaddstr(window, i, j, "~")
+      Ncurses.wrefresh(window)
+      Ncurses.getch
+      #Ncurses.attroff(Ncurses.COLOR_PAIR(1))
     end
   end
 end
