@@ -12,7 +12,7 @@ inhospitableLog.close
 
 Ncurses.initscr             # Start Ncurses
 Ncurses.noecho              # Do not show keyboard input at cursor location
-#Ncurses.start_color
+Ncurses.start_color
 Ncurses.curs_set(0)         # Disable blinking cursor
 Ncurses.cbreak              # Only accept a single character of input
 Ncurses.stdscr              # Initialize Standard Screen, which uses dimensions of current Terminal window
