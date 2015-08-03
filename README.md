@@ -4,13 +4,15 @@ a simple game of survival in a cold wasteland
 TODO
 Features
 * Perlin noise map generation
-* Add in Color
 * Play test distance between bunkers and starvation 
 Fixes
 * Prevent Player from starting inside an unwalkable position
 * Add in more informative logging
 
 Log
+8/3/15
+-Changed the color of snow to be black on white. The default color appears to be white on black. Discovered that changing a tile's color also changes its ascii value.
+
 8/2/15
 -Fixed the menu bug that would not redraw map until user input while also processing an enemy turn. Experimented with logging and saving. Decided that saving existed outside the scope of this game. This game is meant to be played in one sitting.
 
