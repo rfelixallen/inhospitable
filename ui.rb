@@ -6,11 +6,11 @@ end
 
 def drawmenu(item)
   c = 0
-  menu = ["PLAY GAME", "INSTRUCTIONS", "SAVE", "LOAD", "QUIT"]
+  menu = ["PLAY GAME", "INSTRUCTIONS", "QUIT"]
   Ncurses.clear
   Ncurses.mvaddstr(0,2,"Inhospitable - Main Menu")
   Ncurses.refresh
-  for i in 0..4
+  for i in 0..2
     Ncurses.mvaddstr(3 + (i * 2), 20, menu[i])
   end
   while c <= menu.count # set to total menu items, start at 0
@@ -36,22 +36,22 @@ while key != 113
   case key
   when KEY_DOWN
     menuitem += 1
-    if (menuitem > 4) 
+    if (menuitem > 2) 
       menuitem = 0
       #break
     end
   when KEY_UP
     menuitem -= 1
     if (menuitem < 0) 
-      menuitem = 4
+      menuitem = 2
       #break
     end
   when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
     if menuitem == 0 # Play Game
       key = 113
     elsif menuitem == 1 # Instructions
-      menu_instructions
-    elsif menuitem == 4 # Quit Game
+      menu_instructions 
+    elsif menuitem == 2 # Quit Game
       Ncurses.clear
       Ncurses.endwin
       exit
@@ -174,7 +174,7 @@ somefile.close
 end
 
 def log_a(somefile,message)
-somefile = File.open("#{somefile}.txt", "a")
+somefile = File.open("inhospitableLog.txt", "a")
 somefile.puts "#{message}"
 somefile.close
 end

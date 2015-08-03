@@ -2,7 +2,7 @@ require_relative 'library'
 require 'ncurses'
 include Ncurses                                                                
 
-inhospitableLog = File.open("inhospitable_log.txt", "w")
+inhospitableLog = File.open("inhospitableLog.txt", "w")
 inhospitableLog.puts "#{Time.now} - Game Launched"
 inhospitableLog.close
 
@@ -138,7 +138,6 @@ counter = 0 #wander counter for monster
 direction_steps = rand(10..25) # Meander long distances
 player_visible = 1
 menu_active = 1
-#start_ui = 1
 
 borders(console)                            # Add borders to the console
 Ncurses.wrefresh(console)                   # Refresh console window with message
@@ -156,7 +155,6 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
     Ncurses.mvwaddstr(stdscr, 2, 2, "Returning to game...")
     Ncurses.refresh
     Ncurses.napms(1000)
-    #Ncurses.getch
   end
   hud_on(hud,p)
   borders(console) 
@@ -188,8 +186,6 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
       center(viewp,field,p.xlines,p.ycols)     
     when 32 # Spacebar, dont move
       center(viewp,field,p.xlines,p.ycols)
-    #when 101 # e # Troubleshooting
-      #attack(m)
     when 104 # h
       if player_visible == 1
         player_visible = 0
