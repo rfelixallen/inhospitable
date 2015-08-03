@@ -28,6 +28,7 @@ colors.times do |fg|
   color_i += 1
 end
 =end
+Ncurses.init_pair(1, COLOR_WHITE, COLOR_RED)
 
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers
@@ -125,7 +126,7 @@ player_start_lines = (field_max_lines[0] / 4)
 player_start_cols = (field_max_cols[0] / 4)
 
 # Create Player Actor
-p = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_cols, hp: 9)
+p = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_cols, hp: 9, color: 2)
 actors << p
 actors.each { |actor| actor.draw(field)}  # Add all actors to the map
 
