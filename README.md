@@ -3,14 +3,13 @@ a simple game of survival in a cold wasteland
 
 TODO for Extra Features
 * Perlin noise map generation
-* Add in Color
-* Add in Save/Load 
+* Add in Color 
 * Terrain Fixes
 ** Prevent Player from starting inside an unwalkable position
 
 Log
 8/2/15
--Fixed the menu bug that would not redraw map until user input while also processing an enemy turn.
+-Fixed the menu bug that would not redraw map until user input while also processing an enemy turn. Experimented with logging and saving. Decided that saving existed outside the scope of this game. This game is meant to be played in one sitting.
 
 7/29/15
 -Updated Menu so that the text fully displays, and there is also a help menu for instructions.
