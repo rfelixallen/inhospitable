@@ -75,10 +75,11 @@ medkit = Item.new("m", "First Aid Kit", "Medkit")
 =end
 
 # Experiments with tiles as objects
-draw_map(field)         # Draws a simple map with one terrain type
+#draw_map(field)         # Draws a simple map with one terrain type
 #draw_map_tiles(field, snow)
 #draw_map_tiles(field, all_tile[0])
 #generate_random(field)
+generate_perlin(field)
 
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 

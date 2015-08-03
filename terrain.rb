@@ -1,5 +1,6 @@
 require_relative 'ui'
 require_relative 'actors'
+require 'perlin_noise'
 
 #index of tile types with character, colorcode
 =begin
@@ -230,6 +231,27 @@ def generate_random(window)
       else
         Ncurses.mvwaddstr(window, i, j, "~")
       end
+    end
+  end
+end
+
+def generate_perlin(window)
+  w_y = []
+  w_x = []
+  Ncurses.getmaxyx(window,w_y,w_x)
+  n2d = Perlin::Noise.new 2
+  0.step(w_x[0], 0.01) do |x|
+    0.step(w_y[0], 0.01) do |y|
+      #puts n2d[x, y]
+      n = rand(0..100)
+    if n < 30
+      Ncurses.mvwaddstr(window, x, y, "^")
+    elsif n > 30 and n < 60 
+      Ncurses.mvwaddstr(window, x, y, "#")
+    else
+      Ncurses.mvwaddstr(window, x, y, "~")
+    end
+    #puts n
     end
   end
 end
