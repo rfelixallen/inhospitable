@@ -1,15 +1,19 @@
-# inhospitable
-a simple game of survival in a cold wasteland
+Inhospitable
+A simple game of survival in a cold wasteland.
 
 TODO
 Features
-* Perlin noise map generation
 * Play test distance between bunkers and starvation 
 Fixes
 * Prevent Player from starting inside an unwalkable position
 * Add in more informative logging
+* Adjust amount and placement of food/meds in a bunker
+* Tweak Perlin noise
 
 Log
+8/4/15
+-I finally cracked the perlin noise algorithim and got it to generate. I had been working on this problem as far back as March or April before giving up on it. It doesnt work how I want it to yet, but it works. All I'm looking for is for it to do mostly snow with smatterings of impassible rock.
+
 8/3/15
 -Changed the color of snow to be black on white. The default color appears to be white on black. Discovered that changing a tile's color also changes its ascii value.
 
