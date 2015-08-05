@@ -241,10 +241,10 @@ def generate_perlin(window)
   w_y = []
   w_x = []
   Ncurses.getmaxyx(window,w_x,w_y)
-  n2d = Perlin::Noise.new 2#, :interval => 200
+  #n2d = Perlin::Noise.new 2#, :interval => 200
   n3d = Perlin::Noise.new 3
   #contrast = Perlin::Curve.contrast(Perlin::Curve::CUBIC, 3)
-  contrast = Perlin::Curve.contrast(Perlin::Curve::QUINTIC, 3)
+  #contrast = Perlin::Curve.contrast(Perlin::Curve::QUINTIC, 3)
   
   1.step(w_x[0], 1.0) do |x| # x == whole integer, which will always give .5
     1.step(w_y[0], 1.0) do |y|
@@ -257,9 +257,9 @@ def generate_perlin(window)
       j = y / w_y[0]
       #h = z / 200
       #n = n2d[x, y]
-      n = n2d[i, j]
-      #n = n3d[i,j,h]
-      n = contrast.call n
+      #n = n2d[i, j]
+      n = n3d[i,j,0.8]
+      #n = contrast.call n
 
       if n < 0.35
         Ncurses.mvwaddstr(window, x, y, " ")
