@@ -254,7 +254,7 @@ def generate_perlin(window)
       j = y / w_y[0]
       #n = n2d[x, y]
       n = n2d[i, j]
-      n = contrast.call n
+      #n = contrast.call n
 
       if n < 0.35
         Ncurses.mvwaddstr(window, x, y, " ")
@@ -264,7 +264,7 @@ def generate_perlin(window)
         Ncurses.mvwaddstr(window, x, y, "X")
       end
     #puts n
-    Ncurses.wrefresh(window)
+    #Ncurses.wrefresh(window)
     #Ncurses.getch
     end
   end
