@@ -236,11 +236,12 @@ def generate_random(window)
 end
 
 def generate_perlin(window)
+  borders(window)
   w_y = []
   w_x = []
   Ncurses.getmaxyx(window,w_y,w_x)
-  0.step(100, 0.01) do |x|
-    0.step(100, 0.01) do |y|      
+  1.step(w_x[0], 0.01) do |x|
+    1.step(w_y[0], 0.01) do |y|      
       n2d = Perlin::Noise.new 2, :interval => 200
       contrast = Perlin::Curve.contrast(Perlin::Curve::CUBIC, 3)
       n = n2d[x, y]
