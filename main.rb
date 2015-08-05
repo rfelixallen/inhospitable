@@ -35,7 +35,7 @@ Ncurses.init_pair(1, COLOR_WHITE, COLOR_RED)
 # Demo game uses 4 windows: Field (aka game map), Viewport (aka what the player sees), Console and side HUD.
 sd_cols = []                # Standard Screen column aka y
 sd_lines = []               # Standard Screen lines aka x
-Ncurses.getmaxyx(stdscr,sd_lines,sd_cols) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
+Ncurses.getmaxyx(stdscr,sd_cols,sd_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
 field_lines = 200
 field_cols = 200
 view_lines = 25
