@@ -253,14 +253,21 @@ def generate_perlin(window)
     #1.step(w_y[0], 0.98) do |y|        
   #for x in 1..(w_x[0] - 1)
     #for y in 1..(w_y[0] - 1)
+      
       i = x / w_x[0]
       j = y / w_y[0]
       #h = z / 200
-      #n = n2d[x, y]
+
       #n = n2d[i, j]
       n = n3d[i,j,0.8]
-      #n = contrast.call n
 
+      #n = contrast.call n
+      if n > 0.25 and n < 0.80
+        Ncurses.mvwaddstr(window, x, y, "~")
+      else
+        Ncurses.mvwaddstr(window, x, y, "^")
+      end
+=begin
       if n < 0.35
         Ncurses.mvwaddstr(window, x, y, " ")
       elsif n > 0.35 and n < 0.60 
@@ -270,6 +277,7 @@ def generate_perlin(window)
       else
         Ncurses.mvwaddstr(window, x, y, "^")
       end
+=end      
     #puts n
     #Ncurses.wrefresh(window)
     #Ncurses.getch
