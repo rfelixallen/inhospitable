@@ -257,11 +257,11 @@ def generate_perlin(window)
       n = contrast.call n
 
       if n < 0.35
-        Ncurses.mvwaddstr(window, x, y, "^")
+        Ncurses.mvwaddstr(window, x, y, " ")
       elsif n > 0.35 and n < 0.60 
         Ncurses.mvwaddstr(window, x, y, "~")
       else
-        Ncurses.mvwaddstr(window, x, y, "#")
+        Ncurses.mvwaddstr(window, x, y, "X")
       end
     #puts n
     Ncurses.wrefresh(window)
