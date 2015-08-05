@@ -255,6 +255,7 @@ def generate_perlin(window)
       end
     #puts n
     Ncurses.wrefresh(window)
+    Ncurses.getch
     end
   end
 end
