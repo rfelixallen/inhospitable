@@ -8,9 +8,11 @@ Fixes
 * Prevent Player from starting inside an unwalkable position
 * Add in more informative logging
 * Adjust amount and placement of food/meds in a bunker
-* Tweak Perlin noise
 
 Log
+8/5/15
+-Finally got perlin to generate my small - medium pockets of impassible terrain. So, the secret was I needed to use a 3 dimensional noise object, and I had to multiply by 10 the x,y values before passing them to the noise object. This change broadened the range naturally without having to invoke a curve. I spent some time tweaking my perlin method and generating values in a csv, which I would then graph. I reached a point where I felt comfortable setting the range for snow within .4 - .7 My graph showed the edges of the values just going over those points. 
+
 8/4/15
 -I finally cracked the perlin noise algorithim and got it to generate. I had been working on this problem as far back as March or April before giving up on it. It doesnt work how I want it to yet, but it works. All I'm looking for is for it to do mostly snow with smatterings of impassible rock.
 
