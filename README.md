@@ -11,6 +11,8 @@ Fixes
 
 Log
 8/5/15
+-Started work on a spiral algorithim. The idea is that the game will choose a spot for players,bunkers,etc and check if its a valid start location. if not, will spiral around until it finds one.
+
 -Finally got perlin to generate my small - medium pockets of impassible terrain. So, the secret was I needed to use a 3 dimensional noise object, and I had to multiply by 10 the x,y values before passing them to the noise object. This change broadened the range naturally without having to invoke a curve. I spent some time tweaking my perlin method and generating values in a csv, which I would then graph. I reached a point where I felt comfortable setting the range for snow within .4 - .7 My graph showed the edges of the values just going over those points. 
 
 8/4/15
