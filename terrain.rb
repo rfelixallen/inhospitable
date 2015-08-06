@@ -241,47 +241,22 @@ def generate_perlin(window)
   w_y = []
   w_x = []
   Ncurses.getmaxyx(window,w_x,w_y)
-  #n2d = Perlin::Noise.new 2#, :interval => 200
-  n3d = Perlin::Noise.new 3
-  #contrast = Perlin::Curve.contrast(Perlin::Curve::CUBIC, 3)
-  #contrast = Perlin::Curve.contrast(Perlin::Curve::QUINTIC, 3)
+  n3d = Perlin::Noise.new 3, :interval => 100
+  contrast = Perlin::Curve.contrast(Perlin::Curve::CUBIC, 3)
   
   1.step(w_x[0], 1.0) do |x| # x == whole integer, which will always give .5
     1.step(w_y[0], 1.0) do |y|
-      #1.step(200, 1.0) do |z| # for 3rd dimension    
-  #1.step(w_x[0], .98) do |x| # x == float, which gives the variation
-    #1.step(w_y[0], 0.98) do |y|        
-  #for x in 1..(w_x[0] - 1)
-    #for y in 1..(w_y[0] - 1)
       
-      i = x / w_x[0]
-      j = y / w_y[0]
-      #h = z / 200
+    i = (x / w_x[0]) * 10 # (0.01..1.00) * 10 == (.1..9.9)
+    j = (y / w_y[0]) * 10 # (0.01..1.00) * 10 == (.1..9.9)
 
-      #n = n2d[i, j]
       n = n3d[i,j,0.8]
-
       #n = contrast.call n
-      if n > 0.25 and n < 0.80
+      if n > 0.4 and n < 0.7
         Ncurses.mvwaddstr(window, x, y, "~")
       else
         Ncurses.mvwaddstr(window, x, y, "^")
       end
-=begin
-      if n < 0.35
-        Ncurses.mvwaddstr(window, x, y, " ")
-      elsif n > 0.35 and n < 0.60 
-        Ncurses.mvwaddstr(window, x, y, "~")
-      elsif n > 0.60 and n < 0.80
-        Ncurses.mvwaddstr(window, x, y, "X")
-      else
-        Ncurses.mvwaddstr(window, x, y, "^")
-      end
-=end      
-    #puts n
-    #Ncurses.wrefresh(window)
-    #Ncurses.getch
     end
   end
-#end
 end
