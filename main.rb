@@ -308,5 +308,5 @@ Ncurses.clear
 Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Good Bye!")
 Ncurses.wrefresh(stdscr)
 Ncurses.napms(1000)
-Ncurses.getch
+#Ncurses.getch
 Ncurses.endwin
