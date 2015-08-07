@@ -40,24 +40,24 @@ def build(window, lines, cols, structure_array)
 end            
 
 def demo_bunker(window, lines, cols)
-  bunker = ["|==========|",
-            "|   |  *|  |",
-            "|   |   |  |",
-            "|= === === |",
-            "|          |",
-            "|          |",
-            "|          |",
-            "|          |",
-            "|          |",
-            "|== =======|"]
+  bunker = ["              ",
+            " |==========| ",
+            " |   |  *|  | ",
+            " |= === === | ",
+            " |          | ",
+            " |          | ",
+            " |          | ",
+            " |          | ",
+            " |== =======| ",
+            "              "]
   build(window, lines, cols, bunker)
   med_count = rand(0..1)
   food_count = rand(2..5)
   i = 5
-  while i < 9
-    j = 1
+  while i < 8
+    j = 2
     d = rand(1..3)
-    while j < 11
+    while j < 8
       if d == 1 and med_count > 0
         Ncurses.mvwaddstr(window, lines + i, cols + j, "m")
         med_count -= 1
@@ -156,7 +156,7 @@ def make_bunker(window,all_beacons,all_bunkers,actors)
       make_beacon(window,all_beacons,bunker_x,bunker_y)
       flip = rand.round
         if flip == 1
-          make_monster(bunker_x + 1, bunker_y + 1,actors)
+          make_monster(bunker_x + 2, bunker_y + 2,actors)
         end
     end
   end
@@ -165,7 +165,7 @@ end
 def make_beacon(window,all_beacons,bunker_x,bunker_y)
   variable_name = Random.new(cantor_pairing(bunker_x,bunker_y))
   message = "Broadcast #{cantor_pairing(bunker_x,bunker_y)}"
-  variable_name = Beacon.new(xlines: bunker_x + 1, ycols: bunker_y + 6, message: message)
+  variable_name = Beacon.new(xlines: bunker_x + 2, ycols: bunker_y + 6, message: message)
   Ncurses.mvwaddstr(window, variable_name.xlines, variable_name.ycols, variable_name.symb)
   all_beacons << variable_name
 end
@@ -271,7 +271,7 @@ def spiral(window,n,character,walkable) # n is the max dimensions. ex n = 5, thi
   window_max_cols = []
   Ncurses.getmaxyx(window,window_max_cols,window_max_lines)   # Get Max Y,X of window
   step = Ncurses.mvwinch(window, character.xlines, character.ycols)
-  Ncurses.mvwaddstr(window, 40, 40, "#{step}")
+  #Ncurses.mvwaddstr(window, 40, 40, "#{step}")
   
   while step != 382
     #break if halt
