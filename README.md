@@ -10,7 +10,7 @@ Fixes
 
 Log
 8/6/15
--Finished a rough draft of working spiral code. The game will look at the players starting position, and then rotate them around in a spiral until it finds a valid starting position. I thought about doing this for bunkers, but all they really need is a border around them.
+-Finished a rough draft of working spiral code. The game will look at the players starting position, and then rotate them around in a spiral until it finds a valid starting position. I thought about doing this for bunkers, but all they really need is a border around them. I also updated the bunkers so that they had a 1 pixel buffer around them. This is to prevent them from becoming blocked off.
 
 8/5/15
 -Started work on a spiral algorithim. The idea is that the game will choose a spot for players,bunkers,etc and check if its a valid start location. if not, will spiral around until it finds one.
