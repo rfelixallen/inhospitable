@@ -5,11 +5,13 @@ TODO
 Features
 * Play test distance between bunkers and starvation 
 Fixes
-* Prevent Player from starting inside an unwalkable position
 * Add in more informative logging
 * Adjust amount and placement of food/meds in a bunker
 
 Log
+8/6/15
+-Finished a rough draft of working spiral code. The game will look at the players starting position, and then rotate them around in a spiral until it finds a valid starting position. I thought about doing this for bunkers, but all they really need is a border around them.
+
 8/5/15
 -Started work on a spiral algorithim. The idea is that the game will choose a spot for players,bunkers,etc and check if its a valid start location. if not, will spiral around until it finds one.
 
