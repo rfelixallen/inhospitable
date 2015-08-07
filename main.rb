@@ -68,11 +68,10 @@ wall_horizontal = Tile.new(name: "Wall_Horizontal", code: 2, symb: "=", color: "
 wall_vertical = Tile.new(name: "Wall_Vertical", code: 3, symb: "|", color: "Yellow", blocked: true)
 all_tile = []
 all_tile.concat([snow, wall_horizontal, wall_vertical])
-=begin
-# Define item types
-food = Item.new("f", "Beans", "Food")
-medkit = Item.new("m", "First Aid Kit", "Medkit")
-=end
+
+
+Ncurses.mvwaddstr(stdscr, 2, 2, "Generating World...")
+Ncurses.refresh
 
 # Experiments with tiles as objects
 #draw_map(field)         # Draws a simple map with one terrain type
@@ -116,7 +115,7 @@ elsif bunker_test == 1
     bunker_start += 1
   end
 else
-  puts "No Bunker generation specified."
+  #puts "No Bunker generation specified."
 end
 
 # Setup Actors
@@ -129,8 +128,26 @@ player_start_cols = (field_max_cols[0] / 4)
 # Create Player Actor
 p = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_cols, hp: 9, color: 2)
 actors << p
+
+#Ncurses.mvwaddstr(field, 50, 50, "^")
+
+step = Ncurses.mvwinch(field, p.xlines, p.ycols)
+Ncurses.clear
+Ncurses.flash
+Ncurses.mvwaddstr(stdscr, 2, 2, "Starting Terrain: #{step}")
+Ncurses.refresh
+Ncurses.napms(1000)
+Ncurses.clear
+
+spiral(field,10,p,walkable)
 actors.each { |actor| actor.draw(field)}  # Add all actors to the map
 
+Ncurses.flash
+Ncurses.mvwaddstr(stdscr, 2, 2, "Starting Terrain: #{step}")
+Ncurses.mvwaddstr(stdscr, 3, 2, "Starting Coordinates: [#{p.xlines},#{p.ycols}]")
+Ncurses.refresh
+Ncurses.napms(1000)
+Ncurses.clear
 # Game Variables - Initial set and forget
 direction_steps = 0
 counter = 0   

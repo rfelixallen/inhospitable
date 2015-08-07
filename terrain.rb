@@ -262,3 +262,75 @@ def generate_perlin(window)
   end
   Ncurses.wattroff(window,Ncurses.COLOR_PAIR(1))
 end
+
+def spiral(window,n,character,walkable) # n is the max dimensions. ex n = 5, this is a 5x5 square.
+  #a = [character.xlines,character.ycols]
+  x = 1 # X is how many steps to go
+  halt = false
+  window_max_lines = []
+  window_max_cols = []
+  Ncurses.getmaxyx(window,window_max_cols,window_max_lines)   # Get Max Y,X of window
+  step = Ncurses.mvwinch(window, character.xlines, character.ycols)
+  Ncurses.mvwaddstr(window, 40, 40, "#{step}")
+  
+  while step != 382
+    #break if halt
+    if ((character.xlines) > 0 and (character.ycols) > 0 and (character.xlines) < (window_max_lines[0] - 1) and (character.ycols) < (window_max_cols[0] - 1))
+      for i in 1..n
+        if i % 2 != 0
+          x.times do
+            character.ycols += 1
+            step = Ncurses.mvwinch(window, character.xlines, character.ycols)
+              if walkable.include?(step)
+                #halt = true 
+                #character.move(window,character.xlines,character.ycols)
+                #break if halt
+                break
+              end
+          end
+
+          x.times do
+            character.xlines += 1
+            step = Ncurses.mvwinch(window, character.xlines, character.ycols)
+              if walkable.include?(step)
+                #halt = true 
+                #character.move(window,character.xlines,character.ycols)
+                #break if halt
+                break
+              end
+          end
+          x += 1
+          #i += 1
+        else  
+          x.times do
+            character.ycols -= 1
+            step = Ncurses.mvwinch(window, character.xlines, character.ycols)
+              if walkable.include?(step) 
+                #character.move(window,character.xlines,character.ycols)
+                #halt = true
+                #break if halt
+                break
+              end
+          end
+
+          step = Ncurses.mvwinch(window, character.xlines, character.ycols)
+          if walkable.include?(step) 
+            break
+          end
+          x.times do
+            character.xlines -= 1
+            step = Ncurses.mvwinch(window, character.xlines, character.ycols)
+              if walkable.include?(step) 
+                #character.move(window,character.xlines,character.ycols)
+                #halt = true
+                #break if halt
+                break
+              end
+          end
+          x += 1
+          #i += 1
+        end
+      end
+    end
+  end
+end
