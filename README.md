@@ -7,9 +7,12 @@ Features
 Fixes
 * Add in more informative logging
 * Adjust amount and placement of food/meds in a bunker
+* Fix Monster hunting and wandering
 
 Log
 8/6/15
+- Made it such that monsters will only chase if they are within 5 spaces. HOWEVER, it seems that if one knows where you are, then they all know where you are and will run from miles away. They also wander like mosquitoes, and I want them to walk in straight lines for n spaces before determining a new direction.
+
 -Finished a rough draft of working spiral code. The game will look at the players starting position, and then rotate them around in a spiral until it finds a valid starting position. I thought about doing this for bunkers, but all they really need is a border around them. I also updated the bunkers so that they had a 1 pixel buffer around them. This is to prevent them from becoming blocked off.
 
 8/5/15
