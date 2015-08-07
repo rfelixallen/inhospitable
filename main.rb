@@ -103,7 +103,7 @@ if bunker_test == 0
   bunker_x = rand(2..(field_lines - 11))
   bunker_y = rand(2..(field_cols - 11))
   demo_bunker(field,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
-  b2 = Beacon.new(xlines: bunker_x + 2, ycols: bunker_y + 6, message: "HELPHELPHELP")
+  b2 = Beacon.new(xlines: bunker_x + 3, ycols: bunker_y + 6, message: "HELPHELPHELP")
   all_beacons << b2
   Ncurses.mvwaddstr(field, b2.xlines, b2.ycols, b2.symb)
 elsif bunker_test == 1
@@ -257,7 +257,7 @@ if menu_active == 0
         Ncurses.wrefresh(viewp)
       else
         distance_from_player = [(p.xlines - rawr.xlines).abs,(p.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
-        if player_visible == 1 and (distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2) # if the monster is visible, chase player
+        if player_visible == 1 and (distance_from_player[0] < (view_lines / 5) or distance_from_player[1] < view_cols / 5) # if the monster is visible, chase player
           #message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing      
           mode_hunt2(field,hud, rawr, p, walkable, items, actors)            
         else # If player is not visible, wander around
