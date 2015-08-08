@@ -21,7 +21,7 @@ def drawmenu(item)
     end
     c += 1
   end
-  Ncurses.mvaddstr(17,2,"Use arrow keys to move, Enter to select:")
+  Ncurses.mvaddstr(17,2,"Use arrow keys to move - Enter to select")
   Ncurses.mvaddstr(18,2,"Version 0.5 - RFAllen 2015")
 end
 
@@ -69,15 +69,17 @@ def menu_instructions
       Ncurses.clear
       Ncurses.mvaddstr(0,2,"Inhospitable - Instructions")
       Ncurses.mvaddstr(2,2,"Arrow Keys - Up, Down, Left, Right")
-      Ncurses.mvaddstr(3,2,"R - Use Radio")
-      Ncurses.mvaddstr(4,2,"F - Eat Food - icon (f)")
-      Ncurses.mvaddstr(5,2,"M - Use Medkit - icon (m)")
-      Ncurses.mvaddstr(6,2,"Q - Quit Game")
-      Ncurses.mvaddstr(7,2,"Spacebar - Skip Movement")
-      Ncurses.mvaddstr(8,2,"Use Radio to find Bunkers with supplies!")
-      Ncurses.mvaddstr(9,2,"Walk into Monsters to attack - icon (M)")
-      Ncurses.mvaddstr(10,2,"Collect all Tokens to finish game")
-      Ncurses.mvaddstr(12,2,"Press any key to return to menu")
+      Ncurses.mvaddstr(3,2,"(r) - Use Radio")
+      Ncurses.mvaddstr(4,2,"(f) - Eat Food - Icon: f")
+      Ncurses.mvaddstr(5,2,"(m) - Use Medkit - Icon: m")
+      Ncurses.mvaddstr(6,2,"(q) - Quit Game")
+      Ncurses.mvaddstr(7,2,"(Spacebar) - Skip Movement")
+
+      Ncurses.mvaddstr(9,2,"Use Radio to find Bunkers with supplies!")
+      Ncurses.mvaddstr(10,2,"Walk into Monsters to attack - icon (M)")
+      Ncurses.mvaddstr(11,2,"Collect all Tokens to finish game")
+
+      Ncurses.mvaddstr(13,2,"Press any key to return to menu")
       Ncurses.refresh
       Ncurses.getch
 end

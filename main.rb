@@ -52,9 +52,9 @@ hud = Ncurses.newwin(hud_lines, hud_cols, 0, view_lines)
 
 # Welcome Screen
 Ncurses.mvwaddstr(stdscr, 2, 2, "Welcome to Inhospitable!")
-Ncurses.mvwaddstr(stdscr, 3, 3, "Terminal window must be at least these dimensions:")
+Ncurses.mvwaddstr(stdscr, 3, 3, "The Terminal window must be at least these dimensions:")
 Ncurses.mvwaddstr(stdscr, 4, 3, "Rows = #{view_lines}, Columns = #{view_cols}")
-Ncurses.mvwaddstr(stdscr, 5, 3, "Your Terminal: Rows = #{sd_lines[0]}, Columns = #{sd_cols[0]}")
+Ncurses.mvwaddstr(stdscr, 5, 3, "Your Terminal Dimensions: Rows = #{sd_lines[0]}, Columns = #{sd_cols[0]}")
 Ncurses.refresh             # Refresh window to display new text
 Ncurses.getch               # Wait for user input
 Ncurses.clear               # Clear the screen once player is ready to proceed
@@ -70,7 +70,10 @@ all_tile = []
 all_tile.concat([snow, wall_horizontal, wall_vertical])
 
 
-Ncurses.mvwaddstr(stdscr, 2, 2, "Generating World...")
+Ncurses.mvwaddstr(stdscr, 2, 2, "Generating World")
+Ncurses.refresh
+Ncurses.mvwaddstr(stdscr, 3, 3, "Please wait...")
+Ncurses.napms(500)
 Ncurses.refresh
 
 # Experiments with tiles as objects
@@ -130,25 +133,10 @@ player_start_cols = (field_max_cols[0] / 4)
 p = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_cols, hp: 9, color: 2)
 actors << p
 
-#Ncurses.mvwaddstr(field, 50, 50, "^")
-
-step = Ncurses.mvwinch(field, p.xlines, p.ycols)
-Ncurses.clear
-Ncurses.flash
-Ncurses.mvwaddstr(stdscr, 2, 2, "Starting Terrain: #{step}")
-Ncurses.refresh
-Ncurses.napms(1000)
-Ncurses.clear
-
+# Draw Actors onto Map
 spiral(field,10,p,walkable)
 actors.each { |actor| actor.draw(field)}  # Add all actors to the map
 
-Ncurses.flash
-Ncurses.mvwaddstr(stdscr, 2, 2, "Starting Terrain: #{step}")
-Ncurses.mvwaddstr(stdscr, 3, 2, "Starting Coordinates: [#{p.xlines},#{p.ycols}]")
-Ncurses.refresh
-Ncurses.napms(1000)
-Ncurses.clear
 # Game Variables - Initial set and forget
 direction_steps = 0
 counter = 0   
@@ -161,6 +149,7 @@ menu_active = 1
 
 borders(console)                            # Add borders to the console
 Ncurses.wrefresh(console)                   # Refresh console window with message
+
 # Set up HUD (Heads-Up-Display)
 hud_on(hud,p)
 center(viewp,field,p.xlines,p.ycols)        # Center map on player
@@ -186,22 +175,22 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
   case input
     when KEY_UP, 119 # Move Up
       #step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols) # Troubleshooting
-      message(console,"Step: #{step}")  # Troubleshooting
+      #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,-1,0,p,walkable,items,actors) 
       center(viewp,field,p.xlines,p.ycols)
     when KEY_DOWN, 115 # Move Down      
       #step = Ncurses.mvwinch(field, p.xlines + 1, p.ycols) # Troubleshooting
-      message(console,"Step: #{step}")  # Troubleshooting
+      #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,1,0,p,walkable,items,actors)                  
       center(viewp,field,p.xlines,p.ycols)   
     when KEY_RIGHT, 100 # Move Right 
       #step = Ncurses.mvwinch(field, p.xlines, p.ycols + 1) # Troubleshooting
-      message(console,"Step: #{step}")  # Troubleshooting
+      #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,0,1,p,walkable,items,actors)     
       center(viewp,field,p.xlines,p.ycols)    
     when KEY_LEFT, 97 # Move Left   
       #step = Ncurses.mvwinch(field, p.xlines, p.ycols - 1) # Troubleshooting
-      message(console,"Step: #{step}")  # Troubleshooting
+      #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,0,-1,p,walkable,items,actors)          
       center(viewp,field,p.xlines,p.ycols)     
     when 32 # Spacebar, dont move
@@ -257,15 +246,7 @@ if menu_active == 0
         Ncurses.wrefresh(viewp)
       else
         distance_from_player = [(p.xlines - rawr.xlines).abs,(p.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
-        if player_visible == 1 and ((distance_from_player[0] < (view_lines / 5) and distance_from_player[1] < view_cols / 5)) # if the monster is visible, chase player
-          #message(console,"Monster Hunt: #{rawr.object_id}")
-          #Ncurses.napms(500)
-          inhospitableLog = File.open("inhospitableLog.txt", "a")
-          inhospitableLog.puts "#Monster Hunt: #{rawr.object_id}"
-          inhospitableLog.puts "M LOC: [#{rawr.xlines},#{rawr.ycols}]"
-          inhospitableLog.puts "dist cols #{distance_from_player[1]} < #{view_cols / 5}"
-          inhospitableLog.puts "dist lines #{distance_from_player[0]} < #{view_lines / 5}"
-          inhospitableLog.close      
+        if player_visible == 1 and ((distance_from_player[0] < (view_lines / 5) and distance_from_player[1] < view_cols / 5)) # if the monster is visible, chase player  
           mode_hunt2(field,hud, rawr, p, walkable, items, actors)           
         else # If player is not visible, wander around
           mode_wander2(field,hud, rawr, p, walkable, items, actors)

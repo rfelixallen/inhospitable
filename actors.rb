@@ -106,7 +106,7 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors)
       elsif symbcodes.include?(step)
         check_target(hud,actors,character,xl,yc)       
       elsif items.include?(step)
-        if character.symb == @
+        if character.symb == "@"
           update_inventory(hud, step, character, 1)          
           character.move(window, xl, yc)
         end
