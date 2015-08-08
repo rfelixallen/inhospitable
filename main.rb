@@ -108,7 +108,7 @@ if bunker_test == 0
   Ncurses.mvwaddstr(field, b2.xlines, b2.ycols, b2.symb)
 elsif bunker_test == 1
   # Bunker Generations method
-  bunker_area_with_space = (view_lines * view_cols) + 11 # 11 is the area of the demo bunker
+  bunker_area_with_space = (view_lines * view_cols * 10) + 11 # 11 is the area of the demo bunker
   total_bunkers = ((field_lines * field_cols) / bunker_area_with_space) # This will return round number because of floats
   bunker_start = 0
   while bunker_start <= total_bunkers
@@ -260,24 +260,15 @@ if menu_active == 0
         if player_visible == 1 and ((distance_from_player[0] < (view_lines / 5) and distance_from_player[1] < view_cols / 5)) # if the monster is visible, chase player
           message(console,"Monster Hunt: #{rawr.object_id}")
           Ncurses.napms(500)
-          #message(console,"M LOC: [#{rawr.xlines},#{rawr.ycols}]")
-          #Ncurses.napms(500) 
-          #message(console,"dist cols #{distance_from_player[1]} < #{view_cols / 5}")
-          #Ncurses.napms(500)
-          #message(console,"dist lines #{distance_from_player[0]} < #{view_lines / 5}")
-          #Ncurses.napms(500)
           inhospitableLog = File.open("inhospitableLog.txt", "a")
           inhospitableLog.puts "#Monster Hunt: #{rawr.object_id}"
           inhospitableLog.puts "M LOC: [#{rawr.xlines},#{rawr.ycols}]"
           inhospitableLog.puts "dist cols #{distance_from_player[1]} < #{view_cols / 5}"
           inhospitableLog.puts "dist lines #{distance_from_player[0]} < #{view_lines / 5}"
-          inhospitableLog.close 
-          #message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing      
+          inhospitableLog.close      
           mode_hunt2(field,hud, rawr, p, walkable, items, actors)           
         else # If player is not visible, wander around
           mode_wander2(field,hud, rawr, p, walkable, items, actors)
-          #message(console,"Monster Wander: #{rawr.object_id}")
-          #Ncurses.napms(500)   
 =begin        
           if counter < direction_steps
             if dice_roll == false         
