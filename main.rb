@@ -19,18 +19,6 @@ Ncurses.curs_set(0)         # Disable blinking cursor
 Ncurses.cbreak              # Only accept a single character of input
 Ncurses.stdscr              # Initialize Standard Screen, which uses dimensions of current Terminal window
 Ncurses.keypad(stdscr,true) # Use expanded keyboard characters
-
-=begin
-# Initialize Color Pairs
-# Assumes everything has black background.
-colors = Ncurses.COLORS
-color_i = 0
-colors.times do |fg|
-  Ncurses.init_pair(color_i, fg, 0)
-  color_i += 1
-end
-=end
-#Ncurses.init_pair(1, COLOR_WHITE, COLOR_RED)
 Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
 
 # Instantiate Windows
@@ -72,19 +60,12 @@ wall_vertical = Tile.new(name: "Wall_Vertical", code: 3, symb: "|", color: "Yell
 all_tile = []
 all_tile.concat([snow, wall_horizontal, wall_vertical])
 
-
 Ncurses.mvwaddstr(stdscr, 2, 2, "Generating World")
 Ncurses.refresh
 Ncurses.mvwaddstr(stdscr, 3, 3, "Please wait...")
 Ncurses.napms(500)
 Ncurses.refresh
-
-# Experiments with tiles as objects
-#draw_map(field)         # Draws a simple map with one terrain type
-#draw_map_tiles(field, snow)
-#draw_map_tiles(field, all_tile[0])
-#generate_random(field)
-generate_perlin(field)
+generate_perlin(field) # Draw map
 
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 
@@ -94,35 +75,12 @@ walkable = [32,88,126,288,382] # ' ', '~', 'X' #somehow 288 became space, 382 is
 # Draw bunkers and beacons
 all_beacons = []
 all_bunkers = []
-bunker_test = 1
-if bunker_test == 0
-  #Bunker 1
-  bunker_x = rand(2..(field_lines - 11))
-  bunker_y = rand(2..(field_cols - 11))
-  demo_bunker(field,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
-  
-  b1 = Beacon.new(xlines: bunker_x + 3, ycols: bunker_y + 6)
-  all_beacons << b1
-  Ncurses.mvwaddstr(field, b1.xlines, b1.ycols, b1.symb)
-
-  # Bunker 2
-  bunker_x = rand(2..(field_lines - 11))
-  bunker_y = rand(2..(field_cols - 11))
-  demo_bunker(field,bunker_x,bunker_y)   # Adds a building to map. It overlays anything underneath it         
-  b2 = Beacon.new(xlines: bunker_x + 3, ycols: bunker_y + 6, message: "HELPHELPHELP")
-  all_beacons << b2
-  Ncurses.mvwaddstr(field, b2.xlines, b2.ycols, b2.symb)
-elsif bunker_test == 1
-  # Bunker Generations method
-  bunker_area_with_space = (view_lines * view_cols * 10) + 11 # 11 is the area of the demo bunker
-  total_bunkers = ((field_lines * field_cols) / bunker_area_with_space) # This will return round number because of floats
-  bunker_start = 0
-  while bunker_start <= total_bunkers
-    make_bunker(field,all_beacons,all_bunkers,actors)
-    bunker_start += 1
-  end
-else
-  #puts "No Bunker generation specified."
+bunker_area_with_space = (view_lines * view_cols * 10) + 11 # 11 is the area of the demo bunker
+total_bunkers = ((field_lines * field_cols) / bunker_area_with_space) # This will return round number because of floats
+bunker_start = 0
+while bunker_start <= total_bunkers
+  make_bunker(field,all_beacons,all_bunkers,actors)
+  bunker_start += 1
 end
 
 # Setup Actors
@@ -135,9 +93,7 @@ player_start_cols = (field_max_cols[0] / 4)
 # Create Player Actor
 p = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_cols, hp: 9, color: 2)
 actors << p
-
-# Draw Actors onto Map
-spiral(field,10,p,walkable)
+spiral(field,10,p,walkable) # Find legal starting position for player
 actors.each { |actor| actor.draw(field)}  # Add all actors to the map
 
 # Game Variables - Initial set and forget
@@ -145,15 +101,14 @@ direction_steps = 0
 counter = 0   
 dice_roll = false
 hunger_count = 0
-counter = 0 #wander counter for monster
+#counter = 0 #wander counter for monster
 direction_steps = rand(10..25) # Meander long distances
 player_visible = 1
 menu_active = 1
 
+# Set up HUD and Console
 borders(console)                            # Add borders to the console
 Ncurses.wrefresh(console)                   # Refresh console window with message
-
-# Set up HUD (Heads-Up-Display)
 hud_on(hud,p)
 center(viewp,field,p.xlines,p.ycols)        # Center map on player
 Ncurses.wrefresh(viewp)
@@ -177,33 +132,27 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
-      #step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols) # Troubleshooting
-      #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,-1,0,p,walkable,items,actors) 
       center(viewp,field,p.xlines,p.ycols)
     when KEY_DOWN, 115 # Move Down      
-      #step = Ncurses.mvwinch(field, p.xlines + 1, p.ycols) # Troubleshooting
-      #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,1,0,p,walkable,items,actors)                  
       center(viewp,field,p.xlines,p.ycols)   
     when KEY_RIGHT, 100 # Move Right 
-      #step = Ncurses.mvwinch(field, p.xlines, p.ycols + 1) # Troubleshooting
-      #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,0,1,p,walkable,items,actors)     
       center(viewp,field,p.xlines,p.ycols)    
     when KEY_LEFT, 97 # Move Left   
-      #step = Ncurses.mvwinch(field, p.xlines, p.ycols - 1) # Troubleshooting
-      #message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,0,-1,p,walkable,items,actors)          
       center(viewp,field,p.xlines,p.ycols)     
     when 32 # Spacebar, dont move
       center(viewp,field,p.xlines,p.ycols)
+=begin
     when 104 # h
       if player_visible == 1
         player_visible = 0
       elsif player_visible == 0
         player_visible = 1
       end
+=end      
     when 114 # r      
       the_beacon = get_distance_all_beacons(p,all_beacons)
       if get_distance(p,the_beacon) < 101
@@ -319,5 +268,4 @@ Ncurses.clear
 Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Good Bye!")
 Ncurses.wrefresh(stdscr)
 Ncurses.napms(1000)
-#Ncurses.getch
 Ncurses.endwin
