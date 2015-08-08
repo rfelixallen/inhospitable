@@ -291,6 +291,7 @@ if p.hp == 0 || p.hunger == 0 || p.inventory["Token"] == 2
     Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 1, sd_lines[0] / 2, "Abiit nemine salutato.")
     Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 2, sd_lines[0] / 2, "Press any key to quit") 
     Ncurses.wrefresh(stdscr)
+    Ncurses.napms(1000)
     input = Ncurses.getch
     Ncurses.endwin
     Ncurses.clear
@@ -303,6 +304,7 @@ if p.hp == 0 || p.hunger == 0 || p.inventory["Token"] == 2
     Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 1, sd_lines[0] / 2, "You have been rescued!") 
     Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 2, sd_lines[0] / 2, "Press 'q' to quit") 
     Ncurses.wrefresh(stdscr)
+    Ncurses.napms(1000)
     input = Ncurses.getch
     Ncurses.endwin
     Ncurses.clear
