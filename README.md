@@ -8,7 +8,7 @@ Features
 * Compile game to run in a web browser
 Fixes
 * Adjust amount and placement of food/meds in a bunker
-* Fix Bunker generation placement
+* Fix border on viewp
 
 Log
 8/8/15
