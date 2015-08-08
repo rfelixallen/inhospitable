@@ -5,11 +5,13 @@ TODO
 Features
 * Play test distance between bunkers and starvation 
 Fixes
-* Add in more informative logging
 * Adjust amount and placement of food/meds in a bunker
-* Fix Monster hunting and wandering
+* Fix Bunker generation placement
 
 Log
+8/8/15
+-Fixed Monster hunting code using logging. The problem is that monsters were hunting if they were less than 5 on x OR y from the player. changed it to AND. Discovered bunkers generate out of bounds. 
+
 8/6/15
 - Made it such that monsters will only chase if they are within 5 spaces. HOWEVER, it seems that if one knows where you are, then they all know where you are and will run from miles away. They also wander like mosquitoes, and I want them to walk in straight lines for n spaces before determining a new direction.
 
