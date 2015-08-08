@@ -28,7 +28,8 @@ colors.times do |fg|
   color_i += 1
 end
 =end
-Ncurses.init_pair(1, COLOR_WHITE, COLOR_RED)
+#Ncurses.init_pair(1, COLOR_WHITE, COLOR_RED)
+Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
 
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers

@@ -100,7 +100,7 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors)
     actors.each do |x|
       symbcodes << x.symbcode
     end
-    if ((character.xlines + xl) > 0 and (character.ycols + yc) > 0 and (character.xlines + xl) < (window_max_lines[0] - 1) and (character.ycols + yc) < (window_max_cols[0] - 1))
+    if ((character.xlines + xl) > 0 and (character.ycols + yc) > 0 and (character.xlines + xl) < (window_max_lines[0]) and (character.ycols + yc) < (window_max_cols[0]))
       if walkable.include?(step) 
         character.move(window,xl,yc)
       elsif symbcodes.include?(step)

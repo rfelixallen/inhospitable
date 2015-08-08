@@ -243,7 +243,7 @@ def generate_perlin(window)
   Ncurses.getmaxyx(window,w_x,w_y)
   n3d = Perlin::Noise.new 3, :interval => 100
   contrast = Perlin::Curve.contrast(Perlin::Curve::CUBIC, 3)
-  Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
+  #Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
   Ncurses.wattron(window,Ncurses.COLOR_PAIR(1))
   1.step(w_x[0] - 2, 1.0) do |x| # x == whole integer, which will always give .5
     1.step(w_y[0] - 2, 1.0) do |y|

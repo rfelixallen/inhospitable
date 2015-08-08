@@ -114,16 +114,16 @@ def borders2(window)
   Ncurses.getmaxyx(window,w_y,w_x)
   
   # Draw side borders
-  while i <= (w_y[0] - 2) do
+  while i <= (w_y[0] - 1) do
     Ncurses.mvwaddstr(window, i, 0, "|")
-    Ncurses.mvwaddstr(window, i, w_x[0] - 2, "|")
+    Ncurses.mvwaddstr(window, i, w_x[0] - 1, "|")
     i += 1
   end
   # Draw Top/bottom borders
   j = 0
-  while j <= (w_x[0] - 2) do
+  while j <= (w_x[0] - 1) do
     Ncurses.mvwaddstr(window, 0, j, "+")
-    Ncurses.mvwaddstr(window, w_y[0] - 2, j, "+")
+    Ncurses.mvwaddstr(window, w_y[0] - 1, j, "+")
     j += 1
   end
 end
