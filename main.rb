@@ -257,13 +257,21 @@ if menu_active == 0
         Ncurses.wrefresh(viewp)
       else
         distance_from_player = [(p.xlines - rawr.xlines).abs,(p.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
-        if player_visible == 1 and ((distance_from_player[0] < (view_lines / 5) or distance_from_player[1] < view_cols / 5)) # if the monster is visible, chase player
+        if player_visible == 1 and ((distance_from_player[0] < (view_lines / 5) and distance_from_player[1] < view_cols / 5)) # if the monster is visible, chase player
           message(console,"Monster Hunt: #{rawr.object_id}")
-          Ncurses.napms(500)  
-          message(console,"dist lines #{distance_from_player[0]} < #{view_lines / 5}")
-          Ncurses.napms(500) 
-          message(console,"dist lines #{distance_from_player[1]} < #{view_cols / 5}")
           Ncurses.napms(500)
+          #message(console,"M LOC: [#{rawr.xlines},#{rawr.ycols}]")
+          #Ncurses.napms(500) 
+          #message(console,"dist cols #{distance_from_player[1]} < #{view_cols / 5}")
+          #Ncurses.napms(500)
+          #message(console,"dist lines #{distance_from_player[0]} < #{view_lines / 5}")
+          #Ncurses.napms(500)
+          inhospitableLog = File.open("inhospitableLog.txt", "a")
+          inhospitableLog.puts "#Monster Hunt: #{rawr.object_id}"
+          inhospitableLog.puts "M LOC: [#{rawr.xlines},#{rawr.ycols}]"
+          inhospitableLog.puts "dist cols #{distance_from_player[1]} < #{view_cols / 5}"
+          inhospitableLog.puts "dist lines #{distance_from_player[0]} < #{view_lines / 5}"
+          inhospitableLog.close 
           #message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing      
           mode_hunt2(field,hud, rawr, p, walkable, items, actors)           
         else # If player is not visible, wander around
