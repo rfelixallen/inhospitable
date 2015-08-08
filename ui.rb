@@ -106,6 +106,28 @@ def borders(window)
   end
 end
 
+def borders2(window)
+  # Draws borders around the window
+  i = 1
+  w_y = []
+  w_x = []
+  Ncurses.getmaxyx(window,w_y,w_x)
+  
+  # Draw side borders
+  while i <= (w_y[0] - 2) do
+    Ncurses.mvwaddstr(window, i, 0, "|")
+    Ncurses.mvwaddstr(window, i, w_x[0] - 2, "|")
+    i += 1
+  end
+  # Draw Top/bottom borders
+  j = 0
+  while j <= (w_x[0] - 2) do
+    Ncurses.mvwaddstr(window, 0, j, "+")
+    Ncurses.mvwaddstr(window, w_y[0] - 2, j, "+")
+    j += 1
+  end
+end
+
 def center(subwin,parent,p_rows,p_cols)
   rr = []   # Frame y Positions
   cc = []   # Frame x Positions
@@ -156,6 +178,7 @@ def message(window,message)
 end
 
 def hud_on(hud,player)
+  Ncurses.wclear(hud)
   borders(hud)                                
   Ncurses.mvwaddstr(hud, 1, 1, "Inhospitable")
   Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{player.ycols},#{player.xlines}]")
@@ -164,7 +187,7 @@ def hud_on(hud,player)
   Ncurses.mvwaddstr(hud, 5, 1, "Inventory:")
   Ncurses.mvwaddstr(hud, 6, 1, " -(R)adio")
   Ncurses.mvwaddstr(hud, 7, 1, " -(F)ood: #{player.inventory["Food"]}")
-  Ncurses.mvwaddstr(hud, 8, 1, " -(M)edkit: #{player.inventory["Medkit"]}")
+  Ncurses.mvwaddstr(hud, 8, 1, " -(M)ed: #{player.inventory["Medkit"]}")
   Ncurses.mvwaddstr(hud, 9, 1, " -Tokens: #{player.inventory["Token"]}")  
   Ncurses.wrefresh(hud)
 end
