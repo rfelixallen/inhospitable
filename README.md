@@ -3,13 +3,16 @@ A simple game of survival in a cold wasteland.
 
 TODO
 Features
-* Play test distance between bunkers and starvation 
+* Play test distance between bunkers and starvation
+* Compile game to run on Windows or Mac
+* Compile game to run in a web browser
 Fixes
 * Adjust amount and placement of food/meds in a bunker
 * Fix Bunker generation placement
 
 Log
 8/8/15
+-Also changed monster code so that they dont pick up items.
 -Fixed Monster hunting code using logging. The problem is that monsters were hunting if they were less than 5 on x OR y from the player. changed it to AND. Discovered bunkers generate out of bounds. 
 
 8/6/15
