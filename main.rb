@@ -185,22 +185,22 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
-      step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols) # Troubleshooting
+      #step = Ncurses.mvwinch(field, p.xlines - 1, p.ycols) # Troubleshooting
       message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,-1,0,p,walkable,items,actors) 
       center(viewp,field,p.xlines,p.ycols)
     when KEY_DOWN, 115 # Move Down      
-      step = Ncurses.mvwinch(field, p.xlines + 1, p.ycols) # Troubleshooting
+      #step = Ncurses.mvwinch(field, p.xlines + 1, p.ycols) # Troubleshooting
       message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,1,0,p,walkable,items,actors)                  
       center(viewp,field,p.xlines,p.ycols)   
     when KEY_RIGHT, 100 # Move Right 
-      step = Ncurses.mvwinch(field, p.xlines, p.ycols + 1) # Troubleshooting
+      #step = Ncurses.mvwinch(field, p.xlines, p.ycols + 1) # Troubleshooting
       message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,0,1,p,walkable,items,actors)     
       center(viewp,field,p.xlines,p.ycols)    
     when KEY_LEFT, 97 # Move Left   
-      step = Ncurses.mvwinch(field, p.xlines, p.ycols - 1) # Troubleshooting
+      #step = Ncurses.mvwinch(field, p.xlines, p.ycols - 1) # Troubleshooting
       message(console,"Step: #{step}")  # Troubleshooting
       check_space(field,hud,0,-1,p,walkable,items,actors)          
       center(viewp,field,p.xlines,p.ycols)     
@@ -258,8 +258,8 @@ if menu_active == 0
       else
         distance_from_player = [(p.xlines - rawr.xlines).abs,(p.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
         if player_visible == 1 and ((distance_from_player[0] < (view_lines / 5) and distance_from_player[1] < view_cols / 5)) # if the monster is visible, chase player
-          message(console,"Monster Hunt: #{rawr.object_id}")
-          Ncurses.napms(500)
+          #message(console,"Monster Hunt: #{rawr.object_id}")
+          #Ncurses.napms(500)
           inhospitableLog = File.open("inhospitableLog.txt", "a")
           inhospitableLog.puts "#Monster Hunt: #{rawr.object_id}"
           inhospitableLog.puts "M LOC: [#{rawr.xlines},#{rawr.ycols}]"
