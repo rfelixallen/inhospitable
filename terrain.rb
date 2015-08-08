@@ -177,7 +177,7 @@ def make_monster(monster_x,monster_y,actors)
 end
 
 def draw_map(window)
-  borders(window)
+  #borders(window)
   w_y = []
   w_x = []
   Ncurses.getmaxyx(window,w_y,w_x)
@@ -195,7 +195,7 @@ def draw_map(window)
 end
 
 def draw_map_tiles(window, tile)
-  borders(window)
+  borders2(window)
   w_y = []
   w_x = []
   Ncurses.getmaxyx(window,w_y,w_x)
@@ -245,8 +245,8 @@ def generate_perlin(window)
   contrast = Perlin::Curve.contrast(Perlin::Curve::CUBIC, 3)
   Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
   Ncurses.wattron(window,Ncurses.COLOR_PAIR(1))
-  1.step(w_x[0], 1.0) do |x| # x == whole integer, which will always give .5
-    1.step(w_y[0], 1.0) do |y|
+  1.step(w_x[0] - 2, 1.0) do |x| # x == whole integer, which will always give .5
+    1.step(w_y[0] - 2, 1.0) do |y|
       
     i = (x / w_x[0]) * 10 # (0.01..1.00) * 10 == (.1..9.9)
     j = (y / w_y[0]) * 10 # (0.01..1.00) * 10 == (.1..9.9)
