@@ -1,9 +1,5 @@
 require_relative 'terrain'
 
-def test_ui
-	puts "UI Loaded!"
-end
-
 def drawmenu(item)
   c = 0
   menu = ["PLAY GAME", "INSTRUCTIONS", "QUIT"]

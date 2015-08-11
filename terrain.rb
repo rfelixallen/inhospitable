@@ -16,10 +16,6 @@ tiletype = [
 ]
 =end
 
-def test_terrain
-	puts "Terrain Loaded!"
-end
-
 # Demo building
 def building(window, lines, cols)
   i = 1

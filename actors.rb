@@ -185,7 +185,7 @@ def static(beacon, clarity)
         nil
       else
         array << z
-        puts "Random #{z}"
+        #puts "Random #{z}"
         puts "a[z] => z"
         if z % 2 == 0
           a[z] = "z"
