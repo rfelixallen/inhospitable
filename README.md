@@ -1,6 +1,11 @@
 Inhospitable
 A simple game of survival in a cold wasteland.
 
+Installation
+1. Clone the game locally to your computer. https://github.com/rfelixallen/inhospitable.git
+2. In Terminal, cd into the directory and run 'bundle install'
+3. Use Ruby version 2.1.5.
+
 TODO
 Features
 * Play test distance between bunkers and starvation
