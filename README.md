@@ -9,13 +9,27 @@ Installation
 TODO
 Features
 * Play test distance between bunkers and starvation
-* Compile game to run on Windows or Mac
-* Compile game to run in a web browser
+* Ability to turn off beacons
+* Add a clock to keep track of time
+* Add temperature that changes during day and night
+* Add z-levels
+* Replace blank trail with quotes and colons for footprints
+* Add snow to cover tracks
+* End of the game (death or win) go back to main menu
+* Explore weapons and armor
+* Explore different windows for inventory, dialogue, logs, etc
+* Put this in a Rails server to work on a website
+
+
 Fixes
+* Fix screen flashes
 * Adjust amount and placement of food/meds in a bunker
 * Fix border on viewp
 
 Log
+3/15/16
+-And I am back! I plan on reviving this project and doing some more feature work. I miss coding, and I have ambitious roguelike plans. All I've done so far is update the feature list with some new ideas.
+
 8/8/15
 -Also changed monster code so that they dont pick up items.
 -Fixed Monster hunting code using logging. The problem is that monsters were hunting if they were less than 5 on x OR y from the player. changed it to AND. Discovered bunkers generate out of bounds. 
