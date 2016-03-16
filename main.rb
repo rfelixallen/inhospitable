@@ -160,7 +160,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
       else
         message(console,"..zz..zZ..Zzz..")
       end
-    when 102
+    when 102 # f
       food = p.inventory["Food"]
       if food > 0
         update_inventory(hud, 102, p, -1)
@@ -170,7 +170,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
       else
         message(console, "You have no food to eat.")
       end
-    when 109
+    when 109 # m
       medkit = p.inventory["Medkit"]
       if medkit > 0
         p.hp += 1
