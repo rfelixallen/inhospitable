@@ -52,8 +52,6 @@ Ncurses.getch               # Wait for user input
 Ncurses.clear               # Clear the screen once player is ready to proceed
 Ncurses.refresh             # Refresh window to display cleared screen
 
-objects = []
-
 # Draw map
 snow = Tile.new(name: "Snow", symb: "~", code: 1, color: "WHITE", blocked: true)
 wall_horizontal = Tile.new(name: "Wall_Horizontal", code: 2, symb: "=", color: "YELLOW", blocked: true)
@@ -64,7 +62,6 @@ all_tile.concat([snow, wall_horizontal, wall_vertical])
 Ncurses.mvwaddstr(stdscr, 2, 2, "Generating World")
 Ncurses.refresh
 Ncurses.mvwaddstr(stdscr, 3, 3, "Please wait...")
-Ncurses.napms(500)
 Ncurses.refresh
 generate_perlin(field) # Draw map
 
@@ -146,14 +143,12 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
       center(viewp,field,p.xlines,p.ycols)     
     when 32 # Spacebar, dont move
       center(viewp,field,p.xlines,p.ycols)
-=begin
     when 104 # h
       if player_visible == 1
         player_visible = 0
       elsif player_visible == 0
         player_visible = 1
-      end
-=end      
+      end    
     when 114 # r      
       the_beacon = get_distance_all_beacons(p,all_beacons)
       if get_distance(p,the_beacon) < 101
@@ -202,23 +197,7 @@ if menu_active == 0
         if player_visible == 1 and ((distance_from_player[0] < (view_lines / 5) and distance_from_player[1] < view_cols / 5)) # if the monster is visible, chase player  
           mode_hunt2(field,hud, rawr, p, walkable, items, actors)           
         else # If player is not visible, wander around
-          mode_wander2(field,hud, rawr, p, walkable, items, actors)
-=begin        
-          if counter < direction_steps
-            if dice_roll == false         
-             direction_steps = rand(10..25) # Meander long distances
-             dice_roll = true
-            end
-            #message(console,"steps:#{direction_steps},count:#{counter}")  # Troubleshooting message for testing        
-            mode_wander2(field,hud, rawr, p, walkable, items, actors)        
-            counter += 1
-          else
-            #message(console,"Monster move reset") # Troubleshooting message for testing
-            dice_roll = false
-            counter = 0
-            direction_steps = 0
-          end
-=end        
+          mode_wander2(field,hud, rawr, p, walkable, items, actors)       
         end 
       end
     end
