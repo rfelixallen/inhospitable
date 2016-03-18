@@ -20,7 +20,16 @@ Ncurses.cbreak              # Only accept a single character of input
 Ncurses.stdscr              # Initialize Standard Screen, which uses dimensions of current Terminal window
 Ncurses.keypad(stdscr,true) # Use expanded keyboard characters
 Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
-main_menu
+
+game_initialized = 0
+main_menu(game_initialized)
+
+Ncurses.mvwaddstr(stdscr, 2, 2, "Generating World")
+Ncurses.refresh
+Ncurses.mvwaddstr(stdscr, 3, 3, "Please wait...")
+Ncurses.refresh
+
+generate_perlin(field) # Draw map
 
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers
@@ -42,28 +51,12 @@ viewp = Ncurses.derwin(field,view_lines, view_cols, 0, 0) # Must not exceed size
 console = Ncurses.newwin(console_lines, console_cols, view_lines, 0) 
 hud = Ncurses.newwin(hud_lines, hud_cols, 0, view_lines) 
 
-# Welcome Screen
-Ncurses.mvwaddstr(stdscr, 2, 2, "Welcome to Inhospitable!")
-Ncurses.mvwaddstr(stdscr, 3, 3, "The Terminal window must be at least these dimensions:")
-Ncurses.mvwaddstr(stdscr, 4, 3, "Rows = #{view_lines}, Columns = #{view_cols}")
-Ncurses.mvwaddstr(stdscr, 5, 3, "Your Terminal Dimensions: Rows = #{sd_lines[0]}, Columns = #{sd_cols[0]}")
-Ncurses.refresh             # Refresh window to display new text
-Ncurses.getch               # Wait for user input
-Ncurses.clear               # Clear the screen once player is ready to proceed
-Ncurses.refresh             # Refresh window to display cleared screen
-
 # Draw map
 snow = Tile.new(name: "Snow", symb: "~", code: 1, color: "WHITE", blocked: true)
 wall_horizontal = Tile.new(name: "Wall_Horizontal", code: 2, symb: "=", color: "YELLOW", blocked: true)
 wall_vertical = Tile.new(name: "Wall_Vertical", code: 3, symb: "|", color: "Yellow", blocked: true)
 all_tile = []
 all_tile.concat([snow, wall_horizontal, wall_vertical])
-
-Ncurses.mvwaddstr(stdscr, 2, 2, "Generating World")
-Ncurses.refresh
-Ncurses.mvwaddstr(stdscr, 3, 3, "Please wait...")
-Ncurses.refresh
-generate_perlin(field) # Draw map
 
 # Define Actors, Items and Terrain
 actors = []         # Array will contain ascii decimal value of actor symbols 
@@ -103,7 +96,7 @@ hunger_count = 0
 direction_steps = rand(10..25) # Meander long distances
 player_visible = 1
 menu_active = 0
-
+game_initialized = 1
 # Set up HUD and Console
 borders(console)                            # Add borders to the console
 Ncurses.wrefresh(console)                   # Refresh console window with message
@@ -115,7 +108,7 @@ Ncurses.wrefresh(viewp)
 #################################################################################
 while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   if menu_active == 1
-    main_menu
+    main_menu(game_initialized)
     menu_active = 0
     Ncurses.mvwaddstr(stdscr, 2, 2, "Returning to game...")
     Ncurses.refresh
