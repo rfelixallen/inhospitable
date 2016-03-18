@@ -19,6 +19,8 @@ Features
 * Explore weapons and armor
 * Explore different windows for inventory, dialogue, logs, etc
 * Put this in a Rails server to work on a website
+* Ability to save and load
+* Add Colors
 
 
 Fixes
