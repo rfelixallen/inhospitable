@@ -20,6 +20,7 @@ Ncurses.cbreak              # Only accept a single character of input
 Ncurses.stdscr              # Initialize Standard Screen, which uses dimensions of current Terminal window
 Ncurses.keypad(stdscr,true) # Use expanded keyboard characters
 Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
+main_menu
 
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers
@@ -104,7 +105,7 @@ hunger_count = 0
 #counter = 0 #wander counter for monster
 direction_steps = rand(10..25) # Meander long distances
 player_visible = 1
-menu_active = 1
+menu_active = 0
 
 # Set up HUD and Console
 borders(console)                            # Add borders to the console
