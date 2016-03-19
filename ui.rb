@@ -21,7 +21,7 @@ def drawmenu(item)
   Ncurses.mvaddstr(18,2,"Version 0.5 - RFAllen 2015")
 end
 
-def main_menu(state)
+def main_menu(state,screen)
 # Main Menu
 menuitem = 0
 drawmenu(menuitem)
@@ -49,7 +49,7 @@ while key != 113
       menu_instructions 
     elsif menuitem == 2
       if state == 1
-        # Save the game
+        save_game(screen)
         key = 113 # This is just to demonstrate the menu item works.
       else
         Ncurses.flash
@@ -87,7 +87,12 @@ def menu_instructions
       Ncurses.getch
 end
 
-
+def save_game(screen)
+  #inhospitableSave = File.open("inhospitableSave.sav", "w")
+  #inhospitableSave.puts "#{Time.now} - Game Launched"
+  #inhospitableSave.close
+  Ncurses.scr_dump(dump)
+end
 
 def borders(window)
   # Draws borders around the window

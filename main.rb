@@ -22,14 +22,14 @@ Ncurses.keypad(stdscr,true) # Use expanded keyboard characters
 Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
 
 game_initialized = 0
-main_menu(game_initialized)
+main_menu(game_initialized, stdscr)
 
 Ncurses.mvwaddstr(stdscr, 2, 2, "Generating World")
 Ncurses.refresh
 Ncurses.mvwaddstr(stdscr, 3, 3, "Please wait...")
 Ncurses.refresh
 
-generate_perlin(field) # Draw map
+
 
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers
@@ -50,6 +50,7 @@ field = Ncurses.newwin(field_lines, field_cols, 0, 0)
 viewp = Ncurses.derwin(field,view_lines, view_cols, 0, 0) # Must not exceed size of terminal or else crash
 console = Ncurses.newwin(console_lines, console_cols, view_lines, 0) 
 hud = Ncurses.newwin(hud_lines, hud_cols, 0, view_lines) 
+generate_perlin(field) # Draw map
 
 # Draw map
 snow = Tile.new(name: "Snow", symb: "~", code: 1, color: "WHITE", blocked: true)
@@ -108,7 +109,7 @@ Ncurses.wrefresh(viewp)
 #################################################################################
 while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   if menu_active == 1
-    main_menu(game_initialized)
+    main_menu(game_initialized, field)
     menu_active = 0
     Ncurses.mvwaddstr(stdscr, 2, 2, "Returning to game...")
     Ncurses.refresh
