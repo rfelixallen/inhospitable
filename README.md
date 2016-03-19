@@ -29,6 +29,9 @@ Fixes
 * Fix border on viewp
 
 Log
+3/18/15
+-I began experimenting with persistance, the fancy word for saving and reloading. I was able to dump a window and restore it using test files. The next test is to see if we can dump a game screen.
+
 3/15/16
 -And I am back! I plan on reviving this project and doing some more feature work. I miss coding, and I have ambitious roguelike plans. All I've done so far is update the feature list with some new ideas.
 
