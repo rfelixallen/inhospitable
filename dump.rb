@@ -8,5 +8,6 @@ Ncurses.mvwaddstr(stdscr, 3, 3, "Press any key to save the state.")
 Ncurses.refresh
 Ncurses.getch
 
-#x = Ncurses.scr_dump()
-File.open(testfile.txt, 'w') { |file| file.write("I am some text.") 
+x = Ncurses.scr_dump("textfile.txt")
+#File.open("testfile.txt", 'w') { |file| file.write("I am some text.") }
+Ncurses.endwin
