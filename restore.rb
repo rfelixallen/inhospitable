@@ -18,7 +18,7 @@ Ncurses.refresh
 #x = Ncurses.scr_restore("save.sav")
 
 # getwin example
-x = File.open("save1.dat", "r")
+x = File.open("save1.sav", "r")
 win = Ncurses.getwin(x)
 x.close
 

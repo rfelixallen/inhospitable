@@ -35,7 +35,7 @@ end
 Ncurses.wrefresh(window)
 Ncurses.getch
 #x = Ncurses.scr_dump("textfile.txt")
-x = File.open("save1.dat", "w")
+x = File.open("save1.sav", "w")
 #s.write(Ncurses.putwin(stdscr,"save1.sav"))
 #s.close()
 s = Ncurses.putwin(window,x)
