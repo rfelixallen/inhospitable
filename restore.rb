@@ -12,7 +12,7 @@ Ncurses.getch
 Ncurses.clear
 Ncurses.refresh
 
-x = Ncurses.scr_restore("textfile.txt")
+x = Ncurses.scr_restore("save.txt")
 Ncurses.refresh
 Ncurses.getch
 

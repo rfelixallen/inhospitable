@@ -170,8 +170,9 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
       else
         message(console, "You have no medkits.")
       end
-    when 49 # 1 - Main Menu
-      menu_active = 1
+    when 27, 49 # ESC or 1 - Main Menu 
+      #menu_active = 1
+      savegame = Ncurses.scr_dump("save.txt")
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else
