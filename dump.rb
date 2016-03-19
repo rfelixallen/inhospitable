@@ -2,9 +2,11 @@ require 'ncurses'
 include Ncurses
 
 Ncurses.initscr
-Ncurses.mvwaddstr(stdscr, 2, 2, "Testing Screen Dump")
+Ncurses.cbreak
+Ncurses.noecho
 Ncurses.refresh
-Ncurses.mvwaddstr(stdscr, 3, 3, "Press any key to save the state.")
+
+Ncurses.addstr("Testing Screen Dump")
 Ncurses.refresh
 Ncurses.getch
 
