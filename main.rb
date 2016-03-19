@@ -172,7 +172,7 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
       end
     when 27, 49 # ESC or 1 - Main Menu 
       #menu_active = 1
-      savegame = Ncurses.scr_dump("save.txt")
+      savegame = Ncurses.scr_dump("save.sav")
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else
