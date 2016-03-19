@@ -1,6 +1,8 @@
 require 'ncurses'
 include Ncurses
 
+# Files must be restored from .dat files
+
 Ncurses.initscr
 Ncurses.cbreak
 Ncurses.noecho
@@ -12,8 +14,16 @@ Ncurses.getch
 Ncurses.clear
 Ncurses.refresh
 
-x = Ncurses.scr_restore("save.sav")
-Ncurses.refresh
+# Scr_restore example
+#x = Ncurses.scr_restore("save.sav")
+
+# getwin example
+x = File.open("save1.dat", "r")
+win = Ncurses.getwin(x)
+x.close
+
+Ncurses.wrefresh(win)
 Ncurses.getch
+Ncurses.clear
 
 Ncurses.endwin
