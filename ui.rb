@@ -3,13 +3,15 @@ require_relative 'terrain'
 def drawmenu(item)
   c = 0
   menu = ["PLAY GAME", "INSTRUCTIONS", "SAVE", "QUIT"]
+  m = menu.length
   Ncurses.clear
   Ncurses.mvaddstr(0,2,"Inhospitable - Main Menu")
   Ncurses.refresh
-  for i in 0..3
+  #for i in 0..3
+  m.times do |i|
     Ncurses.mvaddstr(3 + (i * 2), 20, menu[i])
   end
-  while c <= menu.count # set to total menu items, start at 0
+  while c <= m # set to total menu items, start at 0
     if c == item
       Ncurses.attron(A_REVERSE)
       Ncurses.mvaddstr(3 + (c * 2), 20, menu[c])
