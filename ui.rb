@@ -49,8 +49,8 @@ while key != 113
       menu_instructions 
     elsif menuitem == 2
       if state == 1
-        #save_game(screen)
-        key = 113 # This is just to demonstrate the menu item works.
+        save_game(screen)
+        #key = 113 # This is just to demonstrate the menu item works.
       else
         Ncurses.flash
       end
@@ -89,7 +89,7 @@ end
 
 def save_game(screen)
   s = File.open("save1.sav", "w")
-  s = Ncurses.putwin(screen,"save1.sav")
+  x = Ncurses.putwin(screen,s)
   s.close
 end
 
