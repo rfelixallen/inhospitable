@@ -1,13 +1,11 @@
 require_relative 'terrain'
 
-def drawmenu(item)
-  c = 0
-  menu = ["PLAY GAME", "INSTRUCTIONS", "SAVE", "QUIT"]
+def drawmenu(item,menu)
+  c = 0  
   m = menu.length
   Ncurses.clear
   Ncurses.mvaddstr(0,2,"Inhospitable - Main Menu")
-  Ncurses.refresh
-  #for i in 0..3
+  Ncurses.refresh 
   m.times do |i|
     Ncurses.mvaddstr(3 + (i * 2), 20, menu[i])
   end
@@ -26,24 +24,20 @@ end
 def main_menu(state,screen)
 # Main Menu
 menuitem = 0
-drawmenu(menuitem)
+menu = ["PLAY GAME", "INSTRUCTIONS", "SAVE GAME", "LOAD GAME", "QUIT"]
+drawmenu(menuitem,menu)
 key = 0
+m = menu.length - 1
 while key != 113
-  drawmenu(menuitem)
+  drawmenu(menuitem,menu)
   key = Ncurses.getch
   case key
   when KEY_DOWN
     menuitem += 1
-    if (menuitem > 3) 
-      menuitem = 0
-      #break
-    end
+    if (menuitem > m) then menuitem = 0 end
   when KEY_UP
     menuitem -= 1
-    if (menuitem < 0) 
-      menuitem = 3
-      #break
-    end
+    if (menuitem < 0) then menuitem = m end
   when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
     if menuitem == 0 # Play Game
       key = 113
@@ -56,7 +50,9 @@ while key != 113
       else
         Ncurses.flash
       end
-    elsif menuitem == 3 # Quit Game
+    elsif menuitem == 3
+      key = 113 # Just play the game. This is to test if the Load menu shows up
+    elsif menuitem == 4 # Quit Game
       Ncurses.clear
       Ncurses.endwin
       exit
