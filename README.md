@@ -29,7 +29,13 @@ Fixes
 * Fix border on viewp
 
 Log
-3/18/15
+3/22/16
+-I cleaned up some variables in Main.rb to make them more descriptive.
+
+3/19/16
+-I successfully exported Inhospitable's game map window to a save file. Restoring will be a bit more complicated, as Ill need to save additional information and instantiate that. Ill need to refactor how the game initializes so it can accomodate loaded variable or standard variables.
+
+3/18/16
 -I began experimenting with persistance, the fancy word for saving and reloading. I was able to dump a window and restore it using test files. The next test is to see if we can dump a game screen.
 
 3/15/16
