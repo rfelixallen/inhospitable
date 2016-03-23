@@ -39,8 +39,8 @@ game_initialized = 1
 standard_screen_columns = []                # Standard Screen column aka y
 standard_screen_lines = []               # Standard Screen lines aka x
 Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
-field_window_lines = 200
-field_window_columns = 200
+game_window_lines = 200
+game_window_columns = 200
 viewport_window_lines = 25
 viewport_window_columns = 25
 hud_window_lines = viewport_window_lines
@@ -56,7 +56,7 @@ hunger_count = 0
 direction_steps = rand(10..25) # Meander long distances
 player_visible = 1
 
-game_window = Ncurses.newwin(field_window_lines, field_window_columns, 0, 0)
+game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
 viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
 console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
 hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
@@ -71,7 +71,7 @@ all_bunkers = []
 
 # Draw bunkers and beacons
 bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker
-total_bunkers = ((field_window_lines * field_window_columns) / bunker_area_with_space) # This will return round number because of floats
+total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space) # This will return round number because of floats
 bunker_start = 0
 while bunker_start <= total_bunkers
   make_bunker(game_window,all_beacons,all_bunkers,actors,12345)
