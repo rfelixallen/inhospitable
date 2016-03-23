@@ -78,16 +78,16 @@ while bunker_start <= total_bunkers
   bunker_start += 1
 end
 
-# Setup Actors
+# Create Player Actor
 game_window_max_lines = []
 game_window_max_columns = []
 Ncurses.getmaxyx(game_window,game_window_max_columns,game_window_max_lines)   # Get Max Y,X of game_window
 player_start_lines = (game_window_max_lines[0] / 4)
 player_start_columns = (game_window_max_columns[0] / 4)
-
-# Create Player Actor
 player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
 actors << player
+
+# Place all Actors from array
 spiral(game_window,10,player,walkable) # Find legal starting position for player
 actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
 
