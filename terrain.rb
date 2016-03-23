@@ -237,7 +237,8 @@ def generate_perlin(window)
   w_y = []
   w_x = []
   Ncurses.getmaxyx(window,w_x,w_y)
-  n3d = Perlin::Noise.new 3, :interval => 100
+  random_seed = 12345
+  n3d = Perlin::Noise.new 3, :interval => 100, :seed => random_seed
   contrast = Perlin::Curve.contrast(Perlin::Curve::CUBIC, 3)
   #Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
   Ncurses.wattron(window,Ncurses.COLOR_PAIR(1))
