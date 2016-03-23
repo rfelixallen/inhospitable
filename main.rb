@@ -29,9 +29,13 @@ Ncurses.refresh
 Ncurses.mvwaddstr(stdscr, 3, 3, "Please wait...")
 Ncurses.refresh
 
+menu_active = 0
+game_initialized = 1
+
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers
 # Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
+# Game Variables - Initial set and forget
 standard_screen_columns = []                # Standard Screen column aka y
 standard_screen_lines = []               # Standard Screen lines aka x
 Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
@@ -43,21 +47,20 @@ hud_window_lines = viewport_window_lines
 hud_window_columns = 15
 console_window_lines = 3
 console_window_columns = viewport_window_columns + hud_window_columns
+seed = 12345
+direction_steps = 0
+counter = 0   
+dice_roll = false
+hunger_count = 0
+#counter = 0 #wander counter for monster
+direction_steps = rand(10..25) # Meander long distances
+player_visible = 1
 
 game_window = Ncurses.newwin(field_window_lines, field_window_columns, 0, 0)
 viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
 console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
 hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
 generate_perlin(game_window) # Draw map
-
-=begin
-# Draw map
-snow = Tile.new(name: "Snow", symb: "~", code: 1, color: "WHITE", blocked: true)
-wall_horizontal = Tile.new(name: "Wall_Horizontal", code: 2, symb: "=", color: "YELLOW", blocked: true)
-wall_vertical = Tile.new(name: "Wall_Vertical", code: 3, symb: "|", color: "Yellow", blocked: true)
-all_tile = []
-all_tile.concat([snow, wall_horizontal, wall_vertical])
-=end
 
 # Define Actors, Items, Terrain, Bunkers and Beacons
 actors = []         # Array will contain ascii decimal value of actor symbols 
@@ -87,17 +90,6 @@ player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycol
 actors << player
 spiral(game_window,10,player,walkable) # Find legal starting position for player
 actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
-
-# Game Variables - Initial set and forget
-direction_steps = 0
-counter = 0   
-dice_roll = false
-hunger_count = 0
-#counter = 0 #wander counter for monster
-direction_steps = rand(10..25) # Meander long distances
-player_visible = 1
-menu_active = 0
-game_initialized = 1
 
 # Set up hud_window and console_window
 borders(console_window)                            # Add borders to the console_window
