@@ -65,11 +65,11 @@ walkable = [32,88,126,288,382] # ' ', '~', 'X' #somehow 288 became space, 382 is
 # Draw bunkers and beacons
 all_beacons = []
 all_bunkers = []
-bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 is the area of the demo bunker
+bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker
 total_bunkers = ((field_window_lines * field_window_columns) / bunker_area_with_space) # This will return round number because of floats
 bunker_start = 0
 while bunker_start <= total_bunkers
-  make_bunker(game_window,all_beacons,all_bunkers,actors)
+  make_bunker(game_window,all_beacons,all_bunkers,actors,12345)
   bunker_start += 1
 end
 
