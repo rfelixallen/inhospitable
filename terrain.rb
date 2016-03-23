@@ -235,12 +235,12 @@ def generate_random(window)
 end
 
 #right now this rights about 100 characters in one position before advancing to the next
-def generate_perlin(window)
+def generate_perlin(window,seed)
   borders(window)
   w_y = []
   w_x = []
   Ncurses.getmaxyx(window,w_x,w_y)
-  random_seed = 12345
+  random_seed = seed
   n3d = Perlin::Noise.new 3, :interval => 100, :seed => random_seed
   contrast = Perlin::Curve.contrast(Perlin::Curve::CUBIC, 3)
   #Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
@@ -261,6 +261,15 @@ def generate_perlin(window)
     end
   end
   Ncurses.wattroff(window,Ncurses.COLOR_PAIR(1))
+end
+
+def generate_map(window,total_bunkers,all_beacons,all_bunkers,actors,seed)
+  generate_perlin(window,seed)
+  bunker_start = 0
+  while bunker_start <= total_bunkers
+    make_bunker(window,all_beacons,all_bunkers,actors,seed)
+    bunker_start += 1
+  end
 end
 
 def spiral(window,n,character,walkable) # n is the max dimensions. ex n = 5, this is a 5x5 square.

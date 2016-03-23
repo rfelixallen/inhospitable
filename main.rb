@@ -35,7 +35,8 @@ game_initialized = 1
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers
 # Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
-# Game Variables - Initial set and forget
+
+# Screen and window variables
 standard_screen_columns = []                # Standard Screen column aka y
 standard_screen_lines = []               # Standard Screen lines aka x
 Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
@@ -47,7 +48,16 @@ hud_window_lines = viewport_window_lines
 hud_window_columns = 15
 console_window_lines = 3
 console_window_columns = viewport_window_columns + hud_window_columns
+bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker
+total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space) # This will return round number because of floats
 seed = 12345
+# Define Actors, Items, Terrain, Bunkers and Beacons
+actors = []         # Array will contain ascii decimal value of actor symbols 
+items = [42,102,109]        # Array contains ascii decimal value of all items on ground
+walkable = [32,88,126,288,382] # ' ', '~', 'X' #somehow 288 became space, 382 is colored ~
+all_beacons = []
+all_bunkers = []
+# Game Loop Variables
 direction_steps = 0
 counter = 0   
 dice_roll = false
@@ -60,23 +70,17 @@ game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
 viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
 console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
 hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
-generate_perlin(game_window) # Draw map
+#generate_perlin(game_window) # Draw map
+generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
 
-# Define Actors, Items, Terrain, Bunkers and Beacons
-actors = []         # Array will contain ascii decimal value of actor symbols 
-items = [42,102,109]        # Array contains ascii decimal value of all items on ground
-walkable = [32,88,126,288,382] # ' ', '~', 'X' #somehow 288 became space, 382 is colored ~
-all_beacons = []
-all_bunkers = []
-
+=begin
 # Draw bunkers and beacons
-bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker
-total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space) # This will return round number because of floats
 bunker_start = 0
 while bunker_start <= total_bunkers
   make_bunker(game_window,all_beacons,all_bunkers,actors,12345)
   bunker_start += 1
 end
+=end
 
 # Create Player Actor
 game_window_max_lines = []
