@@ -17,7 +17,7 @@ Ncurses.noecho              # Do not show keyboard input at cursor location
 Ncurses.start_color
 Ncurses.curs_set(0)         # Disable blinking cursor
 Ncurses.cbreak              # Only accept a single character of input
-Ncurses.stdscr              # Initialize Standard Screen, which uses dimensions of current Terminal window
+Ncurses.stdscr              # Initialize Standard Screen, which uses dimensions of current Terminal window. Invoke with stdscr
 Ncurses.keypad(stdscr,true) # Use expanded keyboard characters
 Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
 
@@ -29,28 +29,26 @@ Ncurses.refresh
 Ncurses.mvwaddstr(stdscr, 3, 3, "Please wait...")
 Ncurses.refresh
 
-
-
 # Instantiate Windows
 # For each window, define lines,cols variables and work with those instead of direct numbers
-# Demo game uses 4 windows: Field (aka game map), Viewport (aka what the player sees), Console and side HUD.
-sd_cols = []                # Standard Screen column aka y
-sd_lines = []               # Standard Screen lines aka x
-Ncurses.getmaxyx(stdscr,sd_cols,sd_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
-field_lines = 200
-field_cols = 200
-view_lines = 25
-view_cols = 25
-hud_lines = view_lines
-hud_cols = 15
-console_lines = 3
-console_cols = view_cols + hud_cols
+# Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
+standard_screen_columns = []                # Standard Screen column aka y
+standard_screen_lines = []               # Standard Screen lines aka x
+Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
+field_window_lines = 200
+field_window_columns = 200
+viewport_window_lines = 25
+viewport_window_columns = 25
+hud_window_lines = viewport_window_lines
+hud_window_columns = 15
+console_window_lines = 3
+console_window_columns = viewport_window_columns + hud_window_columns
 
-field = Ncurses.newwin(field_lines, field_cols, 0, 0)
-viewp = Ncurses.derwin(field,view_lines, view_cols, 0, 0) # Must not exceed size of terminal or else crash
-console = Ncurses.newwin(console_lines, console_cols, view_lines, 0) 
-hud = Ncurses.newwin(hud_lines, hud_cols, 0, view_lines) 
-generate_perlin(field) # Draw map
+game_window = Ncurses.newwin(field_window_lines, field_window_columns, 0, 0)
+viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
+console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
+hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
+generate_perlin(game_window) # Draw map
 
 # Draw map
 snow = Tile.new(name: "Snow", symb: "~", code: 1, color: "WHITE", blocked: true)
@@ -67,26 +65,26 @@ walkable = [32,88,126,288,382] # ' ', '~', 'X' #somehow 288 became space, 382 is
 # Draw bunkers and beacons
 all_beacons = []
 all_bunkers = []
-bunker_area_with_space = (view_lines * view_cols * 10) + 11 # 11 is the area of the demo bunker
-total_bunkers = ((field_lines * field_cols) / bunker_area_with_space) # This will return round number because of floats
+bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 is the area of the demo bunker
+total_bunkers = ((field_window_lines * field_window_columns) / bunker_area_with_space) # This will return round number because of floats
 bunker_start = 0
 while bunker_start <= total_bunkers
-  make_bunker(field,all_beacons,all_bunkers,actors)
+  make_bunker(game_window,all_beacons,all_bunkers,actors)
   bunker_start += 1
 end
 
 # Setup Actors
-field_max_lines = []
-field_max_cols = []
-Ncurses.getmaxyx(field,field_max_cols,field_max_lines)   # Get Max Y,X of Field
-player_start_lines = (field_max_lines[0] / 4)
-player_start_cols = (field_max_cols[0] / 4)
+game_window_max_lines = []
+game_window_max_columns = []
+Ncurses.getmaxyx(game_window,game_window_max_columns,game_window_max_lines)   # Get Max Y,X of game_window
+player_start_lines = (game_window_max_lines[0] / 4)
+player_start_columns = (game_window_max_columns[0] / 4)
 
 # Create Player Actor
-p = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_cols, hp: 9, color: 2)
-actors << p
-spiral(field,10,p,walkable) # Find legal starting position for player
-actors.each { |actor| actor.draw(field)}  # Add all actors to the map
+player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
+actors << player
+spiral(game_window,10,player,walkable) # Find legal starting position for player
+actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
 
 # Game Variables - Initial set and forget
 direction_steps = 0
@@ -98,45 +96,45 @@ direction_steps = rand(10..25) # Meander long distances
 player_visible = 1
 menu_active = 0
 game_initialized = 1
-# Set up HUD and Console
-borders(console)                            # Add borders to the console
-Ncurses.wrefresh(console)                   # Refresh console window with message
-hud_on(hud,p)
-center(viewp,field,p.xlines,p.ycols)        # Center map on player
-Ncurses.wrefresh(viewp)
+# Set up hud_window and console_window
+borders(console_window)                            # Add borders to the console_window
+Ncurses.wrefresh(console_window)                   # Refresh console_window window with message
+hud_on(hud_window,player)
+center(viewport_window,game_window,player.xlines,player.ycols)        # Center map on player
+Ncurses.wrefresh(viewport_window)
 #################################################################################
 # Game Loop                                                                     #
 #################################################################################
-while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
+while player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   if menu_active == 1
-    main_menu(game_initialized, field)
+    main_menu(game_initialized, game_window)
     menu_active = 0
     Ncurses.mvwaddstr(stdscr, 2, 2, "Returning to game...")
     Ncurses.refresh
     Ncurses.napms(1000)
   end
-  hud_on(hud,p)
-  borders(console) 
-  Ncurses.wrefresh(hud)
-  Ncurses.wrefresh(console)
-  Ncurses.wrefresh(viewp) # Fixed Monster location
+  hud_on(hud_window,player)
+  borders(console_window) 
+  Ncurses.wrefresh(hud_window)
+  Ncurses.wrefresh(console_window)
+  Ncurses.wrefresh(viewport_window) # Fixed Monster location
   
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
-      check_space(field,hud,-1,0,p,walkable,items,actors) 
-      center(viewp,field,p.xlines,p.ycols)
+      check_space(game_window,hud_window,-1,0,player,walkable,items,actors) 
+      center(viewport_window,game_window,player.xlines,player.ycols)
     when KEY_DOWN, 115 # Move Down      
-      check_space(field,hud,1,0,p,walkable,items,actors)                  
-      center(viewp,field,p.xlines,p.ycols)   
+      check_space(game_window,hud_window,1,0,player,walkable,items,actors)                  
+      center(viewport_window,game_window,player.xlines,player.ycols)   
     when KEY_RIGHT, 100 # Move Right 
-      check_space(field,hud,0,1,p,walkable,items,actors)     
-      center(viewp,field,p.xlines,p.ycols)    
+      check_space(game_window,hud_window,0,1,player,walkable,items,actors)     
+      center(viewport_window,game_window,player.xlines,player.ycols)    
     when KEY_LEFT, 97 # Move Left   
-      check_space(field,hud,0,-1,p,walkable,items,actors)          
-      center(viewp,field,p.xlines,p.ycols)     
+      check_space(game_window,hud_window,0,-1,player,walkable,items,actors)          
+      center(viewport_window,game_window,player.xlines,player.ycols)     
     when 32 # Spacebar, dont move
-      center(viewp,field,p.xlines,p.ycols)
+      center(viewport_window,game_window,player.xlines,player.ycols)
     when 104 # h
       if player_visible == 1
         player_visible = 0
@@ -144,31 +142,31 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
         player_visible = 1
       end    
     when 114 # r      
-      the_beacon = get_distance_all_beacons(p,all_beacons)
-      if get_distance(p,the_beacon) < 101
-        message(console,"Radio: #{static(the_beacon, transmission(field,the_beacon,p))}")
+      the_beacon = get_distance_all_beacons(player,all_beacons)
+      if get_distance(player,the_beacon) < 101
+        message(console_window,"Radio: #{static(the_beacon, transmission(game_window,the_beacon,player))}")
       else
-        message(console,"..zz..zZ..Zzz..")
+        message(console_window,"..zz..zZ..Zzz..")
       end
     when 102 # f
-      food = p.inventory["Food"]
+      food = player.inventory["Food"]
       if food > 0
-        update_inventory(hud, 102, p, -1)
-        p.hunger += 1
-        Ncurses.mvwaddstr(hud, 4, 1, "Hunger: #{p.hunger}")
-        Ncurses.wrefresh(hud)
+        update_inventory(hud_window, 102, player, -1)
+        player.hunger += 1
+        Ncurses.mvwaddstr(hud_window, 4, 1, "Hunger: #{player.hunger}")
+        Ncurses.wrefresh(hud_window)
       else
-        message(console, "You have no food to eat.")
+        message(console_window, "You have no food to eat.")
       end
     when 109 # m
-      medkit = p.inventory["Medkit"]
+      medkit = player.inventory["Medkit"]
       if medkit > 0
-        p.hp += 1
-        update_inventory(hud, 109, p, -1)        
-        Ncurses.mvwaddstr(hud, 3, 1, "HP: #{p.hp}")
-        Ncurses.wrefresh(hud)
+        player.hp += 1
+        update_inventory(hud_window, 109, player, -1)        
+        Ncurses.mvwaddstr(hud_window, 3, 1, "HP: #{player.hp}")
+        Ncurses.wrefresh(hud_window)
       else
-        message(console, "You have no medkits.")
+        message(console_window, "You have no medkits.")
       end
     when 27, 49 # ESC or 1 - Main Menu 
       menu_active = 1
@@ -177,22 +175,22 @@ while p.hp > 0 && p.hunger > 0 && p.inventory["Token"] < total_bunkers  # While 
       break
     else
       Ncurses.flash           # Flash screen if undefined input selected
-      message(console,"Move not valid")  # Display ascii decimal number of selected input
-      Ncurses.wrefresh(console) 
+      message(console_window,"Move not valid")  # Display ascii decimal number of selected input
+      Ncurses.wrefresh(console_window) 
     end
 
 if menu_active == 0
     # Monsters Move
-    actors.except(p).each do |rawr|  
+    actors.except(player).each do |rawr|  
       if rawr.hp <= 0
-        Ncurses.mvwaddstr(field, rawr.xlines, rawr.ycols, "X") # Turn into dead body
-        Ncurses.wrefresh(viewp)
+        Ncurses.mvwaddstr(game_window, rawr.xlines, rawr.ycols, "X") # Turn into dead body
+        Ncurses.wrefresh(viewport_window)
       else
-        distance_from_player = [(p.xlines - rawr.xlines).abs,(p.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
-        if player_visible == 1 and ((distance_from_player[0] < (view_lines / 5) and distance_from_player[1] < view_cols / 5)) # if the monster is visible, chase player  
-          mode_hunt2(field,hud, rawr, p, walkable, items, actors)           
+        distance_from_player = [(player.xlines - rawr.xlines).abs,(player.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
+        if player_visible == 1 and ((distance_from_player[0] < (viewport_window_lines / 5) and distance_from_player[1] < viewport_window_columns / 5)) # if the monster is visible, chase player  
+          mode_hunt2(game_window,hud_window, rawr, player, walkable, items, actors)           
         else # If player is not visible, wander around
-          mode_wander2(field,hud, rawr, p, walkable, items, actors)       
+          mode_wander2(game_window,hud_window, rawr, player, walkable, items, actors)       
         end 
       end
     end
@@ -201,22 +199,22 @@ if menu_active == 0
     if hunger_count <= 100
       hunger_count += 1
     else
-      p.hunger -= 1
+      player.hunger -= 1
       hunger_count = 0
-      message(console,"Your stomach growls")
-      Ncurses.mvwaddstr(hud, 4, 1, "Hunger: #{p.hunger}")
-      Ncurses.wrefresh(hud)
+      message(console_window,"Your stomach growls")
+      Ncurses.mvwaddstr(hud_window, 4, 1, "Hunger: #{player.hunger}")
+      Ncurses.wrefresh(hud_window)
     end
   end
 end
 # End Screen
-if p.hp == 0 || p.hunger == 0 || p.inventory["Token"] == 2
+if player.hp == 0 || player.hunger == 0 || player.inventory["Token"] == 2
   # Starved or died
-  if p.hp == 0 || p.hunger == 0
+  if player.hp == 0 || player.hunger == 0
     Ncurses.clear
-    Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "You have died in the cold wastes.")
-    Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 1, sd_lines[0] / 2, "Abiit nemine salutato.")
-    Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 2, sd_lines[0] / 2, "Press any key to quit") 
+    Ncurses.mvwaddstr(stdscr, standard_screen_columns[0] / 2, standard_screen_lines[0] / 2, "You have died in the cold wastes.")
+    Ncurses.mvwaddstr(stdscr, (standard_screen_columns[0] / 2) + 1, standard_screen_lines[0] / 2, "Abiit nemine salutato.")
+    Ncurses.mvwaddstr(stdscr, (standard_screen_columns[0] / 2) + 2, standard_screen_lines[0] / 2, "Press any key to quit") 
     Ncurses.wrefresh(stdscr)
     Ncurses.napms(1000)
     input = Ncurses.getch
@@ -225,11 +223,11 @@ if p.hp == 0 || p.hunger == 0 || p.inventory["Token"] == 2
     exit
   end
   # Collected all the tokens
-  if p.inventory["Token"] == 2
+  if player.inventory["Token"] == 2
     Ncurses.clear
-    Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "You collected all the tokens.")
-    Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 1, sd_lines[0] / 2, "You have been rescued!") 
-    Ncurses.mvwaddstr(stdscr, (sd_cols[0] / 2) + 2, sd_lines[0] / 2, "Press 'q' to quit") 
+    Ncurses.mvwaddstr(stdscr, standard_screen_columns[0] / 2, standard_screen_lines[0] / 2, "You collected all the tokens.")
+    Ncurses.mvwaddstr(stdscr, (standard_screen_columns[0] / 2) + 1, standard_screen_lines[0] / 2, "You have been rescued!") 
+    Ncurses.mvwaddstr(stdscr, (standard_screen_columns[0] / 2) + 2, standard_screen_lines[0] / 2, "Press 'q' to quit") 
     Ncurses.wrefresh(stdscr)
     Ncurses.napms(1000)
     input = Ncurses.getch
@@ -240,7 +238,7 @@ if p.hp == 0 || p.hunger == 0 || p.inventory["Token"] == 2
 end
 
 Ncurses.clear
-Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Good Bye!")
+Ncurses.mvwaddstr(stdscr, standard_screen_columns[0] / 2, standard_screen_lines[0] / 2, "Good Bye!")
 Ncurses.wrefresh(stdscr)
 Ncurses.napms(1000)
 Ncurses.endwin
