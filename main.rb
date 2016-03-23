@@ -50,21 +50,23 @@ console_window = Ncurses.newwin(console_window_lines, console_window_columns, vi
 hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
 generate_perlin(game_window) # Draw map
 
+=begin
 # Draw map
 snow = Tile.new(name: "Snow", symb: "~", code: 1, color: "WHITE", blocked: true)
 wall_horizontal = Tile.new(name: "Wall_Horizontal", code: 2, symb: "=", color: "YELLOW", blocked: true)
 wall_vertical = Tile.new(name: "Wall_Vertical", code: 3, symb: "|", color: "Yellow", blocked: true)
 all_tile = []
 all_tile.concat([snow, wall_horizontal, wall_vertical])
+=end
 
-# Define Actors, Items and Terrain
+# Define Actors, Items, Terrain, Bunkers and Beacons
 actors = []         # Array will contain ascii decimal value of actor symbols 
 items = [42,102,109]        # Array contains ascii decimal value of all items on ground
 walkable = [32,88,126,288,382] # ' ', '~', 'X' #somehow 288 became space, 382 is colored ~
-
-# Draw bunkers and beacons
 all_beacons = []
 all_bunkers = []
+
+# Draw bunkers and beacons
 bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker
 total_bunkers = ((field_window_lines * field_window_columns) / bunker_area_with_space) # This will return round number because of floats
 bunker_start = 0
@@ -96,6 +98,7 @@ direction_steps = rand(10..25) # Meander long distances
 player_visible = 1
 menu_active = 0
 game_initialized = 1
+
 # Set up hud_window and console_window
 borders(console_window)                            # Add borders to the console_window
 Ncurses.wrefresh(console_window)                   # Refresh console_window window with message
