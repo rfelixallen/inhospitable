@@ -1,5 +1,6 @@
 require_relative 'library'
 require 'ncurses'
+require 'yaml'
 include Ncurses                                                                
 
 =begin
@@ -52,11 +53,12 @@ bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) 
 total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space) # This will return round number because of floats
 seed = 12345
 # Define Actors, Items, Terrain, Bunkers and Beacons
-actors = []         # Array will contain ascii decimal value of actor symbols 
-items = [42,102,109]        # Array contains ascii decimal value of all items on ground
-walkable = [32,88,126,288,382] # ' ', '~', 'X' #somehow 288 became space, 382 is colored ~
-all_beacons = []
-all_bunkers = []
+everything = []
+everything << actors = []         # Array will contain ascii decimal value of actor symbols 
+everything << items = [42,102,109]        # Array contains ascii decimal value of all items on ground
+everything << walkable = [32,88,126,288,382] # ' ', '~', 'X' #somehow 288 became space, 382 is colored ~
+everything << all_beacons = []
+everything << all_bunkers = []
 # Game Loop Variables
 direction_steps = 0
 counter = 0   
@@ -66,21 +68,12 @@ hunger_count = 0
 direction_steps = rand(10..25) # Meander long distances
 player_visible = 1
 
+# Create game windows, then generate the world
 game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
 viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
 console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
 hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
-#generate_perlin(game_window) # Draw map
 generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
-
-=begin
-# Draw bunkers and beacons
-bunker_start = 0
-while bunker_start <= total_bunkers
-  make_bunker(game_window,all_beacons,all_bunkers,actors,12345)
-  bunker_start += 1
-end
-=end
 
 # Create Player Actor
 game_window_max_lines = []
@@ -117,6 +110,9 @@ while player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < total_bu
   Ncurses.wrefresh(hud_window)
   Ncurses.wrefresh(console_window)
   Ncurses.wrefresh(viewport_window) # Fixed Monster location
+  inhospitableLog = File.open("inhospitableLog.txt", "w")
+  actors.each { |a| inhospitableLog.puts "#{a}.to_yaml" }
+  inhospitableLog.close
   
   input = Ncurses.getch
   case input
