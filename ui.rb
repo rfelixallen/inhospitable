@@ -24,7 +24,7 @@ end
 def main_menu(state,screen)
 # Main Menu
 menuitem = 0
-menu = ["PLAY GAME", "INSTRUCTIONS", "SAVE GAME", "LOAD GAME", "QUIT"]
+menu = ["NEW GAME", "INSTRUCTIONS", "SAVE GAME", "CONTINUE", "QUIT"]
 drawmenu(menuitem,menu)
 key = 0
 m = menu.length - 1
@@ -50,8 +50,9 @@ while key != 113
       else
         Ncurses.flash
       end
-    elsif menuitem == 3
-      key = 113 # Just play the game. This is to test if the Load menu shows up
+    elsif menuitem == 3 # Continue
+      @new = 1
+      key = 113 # Quit Menu
     elsif menuitem == 4 # Quit Game
       Ncurses.clear
       Ncurses.endwin
