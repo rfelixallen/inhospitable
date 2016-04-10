@@ -1,6 +1,7 @@
 require_relative 'library'
 require 'ncurses'
 require 'yaml'
+require 'json'
 include Ncurses                                                                
 
 =begin
@@ -110,9 +111,16 @@ while player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < total_bu
   Ncurses.wrefresh(hud_window)
   Ncurses.wrefresh(console_window)
   Ncurses.wrefresh(viewport_window) # Fixed Monster location
-  inhospitableLog = File.open("inhospitableLog.txt", "w")
-  actors.each { |a| inhospitableLog.puts "#{a}.to_yaml" }
-  inhospitableLog.close
+  temp_hash = {"seed" => "#{seed}"}
+  File.open("game.json", "w") do |f|
+    f.puts temp_hash.to_json
+  end
+
+  
+
+  #inhospitableLog = File.open("inhospitableLog.txt", "w")
+  #actors.each { |a| inhospitableLog.puts "#{a}.to_yaml" }
+  #inhospitableLog.close
   
   input = Ncurses.getch
   case input
