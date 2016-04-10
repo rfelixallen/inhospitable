@@ -113,6 +113,7 @@ else
   #seed = data["seed"].to_i
   # Define Actors, Items, Terrain, Bunkers and Beacons
   everything = []
+  everything << {"seed" => "#{seed}"}
   everything << actors = []         # Array will contain ascii decimal value of actor symbols 
   everything << items = [42,102,109]        # Array contains ascii decimal value of all items on ground
   everything << walkable = [32,88,126,288,382] # ' ', '~', 'X' #somehow 288 became space, 382 is colored ~
@@ -173,10 +174,10 @@ while player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < total_bu
   Ncurses.wrefresh(hud_window)
   Ncurses.wrefresh(console_window)
   Ncurses.wrefresh(viewport_window) # Fixed Monster location
-  temp_hash = {"seed" => "#{seed}"}
-  File.open("game.json", "w") do |f|
-    f.puts temp_hash.to_json
-  end
+  #temp_hash = {"seed" => "#{seed}"}
+  #File.open("game.json", "w") do |f|
+  #  f.puts temp_hash.to_json
+  #end
 
   
 
@@ -233,9 +234,13 @@ while player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < total_bu
       else
         message(console_window, "You have no medkits.")
       end
-    when 27, 49 # ESC or 1 - Main Menu 
+    when 27 # ESC - Main Menu 
       menu_active = 1
-      #savegame = Ncurses.scr_dump("save.sav")
+    when 49 # 1 - Save Game
+        #temp_hash = {"seed" => "#{seed}"}
+      File.open("game.json", "w") do |f|
+        f.puts everything.to_json
+      end
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else
