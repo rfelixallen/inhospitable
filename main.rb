@@ -3,8 +3,7 @@ require 'ncurses'
 require 'yaml'
 require 'json'
 include Ncurses                                                                
-#json = File.read('game.json')
-#data = JSON.parse(json)
+
 =begin
 inhospitableLog = File.open("inhospitableLog.txt", "w")
 inhospitableLog.puts "#{Time.now} - Game Launched"
@@ -14,7 +13,7 @@ inhospitableLog.close
 #################################################################################
 # Initialize                                                                    #
 #################################################################################
-
+@new = 0
 Ncurses.initscr             # Start Ncurses
 Ncurses.noecho              # Do not show keyboard input at cursor location
 Ncurses.start_color
@@ -27,75 +26,130 @@ Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
 game_initialized = 0
 main_menu(game_initialized, stdscr)
 
-if @new == 1
-  Ncurses.mvwaddstr(stdscr, 2, 2, "@new is set to 1")
-  Ncurses.refresh
-  Ncurses.getch
-end
-
 Ncurses.mvwaddstr(stdscr, 2, 2, "Generating World")
 Ncurses.refresh
 Ncurses.mvwaddstr(stdscr, 3, 3, "Please wait...")
 Ncurses.refresh
 
+if @new == 2 # Set to 1 when testing variables
+  # Load Data 
+  json = File.read('game.json')
+  data = JSON.parse(json)
+  
+  # Instantiate Windows
+  # For each window, define lines,cols variables and work with those instead of direct numbers
+  # Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
+  # Screen and window variables
+  standard_screen_columns = []                # Standard Screen column aka y
+  standard_screen_lines = []               # Standard Screen lines aka x
+  Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
+  game_window_lines = 200
+  game_window_columns = 200
+  viewport_window_lines = 25
+  viewport_window_columns = 25
+  hud_window_lines = viewport_window_lines
+  hud_window_columns = 15
+  console_window_lines = 3
+  console_window_columns = viewport_window_columns + hud_window_columns
+  bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker
+  total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space) # This will return round number because of floats
+  seed = data["seed"].to_i
+  #seed = data["seed"].to_i
+  # Define Actors, Items, Terrain, Bunkers and Beacons
+  everything = []
+  everything << actors = []         # Array will contain ascii decimal value of actor symbols 
+  everything << items = [42,102,109]        # Array contains ascii decimal value of all items on ground
+  everything << walkable = [32,88,126,288,382] # ' ', '~', 'X' #somehow 288 became space, 382 is colored ~
+  everything << all_beacons = []
+  everything << all_bunkers = []
+  # Game Loop Variables
+  direction_steps = 0
+  counter = 0   
+  dice_roll = false
+  hunger_count = 0
+  #counter = 0 #wander counter for monster
+  direction_steps = rand(10..25) # Meander long distances
+  player_visible = 1
+
+  # Create game windows, then generate the world
+  game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
+  viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
+  console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
+  hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
+  generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
+
+  # Create Player Actor
+  game_window_max_lines = []
+  game_window_max_columns = []
+  Ncurses.getmaxyx(game_window,game_window_max_columns,game_window_max_lines)   # Get Max Y,X of game_window
+  player_start_lines = (game_window_max_lines[0] / 4)
+  player_start_columns = (game_window_max_columns[0] / 4)
+  player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
+  actors << player
+
+  # Place all Actors from array
+  spiral(game_window,10,player,walkable) # Find legal starting position for player
+  actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
+
+else
+  # Instantiate Windows
+  # For each window, define lines,cols variables and work with those instead of direct numbers
+  # Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
+  # Screen and window variables
+  standard_screen_columns = []                # Standard Screen column aka y
+  standard_screen_lines = []               # Standard Screen lines aka x
+  Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
+  game_window_lines = 200
+  game_window_columns = 200
+  viewport_window_lines = 25
+  viewport_window_columns = 25
+  hud_window_lines = viewport_window_lines
+  hud_window_columns = 15
+  console_window_lines = 3
+  console_window_columns = viewport_window_columns + hud_window_columns
+  bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker
+  total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space) # This will return round number because of floats
+  seed = 12345
+  #seed = data["seed"].to_i
+  # Define Actors, Items, Terrain, Bunkers and Beacons
+  everything = []
+  everything << actors = []         # Array will contain ascii decimal value of actor symbols 
+  everything << items = [42,102,109]        # Array contains ascii decimal value of all items on ground
+  everything << walkable = [32,88,126,288,382] # ' ', '~', 'X' #somehow 288 became space, 382 is colored ~
+  everything << all_beacons = []
+  everything << all_bunkers = []
+  # Game Loop Variables
+  direction_steps = 0
+  counter = 0   
+  dice_roll = false
+  hunger_count = 0
+  #counter = 0 #wander counter for monster
+  direction_steps = rand(10..25) # Meander long distances
+  player_visible = 1
+
+  # Create game windows, then generate the world
+  game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
+  viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
+  console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
+  hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
+  generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
+
+  # Create Player Actor
+  game_window_max_lines = []
+  game_window_max_columns = []
+  Ncurses.getmaxyx(game_window,game_window_max_columns,game_window_max_lines)   # Get Max Y,X of game_window
+  player_start_lines = (game_window_max_lines[0] / 4)
+  player_start_columns = (game_window_max_columns[0] / 4)
+  player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
+  actors << player
+
+  # Place all Actors from array
+  spiral(game_window,10,player,walkable) # Find legal starting position for player
+  actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
+end
+
 menu_active = 0
 game_initialized = 1
-
-# Instantiate Windows
-# For each window, define lines,cols variables and work with those instead of direct numbers
-# Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
-
-# Screen and window variables
-standard_screen_columns = []                # Standard Screen column aka y
-standard_screen_lines = []               # Standard Screen lines aka x
-Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
-game_window_lines = 200
-game_window_columns = 200
-viewport_window_lines = 25
-viewport_window_columns = 25
-hud_window_lines = viewport_window_lines
-hud_window_columns = 15
-console_window_lines = 3
-console_window_columns = viewport_window_columns + hud_window_columns
-bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker
-total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space) # This will return round number because of floats
-seed = 12345
-#seed = data["seed"].to_i
-# Define Actors, Items, Terrain, Bunkers and Beacons
-everything = []
-everything << actors = []         # Array will contain ascii decimal value of actor symbols 
-everything << items = [42,102,109]        # Array contains ascii decimal value of all items on ground
-everything << walkable = [32,88,126,288,382] # ' ', '~', 'X' #somehow 288 became space, 382 is colored ~
-everything << all_beacons = []
-everything << all_bunkers = []
-# Game Loop Variables
-direction_steps = 0
-counter = 0   
-dice_roll = false
-hunger_count = 0
-#counter = 0 #wander counter for monster
-direction_steps = rand(10..25) # Meander long distances
-player_visible = 1
-
-# Create game windows, then generate the world
-game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
-viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
-console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
-hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
-generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
-
-# Create Player Actor
-game_window_max_lines = []
-game_window_max_columns = []
-Ncurses.getmaxyx(game_window,game_window_max_columns,game_window_max_lines)   # Get Max Y,X of game_window
-player_start_lines = (game_window_max_lines[0] / 4)
-player_start_columns = (game_window_max_columns[0] / 4)
-player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
-actors << player
-
-# Place all Actors from array
-spiral(game_window,10,player,walkable) # Find legal starting position for player
-actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
 
 # Set up hud_window and console_window
 borders(console_window)                            # Add borders to the console_window
