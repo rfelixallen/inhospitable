@@ -3,7 +3,8 @@ require 'ncurses'
 require 'yaml'
 require 'json'
 include Ncurses                                                                
-
+json = File.read('game.json')
+data = JSON.parse(json)
 =begin
 inhospitableLog = File.open("inhospitableLog.txt", "w")
 inhospitableLog.puts "#{Time.now} - Game Launched"
@@ -52,7 +53,8 @@ console_window_lines = 3
 console_window_columns = viewport_window_columns + hud_window_columns
 bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker
 total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space) # This will return round number because of floats
-seed = 12345
+#seed = 12345
+seed = data["seed"].to_i
 # Define Actors, Items, Terrain, Bunkers and Beacons
 everything = []
 everything << actors = []         # Array will contain ascii decimal value of actor symbols 
