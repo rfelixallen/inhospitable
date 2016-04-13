@@ -22,6 +22,17 @@ class Actor
     #self.weather = options[:weather] || {"Cold" => 1, "Snow" => 2}
   end
 
+  def export
+    me = {
+          "symb" => self.symb,
+          "symbcode" => self.symbcode,
+          "color" => self.color,
+          "xlines" => self.xlines,
+          "ycols" => self.ycols,
+          "blocked" => self.blocked
+        }
+  end
+
   def draw(window)
     #Ncurses.init_pair(1, self.color, 0)
     #window.attron(Ncurses.COLOR_PAIR(1))
