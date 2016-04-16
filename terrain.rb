@@ -130,32 +130,38 @@ def make_bunker(window,all_beacons,all_bunkers,actors,seed)
   i = 0
   j = 0
   Ncurses.getmaxyx(window,w_y,w_x)
-  while success != 1
-    bunker_x = chance.rand(2..(w_x[0] - 11)) # subtract total height of predefined structure
-    bunker_y = chance.rand(2..(w_y[0] - 11)) # subtract total width of predefined structure
-    test_bunker_coordinates = []
-    for i in (bunker_x)..(bunker_x + 11)
-      for j in (bunker_y)..(bunker_y + 11)
-        coordinates = [i,j]
-        test_bunker_coordinates << coordinates
-      end
-    end
-    if (test_bunker_coordinates & all_bunkers).any?
-      success = 0 # Restart Loop
-    else
+  if @new == 2
+    demo_bunker(window,bunker_x,bunker_y,seed)
+  else
+    while success != 1
+      bunker_x = chance.rand(2..(w_x[0] - 11)) # subtract total height of predefined structure
+      bunker_y = chance.rand(2..(w_y[0] - 11)) # subtract total width of predefined structure
+      test_bunker_coordinates = []
       for i in (bunker_x)..(bunker_x + 11)
         for j in (bunker_y)..(bunker_y + 11)
           coordinates = [i,j]
-          all_bunkers << coordinates
+          test_bunker_coordinates << coordinates
         end
       end
-      success = 1
-      demo_bunker(window,bunker_x,bunker_y,12345)   # Adds a building to map. It overlays anything underneath it         
-      make_beacon(window,all_beacons,bunker_x,bunker_y,12345)
-      flip = chance.rand.round
-        if flip == 1
-          make_monster(bunker_x + 2, bunker_y + 2,actors)
-        end
+      if (test_bunker_coordinates & all_bunkers).any?
+        success = 0 # Restart Loop
+      else
+        construction = []
+        for i in (bunker_x)..(bunker_x + 11)
+          for j in (bunker_y)..(bunker_y + 11)            
+            coordinates = [i,j]
+            construction << coordinates
+          end
+        end        
+        success = 1
+        all_bunkers << construction
+        demo_bunker(window,bunker_x,bunker_y,seed)   # Adds a building to map. It overlays anything underneath it         
+        make_beacon(window,all_beacons,bunker_x,bunker_y,seed)
+        flip = chance.rand.round
+          if flip == 1
+            make_monster(bunker_x + 2, bunker_y + 2,actors)
+          end
+      end
     end
   end
 end
@@ -166,13 +172,15 @@ def make_beacon(window,all_beacons,bunker_x,bunker_y,seed)
   message = "Broadcast #{cantor_pairing(bunker_x,bunker_y)}"
   variable_name = Beacon.new(xlines: bunker_x + 2, ycols: bunker_y + 6, message: message)
   Ncurses.mvwaddstr(window, variable_name.xlines, variable_name.ycols, variable_name.symb)
-  all_beacons << variable_name
+  #all_beacons << variable_name
+  all_beacons.merge!(variable_name.export_beacon)
 end
 
 def make_monster(monster_x,monster_y,actors)
       monster = cantor_pairing(monster_x,monster_y)
       monster = Character.new(symb: 'M', symbcode: 77, xlines: monster_x, ycols: monster_y, hp: 3)
-      actors << monster
+      #actors << monster
+      actors.merge!(monster.export_character)
 end
 
 def draw_map(window)

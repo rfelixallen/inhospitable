@@ -34,7 +34,7 @@ Ncurses.refresh
 if @new == 1 # Set to 1 when testing variables
   # Load Data 
   json = File.read('sample.json')
-  data = JSON.parse(json)
+  everything = JSON.parse(json)
   
   # Instantiate Windows
   # For each window, define lines,cols variables and work with those instead of direct numbers
@@ -51,30 +51,14 @@ if @new == 1 # Set to 1 when testing variables
   hud_window_columns = 15
   console_window_lines = 3
   console_window_columns = viewport_window_columns + hud_window_columns
-  bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker
-  #total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space) # This will return round number because of floats
-  total_bunkers = {"total_bunkers" => ((game_window_lines * game_window_columns) / bunker_area_with_space)}
-  seed = {"seed" => 12345}
-  #seed = data["seed"].to_i
+  bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker  
+  total_bunkers = everything["bunkers"]
+  seed = everything["seed"].to_i
   # Define Actors, Items, Terrain, Bunkers and Beacons
-  everything = {}
-  everything.merge!(seed)
-  #everything << actors = []         # Array will contain ascii decimal value of actor symbols
-  actors = {"actors" => []}
-  everything.merge!(actors) 
-  items = {"items" => [42,102,109]}
-  everything.merge!(items)
-  #everything << items = [42,102,109]        # Array contains ascii decimal value of all items on ground
-  walkable = {"walkable" => [32,88,126,288,382]} # ' ', '~', 'X' #somehow 288 became space, 382 is colored ~
-  #everything << walkable = [32,88,126,288,382] # ' ', '~', 'X' #somehow 288 became space, 382 is colored ~
-  everything.merge!(walkable)
-  #everything << all_beacons = []
-  #everything << all_bunkers = []
-  all_beacons = {"beacons" => []}
-  all_bunkers = {"bunkers" => []}
-  everything.merge!(total_bunkers)
-  everything.merge!(all_beacons)
-  everything.merge!(all_bunkers)
+  actors = everything["actors"]
+  items = everything["items"]
+  all_beacons = everything["beacons"]
+  all_bunkers = everything["bunkers"]
 
   # Game Loop Variables
   direction_steps = 0
@@ -95,16 +79,16 @@ if @new == 1 # Set to 1 when testing variables
   generate_map(game_window,everything["total_bunkers"],everything["beacons"],everything["bunkers"],everything["actors"],everything["seed"])
 
   # Create Player Actor
-  game_window_max_lines = []
-  game_window_max_columns = []
-  Ncurses.getmaxyx(game_window,game_window_max_columns,game_window_max_lines)   # Get Max Y,X of game_window
-  player_start_lines = (game_window_max_lines[0] / 4)
-  player_start_columns = (game_window_max_columns[0] / 4)
-  player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
-  everything["actors"].push(player)
+  #game_window_max_lines = []
+  #game_window_max_columns = []
+  #Ncurses.getmaxyx(game_window,game_window_max_columns,game_window_max_lines)   # Get Max Y,X of game_window
+  #player_start_lines = (game_window_max_lines[0] / 4)
+  #player_start_columns = (game_window_max_columns[0] / 4)
+  #player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
+  #everything["actors"].push(player)
 
   # Place all Actors from array
-  spiral(game_window,10,player,walkable) # Find legal starting position for player
+  #spiral(game_window,10,player,walkable) # Find legal starting position for player
   everything["actors"].each { |actor| actor.draw(game_window)}  # Add all actors to the map  
 
 else
@@ -112,6 +96,7 @@ else
   # For each window, define lines,cols variables and work with those instead of direct numbers
   # Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
   # Screen and window variables
+  seed = {"seed" => 12345}
   standard_screen_columns = []                # Standard Screen column aka y
   standard_screen_lines = []               # Standard Screen lines aka x
   Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
@@ -123,25 +108,17 @@ else
   hud_window_columns = 15
   console_window_lines = 3
   console_window_columns = viewport_window_columns + hud_window_columns
-  bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker
-  #total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space) # This will return round number because of floats
-  total_bunkers = {"total_bunkers" => ((game_window_lines * game_window_columns) / bunker_area_with_space)}
-  seed = {"seed" => 12345}
-  #seed = data["seed"].to_i
+  bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker  
+  total_bunkers = {"total_bunkers" => ((game_window_lines * game_window_columns) / bunker_area_with_space)}    
   # Define Actors, Items, Terrain, Bunkers and Beacons
   everything = {}
-  everything.merge!(seed)
-  #everything << actors = []         # Array will contain ascii decimal value of actor symbols
+  everything.merge!(seed)  
   actors = {"actors" => []}
   everything.merge!(actors) 
   items = {"items" => [42,102,109]}
-  everything.merge!(items)
-  #everything << items = [42,102,109]        # Array contains ascii decimal value of all items on ground
-  walkable = {"walkable" => [32,88,126,288,382]} # ' ', '~', 'X' #somehow 288 became space, 382 is colored ~
-  #everything << walkable = [32,88,126,288,382] # ' ', '~', 'X' #somehow 288 became space, 382 is colored ~
+  everything.merge!(items)  
+  walkable = {"walkable" => [32,88,126,288,382]} # ' ', '~', 'X' #somehow 288 became space, 382 is colored ~  
   everything.merge!(walkable)
-  #everything << all_beacons = []
-  #everything << all_bunkers = []
   all_beacons = {"beacons" => []}
   all_bunkers = {"bunkers" => []}
   everything.merge!(total_bunkers)
@@ -162,8 +139,7 @@ else
   viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
   console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
   hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
-  
-  #generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
+    
   generate_map(game_window,everything["total_bunkers"],everything["beacons"],everything["bunkers"],everything["actors"],everything["seed"])
 
   # Create Player Actor
@@ -179,6 +155,14 @@ else
   spiral(game_window,10,player,walkable) # Find legal starting position for player
   everything["actors"].each { |actor| actor.draw(game_window)}  # Add all actors to the map
   File.open('game.json', 'w') do |f|
+    f.puts everything["seed"].to_json
+    f.puts everything["total_bunkers"].to_json
+    f.puts everything["items"].to_json
+    f.puts everything["walkable"].to_json
+    everything["beacons"].each do |x|
+      f.puts x.export_beacon.to_json
+    end
+    f.puts everything["bunkers"].to_json
     everything["actors"].each do |x|
       f.puts x.export_character.to_json
     end

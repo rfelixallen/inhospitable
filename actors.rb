@@ -91,6 +91,18 @@ class Beacon < Actor
     self.message = options[:message] || "01234567890123456789"
     self.active = options[:active] || true
   end
+
+  def export_beacon
+    me = {
+          "symb" => self.symb,          
+          "color" => self.color,
+          "xlines" => self.xlines,
+          "ycols" => self.ycols,
+          "channel" => self.channel,
+          "message" => self.message,
+          "active" => self.active          
+        }
+  end
 end
 
 class Item < Actor
