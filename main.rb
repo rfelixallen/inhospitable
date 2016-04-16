@@ -163,7 +163,10 @@ else
   spiral(game_window,10,player,walkable) # Find legal starting position for player
   everything["actors"].each { |actor| actor.draw(game_window)}  # Add all actors to the map
   File.open('game.json', 'w') do |f|
-    f.puts everything["actors"][0].export.to_json
+    everything["actors"].each do |x|
+      f.puts x.export.to_json
+    end
+    #f.puts everything["actors"][0].export.to_json
     #f.puts everything.to_json
   end
 end
