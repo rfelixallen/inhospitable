@@ -62,6 +62,21 @@ class Character < Actor
     self.hunger = options[:hunger] || 9
     self.inventory = options[:inventory] || {"Radio" => 1, "Food" => 0, "Medkit" => 0, "Token" => 0}
   end
+
+  def export_character
+    me = {
+          "symb" => self.symb,
+          "symbcode" => self.symbcode,
+          "color" => self.color,
+          "xlines" => self.xlines,
+          "ycols" => self.ycols,
+          "blocked" => self.blocked,
+          "hp" => self.hp,
+          "hunger" => self.hunger,
+          "inventory" => self.inventory
+        }
+  end
+
 end
 
 class Beacon < Actor

@@ -164,7 +164,7 @@ else
   everything["actors"].each { |actor| actor.draw(game_window)}  # Add all actors to the map
   File.open('game.json', 'w') do |f|
     everything["actors"].each do |x|
-      f.puts x.export.to_json
+      f.puts x.export_character.to_json
     end
     #f.puts everything["actors"][0].export.to_json
     #f.puts everything.to_json
