@@ -130,8 +130,10 @@ def make_bunker(window,all_beacons,all_bunkers,actors,seed)
   i = 0
   j = 0
   Ncurses.getmaxyx(window,w_y,w_x)
-  if @new == 2
-    demo_bunker(window,bunker_x,bunker_y,seed)
+  if @new == 1
+    all_bunkers.each do |x|
+      demo_bunker(window,x[0],x[1],seed)
+    end
   else
     while success != 1
       bunker_x = chance.rand(2..(w_x[0] - 11)) # subtract total height of predefined structure
@@ -150,11 +152,12 @@ def make_bunker(window,all_beacons,all_bunkers,actors,seed)
         for i in (bunker_x)..(bunker_x + 11)
           for j in (bunker_y)..(bunker_y + 11)            
             coordinates = [i,j]
-            construction << coordinates
+            #construction << coordinates
+            all_bunkers << coordinates
           end
         end        
         success = 1
-        all_bunkers << construction
+        #all_bunkers << construction
         demo_bunker(window,bunker_x,bunker_y,seed)   # Adds a building to map. It overlays anything underneath it         
         make_beacon(window,all_beacons,bunker_x,bunker_y,seed)
         flip = chance.rand.round
@@ -172,15 +175,15 @@ def make_beacon(window,all_beacons,bunker_x,bunker_y,seed)
   message = "Broadcast #{cantor_pairing(bunker_x,bunker_y)}"
   variable_name = Beacon.new(xlines: bunker_x + 2, ycols: bunker_y + 6, message: message)
   Ncurses.mvwaddstr(window, variable_name.xlines, variable_name.ycols, variable_name.symb)
-  #all_beacons << variable_name
-  all_beacons.merge!(variable_name.export_beacon)
+  all_beacons << variable_name
+  #all_beacons.merge!(variable_name.export_beacon)
 end
 
 def make_monster(monster_x,monster_y,actors)
       monster = cantor_pairing(monster_x,monster_y)
       monster = Character.new(symb: 'M', symbcode: 77, xlines: monster_x, ycols: monster_y, hp: 3)
-      #actors << monster
-      actors.merge!(monster.export_character)
+      actors << monster
+      #actors.merge!(monster.export_character)
 end
 
 def draw_map(window)
