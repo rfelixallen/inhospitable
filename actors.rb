@@ -51,7 +51,7 @@ end
 
 class Character < Actor
   attr_accessor :hp, :symbcode, :hunger, :inventory
-    def initialize(options = {})
+  def initialize(options = {})
     self.symb = options[:symb] || '@'
     self.symbcode = options[:symbcode] || 64 # Should be whatever the ascii code for symb is 
     self.color = options[:color] || 1 # White
@@ -61,6 +61,10 @@ class Character < Actor
     self.hp = options[:hp] || 3
     self.hunger = options[:hunger] || 9
     self.inventory = options[:inventory] || {"Radio" => 1, "Food" => 0, "Medkit" => 0, "Token" => 0}
+  end
+
+  def init_from_json(hash)
+    hash.each {|k,v| send("#{k}=",v)}
   end
 
   def export_character

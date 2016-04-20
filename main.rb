@@ -90,9 +90,11 @@ if @new == 1 # Set to 1 when testing variables
   # Place all Actors from array
   #spiral(game_window,10,player,walkable) # Find legal starting position for player
   #everything["actors"].each { |actor| actor.draw(game_window)}  # Add all actors to the map  
-  everything["actors"].each do |x|
-    x.draw(game_window)  # Add all actors to the map  
-  end
+  
+
+  # Need to create a number of empty characters equal to the number of character hashes in json
+  everything["actors"].each {|k| Character.new().init_from_json(k)} # Instantiate characters from Json
+  everything["actors"].each {|k| k.draw(game_window)} # draw character to map
 
 else
   # Instantiate Windows
