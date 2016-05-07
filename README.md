@@ -29,6 +29,15 @@ Fixes
 * Fix border on viewp
 
 Log
+5/7/16
+- I have been fiddling with Json to save game information. Objects need to be saved as a hash before they can be saved in a json file. I had rejiggered my main, actors and terrain to rely on hash versions of walkable, actors and items instead of the array version they were saved as. While I can kinda save to Json, this has broken other methods that were still looking for arrays. Now I realize that you can create class methods that will pretty package your information into a format acceptable to json. So, instead of saving your data in an always ready json state, you save it in a data type that's easier to work with, and only convert it to hash/json when it needs to be.
+
+I am at a cross roads where I either revert my hashes back to arrays, and make some new class methods for saving, or I need to fix the rest of my methods to take the new hashes that contain my game data.
+
+Additionally, I need to rethink what data needs to be saved. At first I wanted to save everything: actors, bunkers, items, etc. Awhile later I realized that some data would be static, like walkable and items, and other data could be regenerated from a seed value, like bunkers and beacons. I redid bunker/beacon generation to generate from a seed, and to ignore making monsters if the game state was reloading data. This means that the only real information that needs to be saved are actor and item placement.
+
+I explored moving forward with using all my variables as hashes. Its not too cumbersome to use, but I also need to store myplayer object as a hash, and update all that code. I tried invoking monster hash data and player array data, and remembered that in some methods I used the array invokation for both player and monsters. 
+
 3/22/16
 -I cleaned up some variables in Main.rb to make them more descriptive.
 
