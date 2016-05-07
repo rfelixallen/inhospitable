@@ -153,7 +153,7 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors)
     step = Ncurses.mvwinch(window, character.xlines + xl, character.ycols + yc)
     symbcodes = []
     actors.each do |x|
-      symbcodes << x.symbcode
+      symbcodes << x["symbcode"]
     end
     if ((character.xlines + xl) > 0 and (character.ycols + yc) > 0 and (character.xlines + xl) < (window_max_lines[0]) and (character.ycols + yc) < (window_max_cols[0]))
       if walkable.include?(step) 

@@ -280,11 +280,11 @@ while player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < everythi
 if menu_active == 0
     # Monsters Move
     everything["actors"].except(player).each do |rawr|  
-      if rawr.hp <= 0
-        Ncurses.mvwaddstr(game_window, rawr.xlines, rawr.ycols, "X") # Turn into dead body
+      if rawr["hp"] <= 0
+        Ncurses.mvwaddstr(game_window, rawr["xlines"], rawr["ycols"], "X") # Turn into dead body
         Ncurses.wrefresh(viewport_window)
       else
-        distance_from_player = [(player.xlines - rawr.xlines).abs,(player.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
+        distance_from_player = [(player.xlines - rawr["xlines"]).abs,(player.ycols - rawr["ycols"]).abs] # Get positive value of distance between monster and player
         if player_visible == 1 and ((distance_from_player[0] < (viewport_window_lines / 5) and distance_from_player[1] < viewport_window_columns / 5)) # if the monster is visible, chase player  
           mode_hunt2(game_window,hud_window, rawr, player, everything["walkable"], everything["items"], everything["actors"])           
         else # If player is not visible, wander around
