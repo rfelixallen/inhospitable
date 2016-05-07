@@ -33,7 +33,7 @@ Ncurses.refresh
 
 if @new == 1 # Set to 1 when testing variables
   # Load Data 
-  json = File.read('sample.json')
+  json = File.read('sample2.json')
   everything = JSON.parse(json)
   
   # Instantiate Windows
@@ -93,8 +93,9 @@ if @new == 1 # Set to 1 when testing variables
   
 
   # Need to create a number of empty characters equal to the number of character hashes in json
-  everything["actors"].each {|k| Character.new().init_from_json(k)} # Instantiate characters from Json
-  everything["actors"].each {|k| k.draw(game_window)} # draw character to map
+   player = Character.new(symb: everything["actors"][3]["symb"],symbcode: everything["actors"][3]["symbcode"],color: everything["actors"][3]["color"],xlines: everything["actors"][3]["xlines"],ycols: everything["actors"][3]["ycols"],blocked: everything["actors"][3]["blocked"],hp: everything["actors"][3]["hp"],hunger: everything["actors"][3]["hunger"],inventory: everything["actors"][3]["inventory"])
+#everything["actors"].each {|k| Character.new(symb: k["symb"],symbcode: k["symbcode"],color: k["color"],xlines: k["xlines"],ycols: k["ycols"],blocked: k["blocked"],hp: k["hp"],hunger: k["hunger"],inventory: k["inventory"])} # Instantiate characters from Json
+  #everything["actors"].each {|k| k.draw(game_window)} # draw character to map
 
 else
   # Instantiate Windows

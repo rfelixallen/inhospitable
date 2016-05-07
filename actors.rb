@@ -63,6 +63,19 @@ class Character < Actor
     self.inventory = options[:inventory] || {"Radio" => 1, "Food" => 0, "Medkit" => 0, "Token" => 0}
   end
 
+  def scrub_hash(hash)
+    #player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
+    # {"\"symb\"=>\"M\", \"symbcode\"=>77, \"color\"=>1, \"xlines\"=>130, \"ycols\"=>105, \"blocked\"=>true, \"hp\"=>3, \"hunger\"=>9, \"inventory\"=>{\"Radio\"=>1, \"Food\"=>0, \"Medkit\"=>0, \"Token\"=>0}"}
+    hash[0] = '' # Remove front {
+    hash.chop! # Remove back }
+    scrub = hash.gsub!(/\"/, "")
+    scrub = hash.gsub!(/(=>)/, ": ")
+  end
+
+  def scrub_hash2(hash)
+    hash.map{|k,v| "#{k}: #{v}"}.join(', ')
+  end
+  
   def init_from_json(hash)
     hash.each {|k,v| send("#{k}=",v)}
   end
