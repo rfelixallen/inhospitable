@@ -36,15 +36,15 @@ class Actor
   def draw(window)
     #Ncurses.init_pair(1, self.color, 0)
     #window.attron(Ncurses.COLOR_PAIR(1))
-    Ncurses.mvwaddstr(window, self.xlines, self.ycols, "#{self.symb}")
+    Ncurses.mvwaddstr(window, self["xlines"], self["ycols"], "#{self["symb"]}")
     #window.attroff(Ncurses.COLOR_PAIR(1))
     #Ncurses.wrefresh(window)
   end
 
   def move(window,lines,cols)
-    self.xlines += lines
-    self.ycols += cols    
-    Ncurses.mvwaddstr(window, self.xlines + -lines, self.ycols + -cols, " ")
+    self["xlines"] += lines
+    self["ycols"] += cols    
+    Ncurses.mvwaddstr(window, self["xlines"] + -lines, self["ycols"] + -cols, " ")
     self.draw(window)
   end
 end
@@ -150,18 +150,18 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors)
     window_max_lines = []
     window_max_cols = []
     Ncurses.getmaxyx(window,window_max_cols,window_max_lines)   # Get Max Y,X of window
-    step = Ncurses.mvwinch(window, character.xlines + xl, character.ycols + yc)
+    step = Ncurses.mvwinch(window, character["xlines"] + xl, character["ycols"] + yc)
     symbcodes = []
     actors.each do |x|
       symbcodes << x["symbcode"]
     end
-    if ((character.xlines + xl) > 0 and (character.ycols + yc) > 0 and (character.xlines + xl) < (window_max_lines[0]) and (character.ycols + yc) < (window_max_cols[0]))
+    if ((character["xlines"] + xl) > 0 and (character["ycols"] + yc) > 0 and (character["xlines"] + xl) < (window_max_lines[0]) and (character["ycols"] + yc) < (window_max_cols[0]))
       if walkable.include?(step) 
         character.move(window,xl,yc)
       elsif symbcodes.include?(step)
         check_target(hud,actors,character,xl,yc)       
       elsif items.include?(step)
-        if character.symb == "@"
+        if character["symb"] == "@"
           update_inventory(hud, step, character, 1)          
           character.move(window, xl, yc)
         end
@@ -177,7 +177,7 @@ def check_target(hud,actors,character,xl,yc)
   #message(hud,"atk: #{character.symb}")
   #Ncurses.getch
   actors.each do |actor|
-    if (actor.xlines == character.xlines + xl) and (actor.ycols == character.ycols + yc)
+    if (actor["xlines"] == character["xlines"] + xl) and (actor["ycols"] == character["ycols"] + yc)
        attack(actor)
        #message(hud,"Attacked #{actor.symb}")
     end               
@@ -185,26 +185,26 @@ def check_target(hud,actors,character,xl,yc)
 end
 
 def attack(x)
-    x.hp -= 1
+    x["hp"] -= 1
 end
 
 def update_inventory(hud, item, player, modifier)
   case item 
   when 42 
-    player.inventory["Token"] += modifier
+    player["inventory"]["Token"] += modifier
   when 102
-    player.inventory["Food"] += modifier
+    player["inventory"]["Food"] += modifier
   when 109
-    player.inventory["Medkit"] += modifier
+    player["inventory"]["Medkit"] += modifier
   else
     nil
   end
 end
 
 def update_hud_inventory(hud, player)
-    Ncurses.mvwaddstr(hud, 7, 1, " -(F)ood: #{player.inventory["Food"]}")
-    Ncurses.mvwaddstr(hud, 8, 1, " -(M)edkit: #{player.inventory["Medkit"]}")
-    Ncurses.mvwaddstr(hud, 9, 1, " -Token: #{player.inventory["Token"]}")
+    Ncurses.mvwaddstr(hud, 7, 1, " -(F)ood: #{player["inventory"]["Food"]}")
+    Ncurses.mvwaddstr(hud, 8, 1, " -(M)edkit: #{player["inventory"]["Medkit"]}")
+    Ncurses.mvwaddstr(hud, 9, 1, " -Token: #{player["inventory"]["Token"]}")
     Ncurses.wrefresh(hud)
 end
 
@@ -255,7 +255,7 @@ def static(beacon, clarity)
 end
 
 def get_distance(player, beacon)  
-  distance_from_player = (player.xlines - beacon.xlines).abs + (player.ycols - beacon.ycols).abs
+  distance_from_player = (player["xlines"] - beacon["xlines"]).abs + (player["ycols"] - beacon["ycols"]).abs
   return distance_from_player
 end
 
@@ -267,7 +267,7 @@ def get_distance_all_beacons(player, all_beacons)
 end
 
 def transmission(window,beacon,player)
-  distance_from_player = (player.xlines - beacon.xlines).abs + (player.ycols - beacon.ycols).abs
+  distance_from_player = (player["xlines"] - beacon["xlines"]).abs + (player["ycols"] - beacon["ycols"]).abs
   case distance_from_player
   when 0..24
     return "clear"
@@ -309,37 +309,37 @@ end
 def mode_hunt2(window, hud, character, player, walkable, items, actors) # New Hunt
   flip = rand.round
   if flip == 0    
-    if character.ycols > player.ycols 
+    if character["ycols"] > player["ycols"] 
       check_space(window,hud,0,-1,character,walkable,items,actors) # Move Left
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
-    elsif character.ycols < player.ycols
+    elsif character["ycols"] < player["ycols"]
       check_space(window,hud,0,1,character,walkable,items,actors) # Move Right
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
-    elsif character.xlines > player.xlines 
+    elsif character["xlines"] > player["xlines"] 
       check_space(window,hud,-1,0,character,walkable,items,actors) # Move Up
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
-    else character.xlines < player.xlines
+    else character["xlines"] < player["xlines"]
       check_space(window,hud,1,0,character,walkable,items,actors) # Move Down
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     end
   else
-    if character.xlines < player.xlines
+    if character["xlines"] < player["xlines"]
       check_space(window,hud,1,0,character,walkable,items,actors) # Move Down
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
-    elsif character.xlines > player.xlines 
+    elsif character["xlines"] > player["xlines"] 
       check_space(window,hud,-1,0,character,walkable,items,actors) # Move Up
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
-    elsif character.ycols < player.ycols
+    elsif character["ycols"] < player["ycols"]
       check_space(window,hud,0,1,character,walkable,items,actors) # Move Right
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
-    else character.ycols > player.ycols 
+    else character["ycols"] > player["ycols"] 
       check_space(window,hud,0,-1,character,walkable,items,actors) # Move Left
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)    

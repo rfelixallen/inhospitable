@@ -93,7 +93,8 @@ if @new == 1 # Set to 1 when testing variables
   
 
   # Need to create a number of empty characters equal to the number of character hashes in json
-   player = Character.new(symb: everything["actors"][3]["symb"],symbcode: everything["actors"][3]["symbcode"],color: everything["actors"][3]["color"],xlines: everything["actors"][3]["xlines"],ycols: everything["actors"][3]["ycols"],blocked: everything["actors"][3]["blocked"],hp: everything["actors"][3]["hp"],hunger: everything["actors"][3]["hunger"],inventory: everything["actors"][3]["inventory"])
+   player_gen = Character.new(symb: everything["actors"][3]["symb"],symbcode: everything["actors"][3]["symbcode"],color: everything["actors"][3]["color"],xlines: everything["actors"][3]["xlines"],ycols: everything["actors"][3]["ycols"],blocked: everything["actors"][3]["blocked"],hp: everything["actors"][3]["hp"],hunger: everything["actors"][3]["hunger"],inventory: everything["actors"][3]["inventory"])
+   player = player_gen.export_character
 #everything["actors"].each {|k| Character.new(symb: k["symb"],symbcode: k["symbcode"],color: k["color"],xlines: k["xlines"],ycols: k["ycols"],blocked: k["blocked"],hp: k["hp"],hunger: k["hunger"],inventory: k["inventory"])} # Instantiate characters from Json
   #everything["actors"].each {|k| k.draw(game_window)} # draw character to map
 
@@ -184,12 +185,12 @@ game_initialized = 1
 borders(console_window)                            # Add borders to the console_window
 Ncurses.wrefresh(console_window)                   # Refresh console_window window with message
 hud_on(hud_window,player)
-center(viewport_window,game_window,player.xlines,player.ycols)        # Center map on player
+center(viewport_window,game_window,player["xlines"],player["ycols"])        # Center map on player
 Ncurses.wrefresh(viewport_window)
 #################################################################################
 # Game Loop                                                                     #
 #################################################################################
-while player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < everything["total_bunkers"]  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
+while player["hp"] > 0 && player["hunger"] > 0 && player["inventory"]["Token"] < everything["total_bunkers"]  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   if menu_active == 1
     main_menu(game_initialized, game_window)
     menu_active = 0
@@ -217,18 +218,18 @@ while player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < everythi
   case input
     when KEY_UP, 119 # Move Up
       check_space(game_window,hud_window,-1,0,player,everything["walkable"],everything["items"],everything["actors"]) 
-      center(viewport_window,game_window,player.xlines,player.ycols)
+      center(viewport_window,game_window,player["xlines"],player["ycols"])
     when KEY_DOWN, 115 # Move Down      
       check_space(game_window,hud_window,1,0,player,everything["walkable"],everything["items"],everything["actors"])                  
-      center(viewport_window,game_window,player.xlines,player.ycols)   
+      center(viewport_window,game_window,player["xlines"],player["ycols"])   
     when KEY_RIGHT, 100 # Move Right 
       check_space(game_window,hud_window,0,1,player,everything["walkable"],everything["items"],everything["actors"])     
-      center(viewport_window,game_window,player.xlines,player.ycols)    
+      center(viewport_window,game_window,player["xlines"],player["ycols"])    
     when KEY_LEFT, 97 # Move Left   
       check_space(game_window,hud_window,0,-1,player,everything["walkable"],everything["items"],everything["actors"])          
-      center(viewport_window,game_window,player.xlines,player.ycols)     
+      center(viewport_window,game_window,player["xlines"],player["ycols"])     
     when 32 # Spacebar, dont move
-      center(viewport_window,game_window,player.xlines,player.ycols)
+      center(viewport_window,game_window,player["xlines"],player["ycols"])
     when 104 # h
       if player_visible == 1
         player_visible = 0
@@ -243,21 +244,21 @@ while player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < everythi
         message(console_window,"..zz..zZ..Zzz..")
       end
     when 102 # f
-      food = player.inventory["Food"]
+      food = player["inventory"]["Food"]
       if food > 0
         update_inventory(hud_window, 102, player, -1)
-        player.hunger += 1
-        Ncurses.mvwaddstr(hud_window, 4, 1, "Hunger: #{player.hunger}")
+        player["hunger"] += 1
+        Ncurses.mvwaddstr(hud_window, 4, 1, "Hunger: #{player["hunger"]}")
         Ncurses.wrefresh(hud_window)
       else
         message(console_window, "You have no food to eat.")
       end
     when 109 # m
-      medkit = player.inventory["Medkit"]
+      medkit = player["inventory"]["Medkit"]
       if medkit > 0
-        player.hp += 1
+        player["hp"] += 1
         update_inventory(hud_window, 109, player, -1)        
-        Ncurses.mvwaddstr(hud_window, 3, 1, "HP: #{player.hp}")
+        Ncurses.mvwaddstr(hud_window, 3, 1, "HP: #{player["hp"]}")
         Ncurses.wrefresh(hud_window)
       else
         message(console_window, "You have no medkits.")
@@ -284,7 +285,7 @@ if menu_active == 0
         Ncurses.mvwaddstr(game_window, rawr["xlines"], rawr["ycols"], "X") # Turn into dead body
         Ncurses.wrefresh(viewport_window)
       else
-        distance_from_player = [(player.xlines - rawr["xlines"]).abs,(player.ycols - rawr["ycols"]).abs] # Get positive value of distance between monster and player
+        distance_from_player = [(player["xlines"] - rawr["xlines"]).abs,(player["ycols"] - rawr["ycols"]).abs] # Get positive value of distance between monster and player
         if player_visible == 1 and ((distance_from_player[0] < (viewport_window_lines / 5) and distance_from_player[1] < viewport_window_columns / 5)) # if the monster is visible, chase player  
           mode_hunt2(game_window,hud_window, rawr, player, everything["walkable"], everything["items"], everything["actors"])           
         else # If player is not visible, wander around
@@ -297,18 +298,18 @@ if menu_active == 0
     if hunger_count <= 100
       hunger_count += 1
     else
-      player.hunger -= 1
+      player["hunger"] -= 1
       hunger_count = 0
       message(console_window,"Your stomach growls")
-      Ncurses.mvwaddstr(hud_window, 4, 1, "Hunger: #{player.hunger}")
+      Ncurses.mvwaddstr(hud_window, 4, 1, "Hunger: #{player["hunger"]}")
       Ncurses.wrefresh(hud_window)
     end
   end
 end
 # End Screen
-if player.hp == 0 || player.hunger == 0 || player.inventory["Token"] == 2
+if player["hp"] == 0 || player["hunger"] == 0 || player["inventory"]["Token"] == 2
   # Starved or died
-  if player.hp == 0 || player.hunger == 0
+  if player["hp"] == 0 || player["hunger"] == 0
     Ncurses.clear
     Ncurses.mvwaddstr(stdscr, standard_screen_columns[0] / 2, standard_screen_lines[0] / 2, "You have died in the cold wastes.")
     Ncurses.mvwaddstr(stdscr, (standard_screen_columns[0] / 2) + 1, standard_screen_lines[0] / 2, "Abiit nemine salutato.")
@@ -321,7 +322,7 @@ if player.hp == 0 || player.hunger == 0 || player.inventory["Token"] == 2
     exit
   end
   # Collected all the tokens
-  if player.inventory["Token"] == 2 # Change this to reflect total tokens
+  if player["inventory"]["Token"] == 2 # Change this to reflect total tokens
     Ncurses.clear
     Ncurses.mvwaddstr(stdscr, standard_screen_columns[0] / 2, standard_screen_lines[0] / 2, "You collected all the tokens.")
     Ncurses.mvwaddstr(stdscr, (standard_screen_columns[0] / 2) + 1, standard_screen_lines[0] / 2, "You have been rescued!") 
