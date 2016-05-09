@@ -33,7 +33,7 @@ Ncurses.refresh
 
 if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   # Load JSON File
-  json = File.read('sample2.json')
+  json = File.read('sample.json')
   everything = JSON.parse(json)
   
   # Instantiate Windows
@@ -78,10 +78,10 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
   
   generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
-  player = Character.new(symb: everything["player"][0]["symb"],symbcode: everything["player"][0]["symbcode"],color: everything["player"][0]["color"],xlines: everything["player"][0]["xlines"],ycols: everything["player"][0]["ycols"],blocked: everything["player"][0]["blocked"],hp: everything["player"][0]["hp"],hunger: everything["player"][0]["hunger"],inventory: everything["player"][0]["inventory"])
+  player = Character.new(symb: everything["actors"][0]["symb"],symbcode: everything["actors"][0]["symbcode"],color: everything["actors"][0]["color"],xlines: everything["actors"][0]["xlines"],ycols: everything["actors"][0]["ycols"],blocked: everything["actors"][0]["blocked"],hp: everything["actors"][0]["hp"],hunger: everything["actors"][0]["hunger"],inventory: everything["actors"][0]["inventory"])
   actors << player
   player.draw(game_window)
-  everything["actors"].each do |k|
+  everything["actors"].drop(1).each do |k|
     actors << Character.new(symb: k["symb"],symbcode: k["symbcode"],color: k["color"],xlines: k["xlines"],ycols: k["ycols"],blocked: k["blocked"],hp: k["hp"],hunger: k["hunger"],inventory: k["inventory"]) # Instantiate characters from Json
     draw_to_map(game_window,k)    
   end
