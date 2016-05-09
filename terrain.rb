@@ -133,6 +133,7 @@ def make_bunker(window,all_beacons,all_bunkers,actors,seed)
   if @new == 1
     all_bunkers.each do |x|
       demo_bunker(window,x[0],x[1],seed)
+      #make_beacon(window,all_beacons,x[0],x[1],seed)
     end
   else
     while success != 1

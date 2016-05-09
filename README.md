@@ -29,6 +29,9 @@ Fixes
 * Fix border on viewp
 
 Log
+5/9/16
+- I reverted all most of my recent changes so that my game still relies on objects stored in arrays, but plays nice with loaded JSON data. I've got the game to a point where I can load variables with a JSON file and it runs successfully.
+
 5/8/16
 - Realized its way easier if I keep everything stored as an array, and then write class methods that export data as hashes. I had to revert all of my changes. That was kind of successful, but now I ran into the problem of properly generating everything from a json file. For bunkers, I learned that I only need to save the starting point for each bunker, and not all the positions.
 
