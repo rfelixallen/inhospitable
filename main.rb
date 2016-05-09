@@ -1,6 +1,6 @@
 require_relative 'library'
 require 'ncurses'
-require 'yaml'
+require 'oj'
 require 'json'
 include Ncurses                                                                
 
@@ -150,9 +150,7 @@ else
   game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
   viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
   console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
-  hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
-    
-  generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
+  hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines)  
 
   # Create Player Actor
   game_window_max_lines = []
@@ -162,31 +160,52 @@ else
   player_start_columns = (game_window_max_columns[0] / 4)
   player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
   actors << player
-  #everything["actors"].push(player)
+  
+  generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
 
   # Place all Actors from array
-  spiral(game_window,10,player,walkable) # Find legal starting position for player
-  #everything["actors"].each { |actor| actor.draw(game_window)}  # Add all actors to the map
+  spiral(game_window,10,player,walkable) # Find legal starting position for player  
   actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
 
   # Save a copy of the initial Game State.
-=begin  
-  File.open('sample.json', 'w') do |f|
-    f.puts everything["seed"].to_json
-    f.puts everything["total_bunkers"].to_json
-    f.puts everything["items"].to_json
-    f.puts everything["walkable"].to_json
-    everything["beacons"].each do |x|
-      f.puts x.export_beacon.to_json
-    end
-    f.puts everything["bunkers"].to_json
-    everything["actors"].each do |x|
-      f.puts x.export_character.to_json
-    end
+  # Prepare data for JSON
+  all_the_data = {}
+  seed_json = {"seed" => 12345}
+  total_bunkers_json = {"total_bunkers" => total_bunkers}
+  items_json = {"items" => items}
+  walkable_json = {"walkable" => walkable}
+  all_beacons_json = {"beacons" => all_beacons}
+  bunkers_json = {"bunkers" => all_bunkers}
+  actors_json = {"actors" => actors}
+
+  all_the_data.merge!(seed_json)
+  all_the_data.merge!(total_bunkers_json)
+  all_the_data.merge!(items_json)
+  all_the_data.merge!(walkable_json)
+  all_the_data.merge!(all_beacons_json)
+  all_the_data.merge!(bunkers_json)
+  all_the_data.merge!(actors_json)
+
+
+  # Save data to JSON
+  File.open('sample.json', 'w') do |f|    
+    f.puts Oj::dump all_the_data
+    #f.puts Oj::dump player
+    #f.puts everything["seed"].to_json
+    #f.puts everything["total_bunkers"].to_json
+    #f.puts everything["items"].to_json
+    #f.puts everything["walkable"].to_json
+    #everything["beacons"].each do |x|
+    #  f.puts x.export_beacon.to_json
+    #end
+    #f.puts everything["bunkers"].to_json
+    #everything["actors"].each do |x|
+    #  f.puts x.export_character.to_json
+    #end
     #f.puts everything["actors"][0].export.to_json
     #f.puts everything.to_json
   end
-=end  
+  
 end
 
 menu_active = 0
