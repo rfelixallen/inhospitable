@@ -31,7 +31,7 @@ Ncurses.refresh
 Ncurses.mvwaddstr(stdscr, 3, 3, "Please wait...")
 Ncurses.refresh
 
-if @new == 1 # Set to 1 when testing variables, located in main.rb on line 16
+if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   # Load JSON File
   json = File.read('sample2.json')
   everything = JSON.parse(json)
@@ -96,7 +96,8 @@ else
   # For each window, define lines,cols variables and work with those instead of direct numbers
   # Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
   # Screen and window variables
-  seed = {"seed" => 12345}
+  seed = 12345
+  #seed = {"seed" => 12345}
   standard_screen_columns = []                # Standard Screen column aka y
   standard_screen_lines = []               # Standard Screen lines aka x
   Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
@@ -109,8 +110,12 @@ else
   console_window_lines = 3
   console_window_columns = viewport_window_columns + hud_window_columns
   bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker  
-  total_bunkers = {"total_bunkers" => ((game_window_lines * game_window_columns) / bunker_area_with_space)}    
+  #total_bunkers = {"total_bunkers" => ((game_window_lines * game_window_columns) / bunker_area_with_space)}    
+  
+  
   # Define Actors, Items, Terrain, Bunkers and Beacons
+=begin
+  #total_bunkers = {"total_bunkers" => ((game_window_lines * game_window_columns) / bunker_area_with_space)}    
   everything = {}
   everything.merge!(seed)  
   actors = {"actors" => []}
@@ -124,6 +129,13 @@ else
   everything.merge!(total_bunkers)
   everything.merge!(all_beacons)
   everything.merge!(all_bunkers)
+=end
+  total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space)
+  actors = []
+  items = [42,102,109]
+  walkable = [32,88,126,288,382]
+  all_beacons = []
+  all_bunkers = []
 
   # Game Loop Variables
   direction_steps = 0
@@ -140,7 +152,7 @@ else
   console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
   hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
     
-  generate_map(game_window,everything["total_bunkers"],everything["beacons"],everything["bunkers"],everything["actors"],everything["seed"])
+  generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
 
   # Create Player Actor
   game_window_max_lines = []
@@ -149,12 +161,17 @@ else
   player_start_lines = (game_window_max_lines[0] / 4)
   player_start_columns = (game_window_max_columns[0] / 4)
   player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
-  everything["actors"].push(player)
+  actors << player
+  #everything["actors"].push(player)
 
   # Place all Actors from array
   spiral(game_window,10,player,walkable) # Find legal starting position for player
-  everything["actors"].each { |actor| actor.draw(game_window)}  # Add all actors to the map
-  File.open('game.json', 'w') do |f|
+  #everything["actors"].each { |actor| actor.draw(game_window)}  # Add all actors to the map
+  actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
+
+  # Save a copy of the initial Game State.
+=begin  
+  File.open('sample.json', 'w') do |f|
     f.puts everything["seed"].to_json
     f.puts everything["total_bunkers"].to_json
     f.puts everything["items"].to_json
@@ -169,6 +186,7 @@ else
     #f.puts everything["actors"][0].export.to_json
     #f.puts everything.to_json
   end
+=end  
 end
 
 menu_active = 0
@@ -200,8 +218,6 @@ while player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < total_bu
   #File.open("game.json", "w") do |f|
   #  f.puts temp_hash.to_json
   #end
-
-  
 
   #inhospitableLog = File.open("inhospitableLog.txt", "w")
   #actors.each { |a| inhospitableLog.puts "#{a}.to_yaml" }
