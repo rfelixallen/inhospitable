@@ -31,8 +31,8 @@ Ncurses.refresh
 Ncurses.mvwaddstr(stdscr, 3, 3, "Please wait...")
 Ncurses.refresh
 
-if @new == 1 # Set to 1 when testing variables
-  # Load Data 
+if @new == 1 # Set to 1 when testing variables, located in main.rb on line 16
+  # Load JSON File
   json = File.read('sample2.json')
   everything = JSON.parse(json)
   
@@ -53,9 +53,9 @@ if @new == 1 # Set to 1 when testing variables
   console_window_columns = viewport_window_columns + hud_window_columns
   bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker  
   
+  # Load JSON Data
   total_bunkers = everything["total_bunkers"].to_i
   seed = everything["seed"].to_i
-  # Define Actors, Items, Terrain, Bunkers and Beacons
   actors_from_json = everything["actors"]
   actors = []
   items = everything["items"]
@@ -68,7 +68,6 @@ if @new == 1 # Set to 1 when testing variables
   counter = 0   
   dice_roll = false
   hunger_count = 0
-  #counter = 0 #wander counter for monster
   direction_steps = rand(10..25) # Meander long distances
   player_visible = 1
 
@@ -79,39 +78,16 @@ if @new == 1 # Set to 1 when testing variables
   hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
   
   generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
-  #generate_map(game_window,everything["total_bunkers"],everything["beacons"],everything["bunkers"],everything["actors"],everything["seed"])
-
-  # Create Player Actor
-  #game_window_max_lines = []
-  #game_window_max_columns = []
-  #Ncurses.getmaxyx(game_window,game_window_max_columns,game_window_max_lines)   # Get Max Y,X of game_window
-  #player_start_lines = (game_window_max_lines[0] / 4)
-  #player_start_columns = (game_window_max_columns[0] / 4)
-  #player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
-  #everything["actors"].push(player)
-
-  # Place all Actors from array
-  #spiral(game_window,10,player,walkable) # Find legal starting position for player
-  #everything["actors"].each { |actor| actor.draw(game_window)}  # Add all actors to the map  
-  
-
-  # Need to create a number of empty characters equal to the number of character hashes in json
-   #player = Character.new(symb: everything["actors"][3]["symb"],symbcode: everything["actors"][3]["symbcode"],color: everything["actors"][3]["color"],xlines: everything["actors"][3]["xlines"],ycols: everything["actors"][3]["ycols"],blocked: everything["actors"][3]["blocked"],hp: everything["actors"][3]["hp"],hunger: everything["actors"][3]["hunger"],inventory: everything["actors"][3]["inventory"])
-   player = Character.new(symb: everything["player"][0]["symb"],symbcode: everything["player"][0]["symbcode"],color: everything["player"][0]["color"],xlines: everything["player"][0]["xlines"],ycols: everything["player"][0]["ycols"],blocked: everything["player"][0]["blocked"],hp: everything["player"][0]["hp"],hunger: everything["player"][0]["hunger"],inventory: everything["player"][0]["inventory"])
-   actors << player
-   player.draw(game_window)
-   #player.draw(game_window)
-  #everything["actors"].each {|k| Character.new(symb: k["symb"],symbcode: k["symbcode"],color: k["color"],xlines: k["xlines"],ycols: k["ycols"],blocked: k["blocked"],hp: k["hp"],hunger: k["hunger"],inventory: k["inventory"])} # Instantiate characters from Json
-  #everything["actors"].each {|k| k.draw(game_window)} # draw character to map
+  player = Character.new(symb: everything["player"][0]["symb"],symbcode: everything["player"][0]["symbcode"],color: everything["player"][0]["color"],xlines: everything["player"][0]["xlines"],ycols: everything["player"][0]["ycols"],blocked: everything["player"][0]["blocked"],hp: everything["player"][0]["hp"],hunger: everything["player"][0]["hunger"],inventory: everything["player"][0]["inventory"])
+  actors << player
+  player.draw(game_window)
   everything["actors"].each do |k|
     actors << Character.new(symb: k["symb"],symbcode: k["symbcode"],color: k["color"],xlines: k["xlines"],ycols: k["ycols"],blocked: k["blocked"],hp: k["hp"],hunger: k["hunger"],inventory: k["inventory"]) # Instantiate characters from Json
-    draw_to_map(game_window,k)
-    #actors.draw(game_window)
+    draw_to_map(game_window,k)    
   end
   
   everything["beacons"].each do |b|
-    all_beacons << Beacon.new(symb: b["symb"], xlines: b["xlines"], ycols: b["ycols"], message: b["message"])
-    #Ncurses.mvwaddstr(game_window, b["bunker_x"], b["bunker_y"], "#{b["symb"]}")
+    all_beacons << Beacon.new(symb: b["symb"], xlines: b["xlines"], ycols: b["ycols"], message: b["message"])    
     draw_to_map(game_window,b)
   end
 
