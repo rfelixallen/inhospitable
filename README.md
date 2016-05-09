@@ -29,6 +29,9 @@ Fixes
 * Fix border on viewp
 
 Log
+5/8/16
+- Realized its way easier if I keep everything stored as an array, and then write class methods that export data as hashes. I had to revert all of my changes. That was kind of successful, but now I ran into the problem of properly generating everything from a json file. For bunkers, I learned that I only need to save the starting point for each bunker, and not all the positions.
+
 5/7/16
 - I have been fiddling with Json to save game information. Objects need to be saved as a hash before they can be saved in a json file. I had rejiggered my main, actors and terrain to rely on hash versions of walkable, actors and items instead of the array version they were saved as. While I can kinda save to Json, this has broken other methods that were still looking for arrays. Now I realize that you can create class methods that will pretty package your information into a format acceptable to json. So, instead of saving your data in an always ready json state, you save it in a data type that's easier to work with, and only convert it to hash/json when it needs to be.
 
