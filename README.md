@@ -34,6 +34,8 @@ Log
 
 - I used a gem called OJ to easily export data to JSON, and it worked awesome. I've successfully implimented the bones of first version of persistance in my game. I have successfully saved data, and then reloaded that same data. To truly finish the first version, I need to do 2 more things. I need to impliment a way to keep track of items on the ground, and fix my menu to save and load game states.
 
+- The next big part of this feature is to redo the menu. This will be good practice if I want to do anything else with the menu later, like Advanced World Generation. I'm going to use [Continue, New Game, Instructions, Quit], and impliment a Quick Save button from the game world, and automatically save on quit.
+
 5/8/16
 - Realized its way easier if I keep everything stored as an array, and then write class methods that export data as hashes. I had to revert all of my changes. That was kind of successful, but now I ran into the problem of properly generating everything from a json file. For bunkers, I learned that I only need to save the starting point for each bunker, and not all the positions.
 
