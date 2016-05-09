@@ -41,7 +41,7 @@ while key != 113
   when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
     if menuitem == 0 # Play Game
       if @new == 0
-        #@new = 1
+        @new = 1
         key = 113
       else
         key = 113
