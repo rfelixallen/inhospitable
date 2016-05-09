@@ -149,6 +149,7 @@ def make_bunker(window,all_beacons,all_bunkers,actors,seed)
       if (test_bunker_coordinates & all_bunkers).any?
         success = 0 # Restart Loop
       else
+=begin        
         construction = []
         for i in (bunker_x)..(bunker_x + 11)
           for j in (bunker_y)..(bunker_y + 11)            
@@ -156,9 +157,11 @@ def make_bunker(window,all_beacons,all_bunkers,actors,seed)
             #construction << coordinates
             all_bunkers << coordinates
           end
-        end        
+        end
+=end                
         success = 1
         #all_bunkers << construction
+        all_bunkers << [bunker_x,bunker_y]
         demo_bunker(window,bunker_x,bunker_y,seed)   # Adds a building to map. It overlays anything underneath it         
         make_beacon(window,all_beacons,bunker_x,bunker_y,seed)
         flip = chance.rand.round
