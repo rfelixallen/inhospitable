@@ -22,49 +22,83 @@ def drawmenu(item,menu)
 end
 
 def main_menu(state,screen)
-# Main Menu
-menuitem = 0
-#menu = ["PLAY GAME", "INSTRUCTIONS", "SAVE GAME", "CONTINUE", "QUIT"]
-menu = ["CONTINUE", "NEW GAME", "INSTRUCTIONS", "QUIT"]
-drawmenu(menuitem,menu)
-key = 0
-m = menu.length - 1
-while key != 113
+  # Main Menu
+  menuitem = 0
+  #menu = ["PLAY GAME", "INSTRUCTIONS", "SAVE GAME", "CONTINUE", "QUIT"]
+  if @game_initialized == 0
+    menu = ["CONTINUE", "NEW GAME", "INSTRUCTIONS", "QUIT"]
+  else 
+    menu = ["CONTINUE", "INSTRUCTIONS", "QUIT"]
+  end
   drawmenu(menuitem,menu)
-  key = Ncurses.getch
-  case key
-  when KEY_DOWN
-    menuitem += 1
-    if (menuitem > m) then menuitem = 0 end
-  when KEY_UP
-    menuitem -= 1
-    if (menuitem < 0) then menuitem = m end
-  when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
-    if menuitem == 0 # First Spot: CONTINUE GAME
-      if @new == 0
-        @new = 1
-        key = 113
+  key = 0
+  m = menu.length - 1
+  if @game_initialized == 0
+    while key != 113
+      drawmenu(menuitem,menu)
+      key = Ncurses.getch
+      case key
+      when KEY_DOWN
+        menuitem += 1
+        if (menuitem > m) then menuitem = 0 end
+      when KEY_UP
+        menuitem -= 1
+        if (menuitem < 0) then menuitem = m end
+      when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
+        if menuitem == 0 # First Spot: CONTINUE GAME
+          @new = 1
+          key = 113
+        elsif menuitem == 1 # Second Spot: New Game
+          @new == 0
+          key = 113
+        elsif menuitem == 2 # Third Spot: Instructions
+          menu_instructions 
+        elsif menuitem == 3 # Fourth Spot: Quit Game
+          Ncurses.clear
+          Ncurses.mvwaddstr(stdscr, 1, 1, "Good Bye!")
+          Ncurses.wrefresh(stdscr)
+          Ncurses.napms(1000)
+          Ncurses.endwin
+          exit
+        else
+          Ncurses.flash
+        end
       else
         Ncurses.flash
       end
-    if menuitem == 1 # Second Spot: New Game
-      @new == 0
-      key = 113
-    end
-    elsif menuitem == 2 # Third Spot: Instructions
-      menu_instructions 
-    elsif menuitem == 3 # Fourth Spot: Quit Game
-      Ncurses.clear
-      Ncurses.endwin
-      exit
-    else
-      Ncurses.flash
     end
   else
-    Ncurses.flash
+    while key != 113
+      drawmenu(menuitem,menu)
+      key = Ncurses.getch
+      case key
+      when KEY_DOWN
+        menuitem += 1
+        if (menuitem > m) then menuitem = 0 end
+      when KEY_UP
+        menuitem -= 1
+        if (menuitem < 0) then menuitem = m end
+      when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
+        if menuitem == 0  # First Spot: CONTINUE GAME
+          key = 113
+        elsif menuitem == 1 # Second Spot: Instructions
+          menu_instructions 
+        elsif menuitem == 2 # Third Spot: Quit Game
+          Ncurses.clear
+          Ncurses.mvwaddstr(stdscr, 1, 1, "Good Bye!")
+          Ncurses.wrefresh(stdscr)
+          Ncurses.napms(1000)
+          Ncurses.endwin
+          exit
+        else
+          Ncurses.flash
+        end
+      else
+        Ncurses.flash
+      end
+    end
   end
-end
-Ncurses.clear
+  Ncurses.clear
 end
 
 def menu_instructions
