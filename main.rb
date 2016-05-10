@@ -54,19 +54,28 @@ game_initialized = 0
 main_menu(game_initialized, stdscr)
 
 Ncurses.mvwaddstr(stdscr, 2, 2, "Generating World")
-Ncurses.refresh
 Ncurses.mvwaddstr(stdscr, 3, 3, "Please wait...")
+Ncurses.mvwaddstr(stdscr, 4, 4, "[       ]")
 Ncurses.refresh
 
 if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   # Load JSON File
+  Ncurses.mvwaddstr(stdscr, 3, 3, "Loading Saved Data")
+  Ncurses.mvwaddstr(stdscr, 4, 4, "[=      ]")
+  Ncurses.refresh
   json = File.read('sample.json')
   everything = JSON.parse(json)
-  
+  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
+  Ncurses.refresh
+
   # Instantiate Windows
   # For each window, define lines,cols variables and work with those instead of direct numbers
   # Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
   # Screen and window variables
+  Ncurses.mvwaddstr(stdscr, 3, 3, "Prepare Window Variables")
+  Ncurses.mvwaddstr(stdscr, 4, 4, "[==     ]")
+  Ncurses.refresh
+  Ncurses.napms(0500)
   standard_screen_columns = []                # Standard Screen column aka y
   standard_screen_lines = []               # Standard Screen lines aka x
   Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
@@ -79,8 +88,14 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   console_window_lines = 3
   console_window_columns = viewport_window_columns + hud_window_columns
   bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker  
-  
+  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
+  Ncurses.refresh
+
   # Load JSON Data
+  Ncurses.mvwaddstr(stdscr, 3, 3, "Loading Game Variables")
+  Ncurses.mvwaddstr(stdscr, 4, 4, "[===    ]")  
+  Ncurses.refresh
+  Ncurses.napms(0500)
   total_bunkers = everything["total_bunkers"].to_i
   seed = everything["seed"].to_i
   actors_from_json = everything["actors"]
@@ -89,22 +104,47 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   all_beacons = []
   all_bunkers = everything["bunkers"]
   walkable = everything["walkable"]
+  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
+  Ncurses.refresh
 
   # Game Loop Variables
+  Ncurses.mvwaddstr(stdscr, 3, 3, "Setting Loop Variables")
+  Ncurses.mvwaddstr(stdscr, 4, 4, "[====   ]")
+  Ncurses.refresh
+  Ncurses.napms(0500)
   direction_steps = 0
   counter = 0   
   dice_roll = false
   hunger_count = 0
   direction_steps = rand(10..25) # Meander long distances
   player_visible = 1
+  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
+  Ncurses.refresh
 
   # Create game windows, then generate the world
+  Ncurses.mvwaddstr(stdscr, 3, 3, "Create Game Windows")
+  Ncurses.mvwaddstr(stdscr, 4, 4, "[=====  ]")
+  Ncurses.refresh
+  Ncurses.napms(0500)
   game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
   viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
   console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
   hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
-  
+  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
+  Ncurses.refresh
+
+  Ncurses.mvwaddstr(stdscr, 3, 3, "Generating Map")
+  Ncurses.mvwaddstr(stdscr, 4, 4, "[====== ]")
+  Ncurses.refresh
+  Ncurses.napms(0500)
   generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
+  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
+  Ncurses.refresh
+
+  Ncurses.mvwaddstr(stdscr, 3, 3, "Generate Actors")
+  Ncurses.mvwaddstr(stdscr, 4, 4, "[=======]")
+  Ncurses.refresh
+  Ncurses.napms(0500)
   player = Character.new(symb: everything["actors"][0]["symb"],symbcode: everything["actors"][0]["symbcode"],color: everything["actors"][0]["color"],xlines: everything["actors"][0]["xlines"],ycols: everything["actors"][0]["ycols"],blocked: everything["actors"][0]["blocked"],hp: everything["actors"][0]["hp"],hunger: everything["actors"][0]["hunger"],inventory: everything["actors"][0]["inventory"])
   actors << player
   player.draw(game_window)
@@ -117,7 +157,8 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
     all_beacons << Beacon.new(symb: b["symb"], xlines: b["xlines"], ycols: b["ycols"], message: b["message"])    
     draw_to_map(game_window,b)
   end
-
+  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
+  Ncurses.refresh
 else
   # Instantiate Windows
   # For each window, define lines,cols variables and work with those instead of direct numbers
