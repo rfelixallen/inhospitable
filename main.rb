@@ -232,7 +232,7 @@ Ncurses.wrefresh(viewport_window)
 #################################################################################
 # Game Loop                                                                     #
 #################################################################################
-while player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
+while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   if menu_active == 1
     main_menu(@game_initialized, game_window)
     menu_active = 0
@@ -362,7 +362,7 @@ if player.hp == 0 || player.hunger == 0 || player.inventory["Token"] == 2
     exit
   end
   # Collected all the tokens
-  if player.inventory["Token"] == 2 # Change this to reflect total tokens
+  if player.inventory["Token"] == total_bunkers # Change this to reflect total tokens
     Ncurses.clear
     Ncurses.mvwaddstr(stdscr, standard_screen_columns[0] / 2, standard_screen_lines[0] / 2, "You collected all the tokens.")
     Ncurses.mvwaddstr(stdscr, (standard_screen_columns[0] / 2) + 1, standard_screen_lines[0] / 2, "You have been rescued!") 
