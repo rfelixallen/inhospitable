@@ -120,15 +120,6 @@ def menu_instructions
       Ncurses.getch
 end
 
-def save_game(screen)
-  s = File.open("save1.sav", "w")
-  x = Ncurses.putwin(screen,s)
-  s.close
-  t = File.open("actors1.sav", "w")
-  
-  t.close
-end
-
 def borders(window)
   # Draws borders around the window
   i = 1
