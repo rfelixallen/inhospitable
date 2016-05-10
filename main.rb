@@ -63,10 +63,10 @@ Ncurses.stdscr              # Initialize Standard Screen, which uses dimensions 
 Ncurses.keypad(stdscr,true) # Use expanded keyboard characters
 Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
 
-game_initialized = 0
-main_menu(game_initialized, stdscr)
+@game_initialized = 0
+main_menu(@game_initialized, stdscr)
 
-Ncurses.mvwaddstr(stdscr, 2, 2, "Generating World")
+Ncurses.mvwaddstr(stdscr, 2, 2, "Initializing Game")
 Ncurses.mvwaddstr(stdscr, 3, 3, "Please wait...")
 Ncurses.mvwaddstr(stdscr, 4, 4, "[       ]")
 Ncurses.refresh
@@ -221,7 +221,7 @@ else
 end
 
 menu_active = 0
-game_initialized = 1
+@game_initialized = 1
 
 # Set up hud_window and console_window
 borders(console_window)                            # Add borders to the console_window
@@ -234,7 +234,7 @@ Ncurses.wrefresh(viewport_window)
 #################################################################################
 while player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   if menu_active == 1
-    main_menu(game_initialized, game_window)
+    main_menu(@game_initialized, game_window)
     menu_active = 0
     Ncurses.mvwaddstr(stdscr, 2, 2, "Returning to game...")
     Ncurses.refresh
