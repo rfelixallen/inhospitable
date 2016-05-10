@@ -305,7 +305,7 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
       end
     when 27 # ESC - Main Menu 
       menu_active = 1
-    when 115 # s - Save Game
+    when 101 # e - Save Game
       save_state(seed,total_bunkers,items,walkable,all_beacons,all_bunkers,actors)
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break

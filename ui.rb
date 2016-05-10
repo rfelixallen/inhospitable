@@ -104,11 +104,11 @@ end
 def menu_instructions
       Ncurses.clear
       Ncurses.mvaddstr(0,2,"Inhospitable - Instructions")
-      Ncurses.mvaddstr(2,2,"Arrow Keys - Up, Down, Left, Right")
+      Ncurses.mvaddstr(2,2,"Arrow Keys / WASD - Up, Down, Left, Right")
       Ncurses.mvaddstr(3,2,"(r) - Use Radio")
       Ncurses.mvaddstr(4,2,"(f) - Eat Food - Icon: f")
       Ncurses.mvaddstr(5,2,"(m) - Use Medkit - Icon: m")
-      Ncurses.mvaddstr(6,2,"(s) - Save Game")
+      Ncurses.mvaddstr(6,2,"(e) - Save Game")
       Ncurses.mvaddstr(7,2,"(q) - Quit Game")
       Ncurses.mvaddstr(8,2,"(Spacebar) - Skip Movement")
       Ncurses.mvaddstr(9,2,"Use Radio to find Bunkers with supplies!")
