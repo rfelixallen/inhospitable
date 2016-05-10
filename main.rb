@@ -31,6 +31,19 @@ def save_state(seed,total_bunkers,items,walkable,all_beacons,all_bunkers,actors)
   end
 end
 
+def scr_message(message,bars)
+  loading = "[" + "=" * bars + " " * (7 - bars) + "]"
+  Ncurses.mvwaddstr(stdscr, 3, 3, "#{message}")
+  Ncurses.mvwaddstr(stdscr, 4, 4, "#{loading}")
+  Ncurses.refresh
+  Ncurses.napms(0500)
+end
+
+def scr_clear
+  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
+  Ncurses.refresh
+end
+
 =begin
 inhospitableLog = File.open("inhospitableLog.txt", "w")
 inhospitableLog.puts "#{Time.now} - Game Launched"
@@ -60,22 +73,23 @@ Ncurses.refresh
 
 if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   # Load JSON File
-  Ncurses.mvwaddstr(stdscr, 3, 3, "Loading Saved Data")
-  Ncurses.mvwaddstr(stdscr, 4, 4, "[=      ]")
-  Ncurses.refresh
+  #Ncurses.mvwaddstr(stdscr, 3, 3, "Loading Saved Data")
+  #Ncurses.mvwaddstr(stdscr, 4, 4, "[=      ]")
+  #Ncurses.refresh
+  scr_message("Loading Saved Data",1)
   json = File.read('sample.json')
   everything = JSON.parse(json)
-  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
-  Ncurses.refresh
+  scr_clear
 
   # Instantiate Windows
   # For each window, define lines,cols variables and work with those instead of direct numbers
   # Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
   # Screen and window variables
-  Ncurses.mvwaddstr(stdscr, 3, 3, "Prepare Window Variables")
-  Ncurses.mvwaddstr(stdscr, 4, 4, "[==     ]")
-  Ncurses.refresh
-  Ncurses.napms(0500)
+  #Ncurses.mvwaddstr(stdscr, 3, 3, "Prepare Window Variables")
+  #Ncurses.mvwaddstr(stdscr, 4, 4, "[==     ]")
+  #Ncurses.refresh
+  #Ncurses.napms(0500)
+  scr_message("Prepare Window Variables",2)
   standard_screen_columns = []                # Standard Screen column aka y
   standard_screen_lines = []               # Standard Screen lines aka x
   Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
@@ -88,14 +102,14 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   console_window_lines = 3
   console_window_columns = viewport_window_columns + hud_window_columns
   bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker  
-  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
-  Ncurses.refresh
+  scr_clear
 
   # Load JSON Data
-  Ncurses.mvwaddstr(stdscr, 3, 3, "Loading Game Variables")
-  Ncurses.mvwaddstr(stdscr, 4, 4, "[===    ]")  
-  Ncurses.refresh
-  Ncurses.napms(0500)
+  #Ncurses.mvwaddstr(stdscr, 3, 3, "Loading Game Variables")
+  #Ncurses.mvwaddstr(stdscr, 4, 4, "[===    ]")  
+  #Ncurses.refresh
+  #Ncurses.napms(0500)
+  scr_message("Loading Game Variables",3)
   total_bunkers = everything["total_bunkers"].to_i
   seed = everything["seed"].to_i
   actors_from_json = everything["actors"]
@@ -104,47 +118,47 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   all_beacons = []
   all_bunkers = everything["bunkers"]
   walkable = everything["walkable"]
-  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
-  Ncurses.refresh
+  scr_clear
 
   # Game Loop Variables
-  Ncurses.mvwaddstr(stdscr, 3, 3, "Setting Loop Variables")
-  Ncurses.mvwaddstr(stdscr, 4, 4, "[====   ]")
-  Ncurses.refresh
-  Ncurses.napms(0500)
+  #Ncurses.mvwaddstr(stdscr, 3, 3, "Setting Loop Variables")
+  #Ncurses.mvwaddstr(stdscr, 4, 4, "[====   ]")
+  #Ncurses.refresh
+  #Ncurses.napms(0500)
+  scr_message("Setting Loop Variables",4)
   direction_steps = 0
   counter = 0   
   dice_roll = false
   hunger_count = 0
   direction_steps = rand(10..25) # Meander long distances
   player_visible = 1
-  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
-  Ncurses.refresh
+  scr_clear
 
   # Create game windows, then generate the world
-  Ncurses.mvwaddstr(stdscr, 3, 3, "Create Game Windows")
-  Ncurses.mvwaddstr(stdscr, 4, 4, "[=====  ]")
-  Ncurses.refresh
-  Ncurses.napms(0500)
+  #Ncurses.mvwaddstr(stdscr, 3, 3, "Create Game Windows")
+  #Ncurses.mvwaddstr(stdscr, 4, 4, "[=====  ]")
+  #Ncurses.refresh
+  #Ncurses.napms(0500)
+  scr_message("Creating Game Windows",5)
   game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
   viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
   console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
   hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
-  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
-  Ncurses.refresh
+  scr_clear
 
-  Ncurses.mvwaddstr(stdscr, 3, 3, "Generating Map")
-  Ncurses.mvwaddstr(stdscr, 4, 4, "[====== ]")
-  Ncurses.refresh
-  Ncurses.napms(0500)
+  #Ncurses.mvwaddstr(stdscr, 3, 3, "Generating Map")
+  #Ncurses.mvwaddstr(stdscr, 4, 4, "[====== ]")
+  #Ncurses.refresh
+  #Ncurses.napms(0500)
+  scr_message("Generating Map",6)
   generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
-  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
-  Ncurses.refresh
+  scr_clear
 
-  Ncurses.mvwaddstr(stdscr, 3, 3, "Generate Actors")
-  Ncurses.mvwaddstr(stdscr, 4, 4, "[=======]")
-  Ncurses.refresh
-  Ncurses.napms(0500)
+  #Ncurses.mvwaddstr(stdscr, 3, 3, "Generate Actors")
+  #Ncurses.mvwaddstr(stdscr, 4, 4, "[=======]")
+  #Ncurses.refresh
+  #Ncurses.napms(0500)
+  scr_message("Generate Actors",7)
   player = Character.new(symb: everything["actors"][0]["symb"],symbcode: everything["actors"][0]["symbcode"],color: everything["actors"][0]["color"],xlines: everything["actors"][0]["xlines"],ycols: everything["actors"][0]["ycols"],blocked: everything["actors"][0]["blocked"],hp: everything["actors"][0]["hp"],hunger: everything["actors"][0]["hunger"],inventory: everything["actors"][0]["inventory"])
   actors << player
   player.draw(game_window)
@@ -157,13 +171,13 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
     all_beacons << Beacon.new(symb: b["symb"], xlines: b["xlines"], ycols: b["ycols"], message: b["message"])    
     draw_to_map(game_window,b)
   end
-  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
-  Ncurses.refresh
+  scr_clear
 else
   # Instantiate Windows
   # For each window, define lines,cols variables and work with those instead of direct numbers
   # Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
   # Screen and window variables
+  scr_message("Prepare Window Variables",2)
   seed = 12345
   #seed = {"seed" => 12345}
   standard_screen_columns = []                # Standard Screen column aka y
@@ -179,7 +193,7 @@ else
   console_window_columns = viewport_window_columns + hud_window_columns
   bunker_area_with_space = (viewport_window_lines * viewport_window_columns * 10) + 11 # 11 x 11 is the area of the demo bunker  
   #total_bunkers = {"total_bunkers" => ((game_window_lines * game_window_columns) / bunker_area_with_space)}    
-  
+  scr_clear
   
   # Define Actors, Items, Terrain, Bunkers and Beacons
 =begin
@@ -198,14 +212,17 @@ else
   everything.merge!(all_beacons)
   everything.merge!(all_bunkers)
 =end
+  scr_message("Loading Game Variables",3)
   total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space)
   actors = []
   items = [42,102,109]
   walkable = [32,88,126,288,382]
   all_beacons = []
   all_bunkers = []
+  scr_clear
 
   # Game Loop Variables
+  scr_message("Setting Loop Variables",4)
   direction_steps = 0
   counter = 0   
   dice_roll = false
@@ -213,14 +230,18 @@ else
   #counter = 0 #wander counter for monster
   direction_steps = rand(10..25) # Meander long distances
   player_visible = 1
+  scr_clear
 
   # Create game windows, then generate the world
+  scr_message("Creating Game Windows",5)
   game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
   viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
   console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
   hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines)  
+  scr_clear
 
   # Create Player Actor
+  scr_message("Generate Actors",6)
   game_window_max_lines = []
   game_window_max_columns = []
   Ncurses.getmaxyx(game_window,game_window_max_columns,game_window_max_lines)   # Get Max Y,X of game_window
@@ -228,7 +249,9 @@ else
   player_start_columns = (game_window_max_columns[0] / 4)
   player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
   actors << player
+  scr_clear
   
+  scr_message("Generating Map",7)
   generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
 
   # Place all Actors from array
@@ -236,6 +259,7 @@ else
   actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
 
   save_state(seed,total_bunkers,items,walkable,all_beacons,all_bunkers,actors)
+  scr_clear
 =begin
   # Save a copy of the initial Game State.
   # Prepare data for JSON
