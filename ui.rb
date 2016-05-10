@@ -24,7 +24,8 @@ end
 def main_menu(state,screen)
 # Main Menu
 menuitem = 0
-menu = ["PLAY GAME", "INSTRUCTIONS", "SAVE GAME", "CONTINUE", "QUIT"]
+#menu = ["PLAY GAME", "INSTRUCTIONS", "SAVE GAME", "CONTINUE", "QUIT"]
+menu = ["CONTINUE", "NEW GAME", "INSTRUCTIONS", "QUIT"]
 drawmenu(menuitem,menu)
 key = 0
 m = menu.length - 1
@@ -39,25 +40,20 @@ while key != 113
     menuitem -= 1
     if (menuitem < 0) then menuitem = m end
   when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
-    if menuitem == 0 # Play Game
+    if menuitem == 0 # First Spot: CONTINUE GAME
       if @new == 0
         @new = 1
         key = 113
       else
-        key = 113
-      end
-    elsif menuitem == 1 # Instructions
-      menu_instructions 
-    elsif menuitem == 2
-      if state == 1
-        save_game(screen)
-        #key = 113 # This is just to demonstrate the menu item works.
-      else
         Ncurses.flash
       end
-    elsif menuitem == 3 # Continue
-      key = 113 # Quit Menu
-    elsif menuitem == 4 # Quit Game
+    if menuitem == 1 # Second Spot: New Game
+      @new == 0
+      key = 113
+    end
+    elsif menuitem == 2 # Third Spot: Instructions
+      menu_instructions 
+    elsif menuitem == 3 # Fourth Spot: Quit Game
       Ncurses.clear
       Ncurses.endwin
       exit
