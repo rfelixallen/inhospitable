@@ -108,9 +108,9 @@ def menu_instructions
       Ncurses.mvaddstr(3,2,"(r) - Use Radio")
       Ncurses.mvaddstr(4,2,"(f) - Eat Food - Icon: f")
       Ncurses.mvaddstr(5,2,"(m) - Use Medkit - Icon: m")
-      Ncurses.mvaddstr(6,2,"(q) - Quit Game")
-      Ncurses.mvaddstr(7,2,"(Spacebar) - Skip Movement")
-
+      Ncurses.mvaddstr(6,2,"(s) - Save Game")
+      Ncurses.mvaddstr(7,2,"(q) - Quit Game")
+      Ncurses.mvaddstr(8,2,"(Spacebar) - Skip Movement")
       Ncurses.mvaddstr(9,2,"Use Radio to find Bunkers with supplies!")
       Ncurses.mvaddstr(10,2,"Walk into Monsters to attack - icon (M)")
       Ncurses.mvaddstr(11,2,"Collect all Tokens to finish game")

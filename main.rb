@@ -154,7 +154,7 @@ else
   # Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
   # Screen and window variables
   scr_message("Prepare Window Variables",2)
-  seed = 12345
+  seed = rand(1..1000000)
   standard_screen_columns = []                # Standard Screen column aka y
   standard_screen_lines = []               # Standard Screen lines aka x
   Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
@@ -305,11 +305,8 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
       end
     when 27 # ESC - Main Menu 
       menu_active = 1
-    when 49 # 1 - Save Game
-        #temp_hash = {"seed" => "#{seed}"}
-      File.open("game.json", "w") do |f|
-        f.puts everything.to_json
-      end
+    when 115 # s - Save Game
+      save_state(seed,total_bunkers,items,walkable,all_beacons,all_bunkers,actors)
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else
