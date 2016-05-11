@@ -318,6 +318,7 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
       menu_active = 1
     when 101 # e - Save Game
       save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers,actors)
+      message(console_window, "Game saved!")
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else
