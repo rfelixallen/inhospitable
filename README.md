@@ -1,33 +1,12 @@
 Inhospitable
 A simple game of survival in a cold wasteland.
 
-Installation
-1. Clone the game locally to your computer. https://github.com/rfelixallen/inhospitable.git
-2. In Terminal, cd into the directory and run 'bundle install'
-3. Use Ruby version 2.1.5.
-
 TODO
-Features
-* Play test distance between bunkers and starvation
+Features2 Objectives
 * Ability to turn off beacons
 * Add a clock to keep track of time
-* Add temperature that changes during day and night
-* Add z-levels
 * Replace blank trail with quotes and colons for footprints
 * Add snow to cover tracks
-* End of the game (death or win) go back to main menu
-* Explore weapons and armor
-* Explore different windows for inventory, dialogue, logs, etc
-* Put this in a Rails server to work on a website
-* Ability to save and load
-* Add Colors
-
-
-Fixes
-* Fix screen flashes
-* Adjust amount and placement of food/meds in a bunker
-* Fix border on viewp
-* Dead monsters comes back as 'M' until the first move, and then change to 'X'
 
 Log
 5/11/16
