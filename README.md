@@ -29,6 +29,12 @@ Fixes
 * Fix border on viewp
 
 Log
+5/11/16
+- Today I worked on item persistance. The goal is to have any item picked up stay removed from the board.
+
+5/10/16
+- I finally completed two big parts of my persistance projects. I successfully exported data to a file and instantiated a new game based on that file. I also redid my main menu to handle loading the game, startng a new game, and behaving differently during a game. Tomorrow, I plan on working on item persistance. Currently, when loading a save game file, the code just regenerates all items.
+
 5/9/16
 - I reverted all most of my recent changes so that my game still relies on objects stored in arrays, but plays nice with loaded JSON data. I've got the game to a point where I can load variables with a JSON file and it runs successfully. The next big challenge is to figure out how to save my game data in a way that resembles sample2.json, which is in a platonic state.
 
