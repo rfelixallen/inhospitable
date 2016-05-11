@@ -75,9 +75,6 @@ Ncurses.refresh
 
 if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   # Load JSON File
-  #Ncurses.mvwaddstr(stdscr, 3, 3, "Loading Saved Data")
-  #Ncurses.mvwaddstr(stdscr, 4, 4, "[=      ]")
-  #Ncurses.refresh
   scr_message("Loading Saved Data",1)
   json = File.read('game.json')
   everything = JSON.parse(json)
