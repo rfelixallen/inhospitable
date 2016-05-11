@@ -4,7 +4,7 @@ require 'oj'
 require 'json'
 include Ncurses                                                                
 
-def save_state(seed,total_bunkers,items,walkable,all_beacons,all_bunkers,actors)
+def save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers,actors)
   # Save a copy of the initial Game State.
   # Prepare data for JSON
   all_the_data = {}
@@ -12,6 +12,7 @@ def save_state(seed,total_bunkers,items,walkable,all_beacons,all_bunkers,actors)
   total_bunkers_json = {"total_bunkers" => total_bunkers}
   items_json = {"items" => items}
   walkable_json = {"walkable" => walkable}
+  all_items_json = {"all_items" => all_items}
   all_beacons_json = {"beacons" => all_beacons}
   bunkers_json = {"bunkers" => all_bunkers}
   actors_json = {"actors" => actors}
@@ -20,6 +21,7 @@ def save_state(seed,total_bunkers,items,walkable,all_beacons,all_bunkers,actors)
   all_the_data.merge!(total_bunkers_json)
   all_the_data.merge!(items_json)
   all_the_data.merge!(walkable_json)
+  all_the_data.merge!(all_items_json)
   all_the_data.merge!(all_beacons_json)
   all_the_data.merge!(bunkers_json)
   all_the_data.merge!(actors_json)
@@ -107,6 +109,7 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   actors_from_json = everything["actors"]
   actors = []
   items = everything["items"]
+  all_items = []
   all_beacons = []
   all_bunkers = everything["bunkers"]
   walkable = everything["walkable"]
@@ -131,10 +134,10 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   scr_clear
 
   scr_message("Generating Map",6)
-  generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
+  generate_map(game_window,total_bunkers,all_items,all_beacons,all_bunkers,actors,seed)
   scr_clear
 
-  scr_message("Generate Actors",7)
+  scr_message("Generating Actors",7)
   player = Character.new(symb: everything["actors"][0]["symb"],symbcode: everything["actors"][0]["symbcode"],color: everything["actors"][0]["color"],xlines: everything["actors"][0]["xlines"],ycols: everything["actors"][0]["ycols"],blocked: everything["actors"][0]["blocked"],hp: everything["actors"][0]["hp"],hunger: everything["actors"][0]["hunger"],inventory: everything["actors"][0]["inventory"])
   actors << player
   player.draw(game_window)
@@ -146,6 +149,13 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   everything["beacons"].each do |b|
     all_beacons << Beacon.new(symb: b["symb"], xlines: b["xlines"], ycols: b["ycols"], message: b["message"])    
     draw_to_map(game_window,b)
+  end
+
+  everything["all_items"].each do |i|
+    if i["taken"] == false
+      all_items << Item.new(symb: i["symb"], symbcode: i["symbcode"], xlines: i["xlines"], ycols: i["ycols"], type: i["type"])    
+      draw_to_map(game_window,i)
+    end
   end
   scr_clear
 else
@@ -174,6 +184,7 @@ else
   total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space)
   actors = []
   items = [42,102,109]
+  all_items = []
   walkable = [32,88,126,288,382]
   all_beacons = []
   all_bunkers = []
@@ -210,13 +221,13 @@ else
   scr_clear
   
   scr_message("Generating Map",7)
-  generate_map(game_window,total_bunkers,all_beacons,all_bunkers,actors,seed)
+  generate_map(game_window,total_bunkers,all_items,all_beacons,all_bunkers,actors,seed)
 
   # Place all Actors from array
   spiral(game_window,10,player,walkable) # Find legal starting position for player  
   actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
 
-  save_state(seed,total_bunkers,items,walkable,all_beacons,all_bunkers,actors)
+  save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers,actors)
   scr_clear
 end
 
@@ -257,16 +268,16 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
-      check_space(game_window,hud_window,-1,0,player,walkable,items,actors) 
+      check_space(game_window,hud_window,-1,0,player,walkable,items,actors,all_items) 
       center(viewport_window,game_window,player.xlines,player.ycols)
     when KEY_DOWN, 115 # Move Down      
-      check_space(game_window,hud_window,1,0,player,walkable,items,actors)                  
+      check_space(game_window,hud_window,1,0,player,walkable,items,actors,all_items)                  
       center(viewport_window,game_window,player.xlines,player.ycols)   
     when KEY_RIGHT, 100 # Move Right 
-      check_space(game_window,hud_window,0,1,player,walkable,items,actors)     
+      check_space(game_window,hud_window,0,1,player,walkable,items,actors,all_items)     
       center(viewport_window,game_window,player.xlines,player.ycols)    
     when KEY_LEFT, 97 # Move Left   
-      check_space(game_window,hud_window,0,-1,player,walkable,items,actors)          
+      check_space(game_window,hud_window,0,-1,player,walkable,items,actors,all_items)          
       center(viewport_window,game_window,player.xlines,player.ycols)     
     when 32 # Spacebar, dont move
       center(viewport_window,game_window,player.xlines,player.ycols)
@@ -306,7 +317,7 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
     when 27 # ESC - Main Menu 
       menu_active = 1
     when 101 # e - Save Game
-      save_state(seed,total_bunkers,items,walkable,all_beacons,all_bunkers,actors)
+      save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers,actors)
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else
@@ -324,9 +335,9 @@ if menu_active == 0
       else
         distance_from_player = [(player.xlines - rawr.xlines).abs,(player.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
         if player_visible == 1 and ((distance_from_player[0] < (viewport_window_lines / 5) and distance_from_player[1] < viewport_window_columns / 5)) # if the monster is visible, chase player  
-          mode_hunt2(game_window,hud_window, rawr, player, walkable, items, actors)           
+          mode_hunt2(game_window,hud_window, rawr, player, walkable, items, actors, all_items)           
         else # If player is not visible, wander around
-          mode_wander2(game_window,hud_window, rawr, player, walkable, items, actors)       
+          mode_wander2(game_window,hud_window, rawr, player, walkable, items, actors, all_items)       
         end 
       end
     end

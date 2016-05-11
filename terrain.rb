@@ -39,15 +39,16 @@ def demo_bunker(window, lines, cols, seed)
   chance = Random.new(seed)
   bunker = ["              ",
             " |==========| ",
-            " |   |  *|  | ",
-            " |= === === | ",
-            " |          | ",
+            " |   |   |  | ",
+            " |   |   |  | ",
+            " |= === === | ",            
             " |          | ",
             " |          | ",
             " |          | ",
             " |== =======| ",
             "              "]
   build(window, lines, cols, bunker)
+=begin  
   med_count = chance.rand(0..1)
   food_count = chance.rand(2..5)
   i = 5
@@ -68,6 +69,7 @@ def demo_bunker(window, lines, cols, seed)
     end
     i += 1
   end
+=end  
 end
 
 def demo_bunker2(window, lines, cols, all_tiles)
@@ -122,7 +124,7 @@ def cantor_pairing(n, m)
     (n + m) * (n + m + 1) / 2 + m
 end
 
-def make_bunker(window,all_beacons,all_bunkers,actors,seed)
+def make_bunker(window,all_items,all_beacons,all_bunkers,actors,seed)
   success = 0
   chance = Random.new(seed)
   w_y = []
@@ -164,10 +166,27 @@ def make_bunker(window,all_beacons,all_bunkers,actors,seed)
         all_bunkers << [bunker_x,bunker_y]
         demo_bunker(window,bunker_x,bunker_y,seed)   # Adds a building to map. It overlays anything underneath it         
         make_beacon(window,all_beacons,bunker_x,bunker_y,seed)
+        make_item(window,all_items,bunker_x + 2,bunker_y + 8,seed,"Token")
         flip = chance.rand.round
           if flip == 1
             make_monster(bunker_x + 2, bunker_y + 2,actors)
           end
+        flip = chance.rand(0..2)
+        if flip == 0
+          make_item(window,all_items,bunker_x + 2,bunker_y + 10,seed,"Food")
+        elsif flip == 1
+          make_item(window,all_items,bunker_x + 2,bunker_y + 10,seed,"Food")
+          make_item(window,all_items,bunker_x + 2,bunker_y + 11,seed,"Food")
+        else
+        end
+        flip = chance.rand(0..2)
+        if flip == 0
+          make_item(window,all_items,bunker_x + 3,bunker_y + 10,seed,"Medkit")
+        elsif flip == 1
+          make_item(window,all_items,bunker_x + 3,bunker_y + 10,seed,"Medkit")
+          make_item(window,all_items,bunker_x + 3,bunker_y + 11,seed,"Medkit")
+        else
+        end             
       end
     end
   end
@@ -188,6 +207,19 @@ def make_monster(monster_x,monster_y,actors)
       monster = Character.new(symb: 'M', symbcode: 77, xlines: monster_x, ycols: monster_y, hp: 3)
       actors << monster
       #actors.merge!(monster.export_character)
+end
+
+def make_item(window,all_items,bunker_x,bunker_y,seed,type)
+  case type
+      when "Food"
+        thing = Item.new(symb: 'f', symbcode: 102, xlines: bunker_x, ycols: bunker_y, type: type)
+      when "Medkit"
+        thing = Item.new(symb: 'm', symbcode: 109, xlines: bunker_x, ycols: bunker_y, type: type)
+      when "Token"
+        thing = Item.new(symb: '*', symbcode: 42, xlines: bunker_x, ycols: bunker_y, type: type)
+      end
+  Ncurses.mvwaddstr(window, thing.xlines, thing.ycols, thing.symb)
+  all_items << thing
 end
 
 def draw_map(window)
@@ -278,11 +310,11 @@ def generate_perlin(window,seed)
   Ncurses.wattroff(window,Ncurses.COLOR_PAIR(1))
 end
 
-def generate_map(window,total_bunkers,all_beacons,all_bunkers,actors,seed)
+def generate_map(window,total_bunkers,all_items,all_beacons,all_bunkers,actors,seed)
   generate_perlin(window,seed)
   bunker_start = 0
   while bunker_start <= total_bunkers
-    make_bunker(window,all_beacons,all_bunkers,actors,seed)
+    make_bunker(window,all_items,all_beacons,all_bunkers,actors,seed)
     bunker_start += 1
   end
 end

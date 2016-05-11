@@ -62,15 +62,14 @@ class Beacon < Actor
 end
 
 class Item < Actor
-  attr_accessor :symb, :name, :type,
+  attr_accessor :name, :type, :taken
   def initialize(options = {})
     self.symb = options[:symb]
     self.color = options[:color] || 2 # Green
     self.xlines = options[:xlines]
-    self.ycols = options[:ycols]
-    self.name = options[:name]
+    self.ycols = options[:ycols]    
     self.type = options[:type] # "Food", "Medkit"
-    #self.count = options[:count] || 1
+    self.taken = options[:taken] || false    
   end
 end
 
@@ -89,7 +88,7 @@ def draw_to_map(window,actor) # Standalone method for drawing objects stored in 
   Ncurses.mvwaddstr(window, actor["xlines"], actor["ycols"], "#{actor["symb"]}")
 end
 
-def check_space(window,hud,xl,yc,character,walkable,items,actors)
+def check_space(window,hud,xl,yc,character,walkable,items,actors,all_items)
     window_max_lines = []
     window_max_cols = []
     Ncurses.getmaxyx(window,window_max_cols,window_max_lines)   # Get Max Y,X of window
@@ -105,6 +104,7 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors)
         check_target(hud,actors,character,xl,yc)       
       elsif items.include?(step)
         if character.symb == "@"
+          check_item(hud,all_items,character,xl,yc)
           update_inventory(hud, step, character, 1)          
           character.move(window, xl, yc)
         end
@@ -114,6 +114,15 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors)
     else
       return false
     end
+end
+
+def check_item(hud,all_items,character,xl,yc)
+  all_items.each do |i|
+    if (i.xlines == character.xlines + xl) and (i.ycols == character.ycols + yc)
+       i.taken = true
+       #message(hud,"Attacked #{actor.symb}")
+    end               
+  end
 end
 
 def check_target(hud,actors,character,xl,yc)
@@ -226,22 +235,22 @@ def transmission(window,beacon,player)
 end
 
 # Modes
-def mode_wander2(window, hud, character, player, walkable, items, actors) # New Wander Method
+def mode_wander2(window, hud, character, player, walkable, items, actors, all_items) # New Wander Method
   d4 = rand(0..3)
   if d4 == 0
-    check_space(window,hud,0,-1,character,walkable,items,actors) # Move Left
+    check_space(window,hud,0,-1,character,walkable,items,actors,all_items) # Move Left
     Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
     Ncurses.wrefresh(hud)    
   elsif d4 == 1    
-    check_space(window,hud,0,1,character,walkable,items,actors) # Move Right
+    check_space(window,hud,0,1,character,walkable,items,actors,all_items) # Move Right
     Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
     Ncurses.wrefresh(hud)    
   elsif d4 == 2
-    check_space(window,hud,-1,0,character,walkable,items,actors) # Move Up
+    check_space(window,hud,-1,0,character,walkable,items,actors,all_items) # Move Up
     Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
     Ncurses.wrefresh(hud)    
   elsif d4 == 3
-    check_space(window,hud,1,0,character,walkable,items,actors) # Move Down
+    check_space(window,hud,1,0,character,walkable,items,actors,all_items) # Move Down
     Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
     Ncurses.wrefresh(hud)    
   else
@@ -249,41 +258,41 @@ def mode_wander2(window, hud, character, player, walkable, items, actors) # New 
   end  
 end
 
-def mode_hunt2(window, hud, character, player, walkable, items, actors) # New Hunt
+def mode_hunt2(window, hud, character, player, walkable, items, actors, all_items) # New Hunt
   flip = rand.round
   if flip == 0    
     if character.ycols > player.ycols
-      check_space(window,hud,0,-1,character,walkable,items,actors) # Move Left
+      check_space(window,hud,0,-1,character,walkable,items,actors,all_items) # Move Left
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     elsif character.ycols < player.ycols
-      check_space(window,hud,0,1,character,walkable,items,actors) # Move Right
+      check_space(window,hud,0,1,character,walkable,items,actors,all_items) # Move Right
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     elsif character.xlines > player.xlines 
-      check_space(window,hud,-1,0,character,walkable,items,actors) # Move Up
+      check_space(window,hud,-1,0,character,walkable,items,actors,all_items) # Move Up
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     else character.xlines < player.xlines
-      check_space(window,hud,1,0,character,walkable,items,actors) # Move Down
+      check_space(window,hud,1,0,character,walkable,items,actors,all_items) # Move Down
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     end
   else
     if character.xlines < player.xlines
-      check_space(window,hud,1,0,character,walkable,items,actors) # Move Down
+      check_space(window,hud,1,0,character,walkable,items,actors,all_items) # Move Down
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     elsif character.xlines > player.xlines
-      check_space(window,hud,-1,0,character,walkable,items,actors) # Move Up
+      check_space(window,hud,-1,0,character,walkable,items,actors,all_items) # Move Up
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     elsif character.ycols < player.ycols
-      check_space(window,hud,0,1,character,walkable,items,actors) # Move Right
+      check_space(window,hud,0,1,character,walkable,items,actors,all_items) # Move Right
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     else character.ycols > player.ycols 
-      check_space(window,hud,0,-1,character,walkable,items,actors) # Move Left
+      check_space(window,hud,0,-1,character,walkable,items,actors,all_items) # Move Left
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)    
     end
