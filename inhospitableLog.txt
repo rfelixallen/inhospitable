@@ -1,4 +1,0 @@
-#<Character:0x007ff273938df8>.to_yaml
-#<Character:0x007ff27392a5a0>.to_yaml
-#<Character:0x007ff27389fa40>.to_yaml
-#<Character:0x007ff27386ee68>.to_yaml
