@@ -28,7 +28,7 @@ def save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunke
 
 
   # Save data to JSON
-  File.open('game.json', 'w') do |f|    
+  File.open('save.json', 'w') do |f|    
     f.puts Oj::dump all_the_data
   end
 end
@@ -76,7 +76,7 @@ Ncurses.refresh
 if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   # Load JSON File
   scr_message("Loading Saved Data",1)
-  json = File.read('game.json')
+  json = File.read('save.json')
   everything = JSON.parse(json)
   scr_clear
 
