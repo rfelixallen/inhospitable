@@ -15,25 +15,9 @@ class Actor
     self.xlines = options[:xlines] || 2
     self.ycols = options[:ycols] || 2
     self.blocked = options[:blocked] || true
-
-    #self.hp = options[:hp] || 3
-    #self.hunger = options[:hunger] || 9
-    #self.inventory = options[:inventory] || {"Radio" => 1, "Food" => 0, "Medkit" => 0, "Token" => 0}
-    #self.weather = options[:weather] || {"Cold" => 1, "Snow" => 2}
   end
 
-  def export
-    me = {
-          "symb" => self.symb,
-          "symbcode" => self.symbcode,
-          "color" => self.color,
-          "xlines" => self.xlines,
-          "ycols" => self.ycols,
-          "blocked" => self.blocked
-        }
-  end
-
-  def draw(window)
+  def draw(window) # Class method for drawing objects to map.
     #Ncurses.init_pair(1, self.color, 0)
     #window.attron(Ncurses.COLOR_PAIR(1))
     Ncurses.mvwaddstr(window, self.xlines, self.ycols, "#{self.symb}")
@@ -62,42 +46,9 @@ class Character < Actor
     self.hunger = options[:hunger] || 9
     self.inventory = options[:inventory] || {"Radio" => 1, "Food" => 0, "Medkit" => 0, "Token" => 0}
   end
-
-  def scrub_hash(hash)
-    #player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
-    # {"\"symb\"=>\"M\", \"symbcode\"=>77, \"color\"=>1, \"xlines\"=>130, \"ycols\"=>105, \"blocked\"=>true, \"hp\"=>3, \"hunger\"=>9, \"inventory\"=>{\"Radio\"=>1, \"Food\"=>0, \"Medkit\"=>0, \"Token\"=>0}"}
-    hash[0] = '' # Remove front {
-    hash.chop! # Remove back }
-    scrub = hash.gsub!(/\"/, "")
-    scrub = hash.gsub!(/(=>)/, ": ")
-  end
-
-  def scrub_hash2(hash)
-    hash.map{|k,v| "#{k}: #{v}"}.join(', ')
-  end
-  
-  def init_from_json(hash)
-    hash.each {|k,v| send("#{k}=",v)}
-  end
-
-  def export_character
-    me = {
-          "symb" => self.symb,
-          "symbcode" => self.symbcode,
-          "color" => self.color,
-          "xlines" => self.xlines,
-          "ycols" => self.ycols,
-          "blocked" => self.blocked,
-          "hp" => self.hp,
-          "hunger" => self.hunger,
-          "inventory" => self.inventory
-        }
-  end
-
 end
 
-class Beacon < Actor
-  #attr_accessor :symb, :channel, :message, :xlines, :ycols, :active
+class Beacon < Actor  
   attr_accessor :channel, :message, :active
   def initialize(options = {})        
     self.symb = options[:symb] || 'A'
@@ -107,18 +58,6 @@ class Beacon < Actor
     self.channel = options[:channel] || '1'
     self.message = options[:message] || "01234567890123456789"
     self.active = options[:active] || true
-  end
-
-  def export_beacon
-    me = {
-          "symb" => self.symb,          
-          "color" => self.color,
-          "xlines" => self.xlines,
-          "ycols" => self.ycols,
-          "channel" => self.channel,
-          "message" => self.message,
-          "active" => self.active          
-        }
   end
 end
 
@@ -146,7 +85,7 @@ class Tile < Actor
   end
 end
 
-def draw_to_map(window,actor)
+def draw_to_map(window,actor) # Standalone method for drawing objects stored in a hash to the map.
   Ncurses.mvwaddstr(window, actor["xlines"], actor["ycols"], "#{actor["symb"]}")
 end
 
