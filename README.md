@@ -27,10 +27,13 @@ Fixes
 * Fix screen flashes
 * Adjust amount and placement of food/meds in a bunker
 * Fix border on viewp
+* Dead monsters comes back as 'M' until the first move, and then change to 'X'
 
 Log
 5/11/16
-- Today I worked on item persistance. The goal is to have any item picked up stay removed from the board.
+- I reworked all the items to be generated from a class that inherits from the actor class. Since they now have x and y coordinates, I also added a boolean value for if they had been picked up or not. I added a new array that saved all the items and worked that into my save game structure. I played around and tested the game to see if items would come back or not, and it seems to work as expected.
+
+- The next thing to work on is deactivating beacons. Id like the beacon to either turn off when the token is picked up, or walk into the station to turn the broadcast off.
 
 5/10/16
 - I finally completed two big parts of my persistance projects. I successfully exported data to a file and instantiated a new game based on that file. I also redid my main menu to handle loading the game, startng a new game, and behaving differently during a game. Tomorrow, I plan on working on item persistance. Currently, when loading a save game file, the code just regenerates all items.
