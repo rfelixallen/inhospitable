@@ -1,0 +1,131 @@
+{
+	"seed" : 12345,
+	"total_bunkers" : 6,
+	"items" : [42,102,109],
+	"walkable" : [32,88,126,288,382],
+	"beacons" : [
+		{
+			"symb":"A",
+			"color":2,
+			"xlines":33,
+			"ycols":137,
+			"channel":"1",
+			"message":"Broadcast 13334",
+			"active":true
+			},
+		{
+			"symb":"A",
+			"color":2,
+			"xlines":168,
+			"ycols":177,
+			"channel":"1",
+			"message":"Broadcast 57124",
+			"active":true
+			},
+		{
+			"symb":"A",
+			"color":2,
+			"xlines":130,
+			"ycols":109,
+			"channel":"1",
+			"message":"Broadcast 26899",
+			"active":true
+			},
+		{
+			"symb":"A",
+			"color":2,
+			"xlines":38,
+			"ycols":37,
+			"channel":"1",
+			"message":"Broadcast 2309",
+			"active":true
+			},
+		{
+			"symb":"A",
+			"color":2,
+			"xlines":5,
+			"ycols":126,
+			"channel":"1",
+			"message":"Broadcast 7746",
+			"active":true
+			},
+		{
+			"symb":"A",
+			"color":2,
+			"xlines":117,
+			"ycols":67,
+			"channel":"1",
+			"message":"Broadcast 15637",
+			"active":true
+			},
+		{
+			"symb":"A",
+			"color":2,
+			"xlines":146,
+			"ycols":113,
+			"channel":"1",
+			"message":"Broadcast 31733",
+			"active":true
+		}
+		],
+	"bunkers" : [[31,131],[166,171],[128,103],[36,31],[3,120],[115,61],[144,107]],			
+	"player" : 	[
+		{
+			"symb" : "@",
+			"symbcode" : 64,
+			"color" : 2,
+			"xlines" : 50,
+			"ycols" : 50,
+			"blocked" : true,
+			"hp" : 9,
+			"hunger" : 9,
+			"inventory" : { "Radio" : 1,"Food" : 0,"Medkit" : 0,"Token" : 0 }
+		}
+	],
+	"actors" : [
+		{
+			"symb" : "@",
+			"symbcode" : 64,
+			"color" : 2,
+			"xlines" : 50,
+			"ycols" : 50,
+			"blocked" : true,
+			"hp" : 9,
+			"hunger" : 9,
+			"inventory" : { "Radio" : 1,"Food" : 0,"Medkit" : 0,"Token" : 0 }
+		},
+		{
+			"symb" : "M",
+			"symbcode" : 77,
+			"color" : 1,
+			"xlines" : 130,
+			"ycols" : 105,
+			"blocked" : true,
+			"hp" : 3,
+			"hunger" : 9,
+			"inventory" : { "Radio" : 1,"Food" : 0,"Medkit" : 0,"Token" : 0 }
+		},
+		{
+			"symb":"M",
+			"symbcode":77,
+			"color":1,
+			"xlines":38,
+			"ycols":33,
+			"blocked":true,
+			"hp":3,
+			"hunger":9,
+			"inventory":{"Radio":1,"Food":0,"Medkit":0,"Token":0}
+		},	
+		{
+			"symb":"M",
+			"symbcode":77,
+			"color":1,
+			"xlines":117,
+			"ycols":63,
+			"blocked":true,
+			"hp":3,
+			"hunger":9,
+			"inventory":{"Radio":1,"Food":0,"Medkit":0,"Token":0}		
+		}
+	]
+}

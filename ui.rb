@@ -1,15 +1,15 @@
 require_relative 'terrain'
 
-def drawmenu(item)
-  c = 0
-  menu = ["PLAY GAME", "INSTRUCTIONS", "QUIT"]
+def drawmenu(item,menu)
+  c = 0  
+  m = menu.length
   Ncurses.clear
   Ncurses.mvaddstr(0,2,"Inhospitable - Main Menu")
-  Ncurses.refresh
-  for i in 0..2
+  Ncurses.refresh 
+  m.times do |i|
     Ncurses.mvaddstr(3 + (i * 2), 20, menu[i])
   end
-  while c <= menu.count # set to total menu items, start at 0
+  while c <= m # set to total menu items, start at 0
     if c == item
       Ncurses.attron(A_REVERSE)
       Ncurses.mvaddstr(3 + (c * 2), 20, menu[c])
@@ -21,56 +21,96 @@ def drawmenu(item)
   Ncurses.mvaddstr(18,2,"Version 0.5 - RFAllen 2015")
 end
 
-def main_menu
-# Main Menu
-menuitem = 0
-drawmenu(menuitem)
-key = 0
-while key != 113
-  drawmenu(menuitem)
-  key = Ncurses.getch
-  case key
-  when KEY_DOWN
-    menuitem += 1
-    if (menuitem > 2) 
-      menuitem = 0
-      #break
-    end
-  when KEY_UP
-    menuitem -= 1
-    if (menuitem < 0) 
-      menuitem = 2
-      #break
-    end
-  when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
-    if menuitem == 0 # Play Game
-      key = 113
-    elsif menuitem == 1 # Instructions
-      menu_instructions 
-    elsif menuitem == 2 # Quit Game
-      Ncurses.clear
-      Ncurses.endwin
-      exit
-    else
-      Ncurses.flash
+def main_menu(state,screen)
+  # Main Menu
+  menuitem = 0
+  #menu = ["PLAY GAME", "INSTRUCTIONS", "SAVE GAME", "CONTINUE", "QUIT"]
+  if @game_initialized == 0
+    menu = ["CONTINUE", "NEW GAME", "INSTRUCTIONS", "QUIT"]
+  else 
+    menu = ["CONTINUE", "INSTRUCTIONS", "QUIT"]
+  end
+  drawmenu(menuitem,menu)
+  key = 0
+  m = menu.length - 1
+  if @game_initialized == 0
+    while key != 113
+      drawmenu(menuitem,menu)
+      key = Ncurses.getch
+      case key
+      when KEY_DOWN
+        menuitem += 1
+        if (menuitem > m) then menuitem = 0 end
+      when KEY_UP
+        menuitem -= 1
+        if (menuitem < 0) then menuitem = m end
+      when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
+        if menuitem == 0 # First Spot: CONTINUE GAME
+          @new = 1
+          key = 113
+        elsif menuitem == 1 # Second Spot: New Game
+          @new == 0
+          key = 113
+        elsif menuitem == 2 # Third Spot: Instructions
+          menu_instructions 
+        elsif menuitem == 3 # Fourth Spot: Quit Game
+          Ncurses.clear
+          Ncurses.mvwaddstr(stdscr, 1, 1, "Good Bye!")
+          Ncurses.wrefresh(stdscr)
+          Ncurses.napms(1000)
+          Ncurses.endwin
+          exit
+        else
+          Ncurses.flash
+        end
+      else
+        Ncurses.flash
+      end
     end
   else
-    Ncurses.flash
+    while key != 113
+      drawmenu(menuitem,menu)
+      key = Ncurses.getch
+      case key
+      when KEY_DOWN
+        menuitem += 1
+        if (menuitem > m) then menuitem = 0 end
+      when KEY_UP
+        menuitem -= 1
+        if (menuitem < 0) then menuitem = m end
+      when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
+        if menuitem == 0  # First Spot: CONTINUE GAME
+          key = 113
+        elsif menuitem == 1 # Second Spot: Instructions
+          menu_instructions 
+        elsif menuitem == 2 # Third Spot: Quit Game
+          Ncurses.clear
+          Ncurses.mvwaddstr(stdscr, 1, 1, "Good Bye!")
+          Ncurses.wrefresh(stdscr)
+          Ncurses.napms(1000)
+          Ncurses.endwin
+          exit
+        else
+          Ncurses.flash
+        end
+      else
+        Ncurses.flash
+      end
+    end
   end
-end
-Ncurses.clear
+  Ncurses.clear
 end
 
 def menu_instructions
       Ncurses.clear
       Ncurses.mvaddstr(0,2,"Inhospitable - Instructions")
-      Ncurses.mvaddstr(2,2,"Arrow Keys - Up, Down, Left, Right")
+      Ncurses.mvaddstr(2,2,"Arrow Keys / WASD - Up, Down, Left, Right")
       Ncurses.mvaddstr(3,2,"(r) - Use Radio")
       Ncurses.mvaddstr(4,2,"(f) - Eat Food - Icon: f")
       Ncurses.mvaddstr(5,2,"(m) - Use Medkit - Icon: m")
-      Ncurses.mvaddstr(6,2,"(q) - Quit Game")
-      Ncurses.mvaddstr(7,2,"(Spacebar) - Skip Movement")
-
+      Ncurses.mvaddstr(6,2,"(e) - Save Game")
+      Ncurses.mvaddstr(7,2,"(q) - Quit Game")
+      Ncurses.mvaddstr(8,2,"(Spacebar) - Skip Movement")
       Ncurses.mvaddstr(9,2,"Use Radio to find Bunkers with supplies!")
       Ncurses.mvaddstr(10,2,"Walk into Monsters to attack - icon (M)")
       Ncurses.mvaddstr(11,2,"Collect all Tokens to finish game")

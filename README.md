@@ -27,8 +27,45 @@ Fixes
 * Fix screen flashes
 * Adjust amount and placement of food/meds in a bunker
 * Fix border on viewp
+* Dead monsters comes back as 'M' until the first move, and then change to 'X'
 
 Log
+5/11/16
+- I reworked all the items to be generated from a class that inherits from the actor class. Since they now have x and y coordinates, I also added a boolean value for if they had been picked up or not. I added a new array that saved all the items and worked that into my save game structure. I played around and tested the game to see if items would come back or not, and it seems to work as expected.
+
+- The next thing to work on is deactivating beacons. Id like the beacon to either turn off when the token is picked up, or walk into the station to turn the broadcast off.
+
+5/10/16
+- I finally completed two big parts of my persistance projects. I successfully exported data to a file and instantiated a new game based on that file. I also redid my main menu to handle loading the game, startng a new game, and behaving differently during a game. Tomorrow, I plan on working on item persistance. Currently, when loading a save game file, the code just regenerates all items.
+
+5/9/16
+- I reverted all most of my recent changes so that my game still relies on objects stored in arrays, but plays nice with loaded JSON data. I've got the game to a point where I can load variables with a JSON file and it runs successfully. The next big challenge is to figure out how to save my game data in a way that resembles sample2.json, which is in a platonic state.
+
+- I used a gem called OJ to easily export data to JSON, and it worked awesome. I've successfully implimented the bones of first version of persistance in my game. I have successfully saved data, and then reloaded that same data. To truly finish the first version, I need to do 2 more things. I need to impliment a way to keep track of items on the ground, and fix my menu to save and load game states.
+
+- The next big part of this feature is to redo the menu. This will be good practice if I want to do anything else with the menu later, like Advanced World Generation. I'm going to use [Continue, New Game, Instructions, Quit], and impliment a Quick Save button from the game world, and automatically save on quit.
+
+5/8/16
+- Realized its way easier if I keep everything stored as an array, and then write class methods that export data as hashes. I had to revert all of my changes. That was kind of successful, but now I ran into the problem of properly generating everything from a json file. For bunkers, I learned that I only need to save the starting point for each bunker, and not all the positions.
+
+5/7/16
+- I have been fiddling with Json to save game information. Objects need to be saved as a hash before they can be saved in a json file. I had rejiggered my main, actors and terrain to rely on hash versions of walkable, actors and items instead of the array version they were saved as. While I can kinda save to Json, this has broken other methods that were still looking for arrays. Now I realize that you can create class methods that will pretty package your information into a format acceptable to json. So, instead of saving your data in an always ready json state, you save it in a data type that's easier to work with, and only convert it to hash/json when it needs to be.
+
+I am at a cross roads where I either revert my hashes back to arrays, and make some new class methods for saving, or I need to fix the rest of my methods to take the new hashes that contain my game data.
+
+Additionally, I need to rethink what data needs to be saved. At first I wanted to save everything: actors, bunkers, items, etc. Awhile later I realized that some data would be static, like walkable and items, and other data could be regenerated from a seed value, like bunkers and beacons. I redid bunker/beacon generation to generate from a seed, and to ignore making monsters if the game state was reloading data. This means that the only real information that needs to be saved are actor and item placement.
+
+I explored moving forward with using all my variables as hashes. Its not too cumbersome to use, but I also need to store myplayer object as a hash, and update all that code. I tried invoking monster hash data and player array data, and remembered that in some methods I used the array invokation for both player and monsters. 
+
+3/22/16
+-I cleaned up some variables in Main.rb to make them more descriptive.
+
+3/19/16
+-I successfully exported Inhospitable's game map window to a save file. Restoring will be a bit more complicated, as Ill need to save additional information and instantiate that. Ill need to refactor how the game initializes so it can accomodate loaded variable or standard variables.
+
+3/18/16
+-I began experimenting with persistance, the fancy word for saving and reloading. I was able to dump a window and restore it using test files. The next test is to see if we can dump a game screen.
+
 3/15/16
 -And I am back! I plan on reviving this project and doing some more feature work. I miss coding, and I have ambitious roguelike plans. All I've done so far is update the feature list with some new ideas.
 
