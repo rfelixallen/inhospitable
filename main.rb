@@ -281,16 +281,16 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
-      check_space(game_window,hud_window,-1,0,player,walkable,items,actors,all_items) 
+      check_space(game_window,hud_window,-1,0,player,walkable,items,actors,all_items,all_beacons) 
       center(viewport_window,game_window,player.xlines,player.ycols)
     when KEY_DOWN, 115 # Move Down      
-      check_space(game_window,hud_window,1,0,player,walkable,items,actors,all_items)                  
+      check_space(game_window,hud_window,1,0,player,walkable,items,actors,all_items,all_beacons)                  
       center(viewport_window,game_window,player.xlines,player.ycols)   
     when KEY_RIGHT, 100 # Move Right 
-      check_space(game_window,hud_window,0,1,player,walkable,items,actors,all_items)     
+      check_space(game_window,hud_window,0,1,player,walkable,items,actors,all_items,all_beacons)     
       center(viewport_window,game_window,player.xlines,player.ycols)    
     when KEY_LEFT, 97 # Move Left   
-      check_space(game_window,hud_window,0,-1,player,walkable,items,actors,all_items)          
+      check_space(game_window,hud_window,0,-1,player,walkable,items,actors,all_items,all_beacons)          
       center(viewport_window,game_window,player.xlines,player.ycols)     
     when 32 # Spacebar, dont move
       center(viewport_window,game_window,player.xlines,player.ycols)
@@ -349,9 +349,9 @@ if menu_active == 0
       else
         distance_from_player = [(player.xlines - rawr.xlines).abs,(player.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
         if player_visible == 1 and ((distance_from_player[0] < (viewport_window_lines / 5) and distance_from_player[1] < viewport_window_columns / 5)) # if the monster is visible, chase player  
-          mode_hunt2(game_window,hud_window, rawr, player, walkable, items, actors, all_items)           
+          mode_hunt2(game_window,hud_window, rawr, player, walkable, items, actors, all_items,all_beacons)           
         else # If player is not visible, wander around
-          mode_wander2(game_window,hud_window, rawr, player, walkable, items, actors, all_items)       
+          mode_wander2(game_window,hud_window, rawr, player, walkable, items, actors, all_items,all_beacons)       
         end 
       end
     end

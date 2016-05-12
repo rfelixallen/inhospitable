@@ -90,7 +90,7 @@ def draw_to_map(window,actor) # Standalone method for drawing objects stored in 
   Ncurses.mvwaddstr(window, actor["xlines"], actor["ycols"], "#{actor["symb"]}")
 end
 
-def check_space(window,hud,xl,yc,character,walkable,items,actors,all_items)
+def check_space(window,hud,xl,yc,character,walkable,items,actors,all_items,all_beacons)
     window_max_lines = []
     window_max_cols = []
     Ncurses.getmaxyx(window,window_max_cols,window_max_lines)   # Get Max Y,X of window
@@ -110,6 +110,8 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors,all_items)
           update_inventory(hud, step, character, 1)          
           character.move(window, xl, yc)
         end
+      elsif step == "A" && character.symb == "@"
+        check_beacons(all_beacons,character,xl,yc)
       else 
         nil
       end
@@ -124,6 +126,14 @@ def check_item(hud,all_items,character,xl,yc)
        i.taken = true
        #message(hud,"Attacked #{actor.symb}")
     end               
+  end
+end
+
+def check_beacons(all_beacons,character,xl,yc)
+  all_beacons.each do |b|
+    if (b.xlines == character.xlines + xl) and (b.ycols == character.ycols + yc)
+      b.active = false
+    end
   end
 end
 
@@ -215,7 +225,13 @@ end
 
 def get_distance_all_beacons(player, all_beacons)
   # Make hash of beacons and their distances, then return beacon with shortest distance  
-  distances = Hash[all_beacons.collect { |v| [v,get_distance(player,v)] }]
+  active_beacons = all_beacons
+  active_beacons.each do |x|
+    if x.active == false
+      active_beacons.delete(x)
+    end
+  end
+  distances = Hash[active_beacons.collect { |v| [v,get_distance(player,v)] }]
   y = distances.values.min_by { |x| x }
   return distances.key(y)
 end
@@ -237,22 +253,22 @@ def transmission(window,beacon,player)
 end
 
 # Modes
-def mode_wander2(window, hud, character, player, walkable, items, actors, all_items) # New Wander Method
+def mode_wander2(window, hud, character, player, walkable, items, actors, all_items, all_beacons) # New Wander Method
   d4 = rand(0..3)
   if d4 == 0
-    check_space(window,hud,0,-1,character,walkable,items,actors,all_items) # Move Left
+    check_space(window,hud,0,-1,character,walkable,items,actors,all_items,all_beacons) # Move Left
     Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
     Ncurses.wrefresh(hud)    
   elsif d4 == 1    
-    check_space(window,hud,0,1,character,walkable,items,actors,all_items) # Move Right
+    check_space(window,hud,0,1,character,walkable,items,actors,all_items,all_beacons) # Move Right
     Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
     Ncurses.wrefresh(hud)    
   elsif d4 == 2
-    check_space(window,hud,-1,0,character,walkable,items,actors,all_items) # Move Up
+    check_space(window,hud,-1,0,character,walkable,items,actors,all_items,all_beacons) # Move Up
     Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
     Ncurses.wrefresh(hud)    
   elsif d4 == 3
-    check_space(window,hud,1,0,character,walkable,items,actors,all_items) # Move Down
+    check_space(window,hud,1,0,character,walkable,items,actors,all_items,all_beacons) # Move Down
     Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
     Ncurses.wrefresh(hud)    
   else
@@ -260,41 +276,41 @@ def mode_wander2(window, hud, character, player, walkable, items, actors, all_it
   end  
 end
 
-def mode_hunt2(window, hud, character, player, walkable, items, actors, all_items) # New Hunt
+def mode_hunt2(window, hud, character, player, walkable, items, actors, all_items, all_beacons) # New Hunt
   flip = rand.round
   if flip == 0    
     if character.ycols > player.ycols
-      check_space(window,hud,0,-1,character,walkable,items,actors,all_items) # Move Left
+      check_space(window,hud,0,-1,character,walkable,items,actors,all_items,all_beacons) # Move Left
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     elsif character.ycols < player.ycols
-      check_space(window,hud,0,1,character,walkable,items,actors,all_items) # Move Right
+      check_space(window,hud,0,1,character,walkable,items,actors,all_items,all_beacons) # Move Right
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     elsif character.xlines > player.xlines 
-      check_space(window,hud,-1,0,character,walkable,items,actors,all_items) # Move Up
+      check_space(window,hud,-1,0,character,walkable,items,actors,all_items,all_beacons) # Move Up
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     else character.xlines < player.xlines
-      check_space(window,hud,1,0,character,walkable,items,actors,all_items) # Move Down
+      check_space(window,hud,1,0,character,walkable,items,actors,all_items,all_beacons) # Move Down
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     end
   else
     if character.xlines < player.xlines
-      check_space(window,hud,1,0,character,walkable,items,actors,all_items) # Move Down
+      check_space(window,hud,1,0,character,walkable,items,actors,all_items,all_beacons) # Move Down
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     elsif character.xlines > player.xlines
-      check_space(window,hud,-1,0,character,walkable,items,actors,all_items) # Move Up
+      check_space(window,hud,-1,0,character,walkable,items,actors,all_items,all_beacons) # Move Up
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     elsif character.ycols < player.ycols
-      check_space(window,hud,0,1,character,walkable,items,actors,all_items) # Move Right
+      check_space(window,hud,0,1,character,walkable,items,actors,all_items,all_beacons) # Move Right
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)
     else character.ycols > player.ycols 
-      check_space(window,hud,0,-1,character,walkable,items,actors,all_items) # Move Left
+      check_space(window,hud,0,-1,character,walkable,items,actors,all_items,all_beacons) # Move Left
       Ncurses.mvwaddstr(hud, 3, 1, "HP: #{player.hp}")
       Ncurses.wrefresh(hud)    
     end
