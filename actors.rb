@@ -110,8 +110,8 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors,all_items,all_b
           update_inventory(hud, step, character, 1)          
           character.move(window, xl, yc)
         end
-      elsif step == "A" && character.symb == "@"
-        check_beacons(all_beacons,character,xl,yc)
+      elsif step == 65 && character.symb == "@"
+        check_beacons(hud,all_beacons,character,xl,yc)
       else 
         nil
       end
@@ -129,10 +129,11 @@ def check_item(hud,all_items,character,xl,yc)
   end
 end
 
-def check_beacons(all_beacons,character,xl,yc)
+def check_beacons(hud,all_beacons,character,xl,yc)
   all_beacons.each do |b|
     if (b.xlines == character.xlines + xl) and (b.ycols == character.ycols + yc)
-      b.active = false
+      b.active = false      
+      #message(hud,"Beacon Set: #{b.active}")
     end
   end
 end

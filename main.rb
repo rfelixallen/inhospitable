@@ -156,7 +156,7 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   end
   
   everything["beacons"].each do |b|
-    all_beacons << Beacon.new(symb: b["symb"], xlines: b["xlines"], ycols: b["ycols"], message: b["message"])    
+    all_beacons << Beacon.new(symb: b["symb"], xlines: b["xlines"], ycols: b["ycols"], message: b["message"], active: b["active"])    
     draw_to_map(game_window,b)
   end
 
