@@ -113,7 +113,8 @@ def menu_instructions
       Ncurses.mvaddstr(8,2,"(Spacebar) - Skip Movement")
       Ncurses.mvaddstr(9,2,"Use Radio to find Bunkers with supplies!")
       Ncurses.mvaddstr(10,2,"Walk into Monsters to attack - icon (M)")
-      Ncurses.mvaddstr(11,2,"Collect all Tokens to finish game")
+      Ncurses.mvaddstr(11,2,"Walk into Radio Towers to deactivate - icon (A)")
+      Ncurses.mvaddstr(12,2,"Collect all Tokens to finish game")
 
       Ncurses.mvaddstr(13,2,"Press any key to return to menu")
       Ncurses.refresh
