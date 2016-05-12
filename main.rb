@@ -194,7 +194,7 @@ else
   actors = []
   items = [42,102,109]
   all_items = []
-  walkable = [32,88,126,288,382]
+  walkable = [32,34,88,126,288,382]
   all_beacons = []
   all_bunkers = []
   scr_clear

@@ -28,7 +28,8 @@ class Actor
   def move(window,lines,cols)
     self.xlines += lines
     self.ycols += cols    
-    Ncurses.mvwaddstr(window, self.xlines + -lines, self.ycols + -cols, " ")
+    #Ncurses.mvwaddstr(window, self.xlines + -lines, self.ycols + -cols, " ")
+    Ncurses.mvwaddstr(window, self.xlines + -lines, self.ycols + -cols, "\"")
     self.draw(window)
   end
 end
