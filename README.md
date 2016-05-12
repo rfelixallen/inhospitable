@@ -4,11 +4,14 @@ A simple game of survival in a cold wasteland.
 TODO
 Features2 Objectives
 * Ability to turn off beacons
-* Replace blank trail with quotes and colons for footprints
-* Add snow to cover tracks
 
 DONE
 * Add a clock to keep track of time
+* Replace blank trail with quotes and colons for footprints
+* Removed Position entry in HUD
+
+ABANDONED
+* Add snow to cover tracks (I dont want to bog down the game by iterating over the game map.)
 
 Log
 5/11/16
