@@ -213,12 +213,20 @@ def message(window,message)
   Ncurses.wrefresh(window)
 end
 
+def convert_time(x)
+  if x.to_s.length == 1
+    return "0" + x.to_s
+  else
+    return x.to_s
+  end
+end
+
 def hud_on(hud,player)
   Ncurses.wclear(hud)
   borders(hud)                                
   Ncurses.mvwaddstr(hud, 1, 1, "Inhospitable")
   Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{player.ycols},#{player.xlines}]") # Remove this in final game. 
-  Ncurses.mvwaddstr(hud, 3, 1, "Time: #{player.hp}")
+  Ncurses.mvwaddstr(hud, 3, 1, "Time: #{convert_time(player.timeday[0])}:#{convert_time(player.timeday[1])}")
   Ncurses.mvwaddstr(hud, 4, 1, "HP: #{player.hp}")
   Ncurses.mvwaddstr(hud, 5, 1, "Hunger: #{player.hunger}")
   Ncurses.mvwaddstr(hud, 6, 1, "Inventory:")

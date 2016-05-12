@@ -1,4 +1,4 @@
-def timeu(timed)	
+def time_increase(timed)	
 	if timed[1] < 59 && timed[0] < 24
 		timed[1] += 1
 	elsif timed[0] == 23 && timed[1] == 59

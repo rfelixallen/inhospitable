@@ -33,6 +33,18 @@ def save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunke
   end
 end
 
+def time_increase(timed)  
+  if timed[1] < 59 && timed[0] < 24
+    timed[1] += 1
+  elsif timed[0] == 23 && timed[1] == 59
+    timed[0] == 0
+    timed[1] == 0
+  else
+    timed[0] += 1
+    timed[1] = 0
+  end 
+end
+
 def scr_message(message,bars)
   loading = "[" + "=" * bars + " " * (7 - bars) + "]"
   Ncurses.mvwaddstr(stdscr, 3, 3, "#{message}")
@@ -135,7 +147,7 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   scr_clear
 
   scr_message("Generating Actors",7)
-  player = Character.new(symb: everything["actors"][0]["symb"],symbcode: everything["actors"][0]["symbcode"],color: everything["actors"][0]["color"],xlines: everything["actors"][0]["xlines"],ycols: everything["actors"][0]["ycols"],blocked: everything["actors"][0]["blocked"],hp: everything["actors"][0]["hp"],hunger: everything["actors"][0]["hunger"],inventory: everything["actors"][0]["inventory"])
+  player = Character.new(symb: everything["actors"][0]["symb"],symbcode: everything["actors"][0]["symbcode"],color: everything["actors"][0]["color"],xlines: everything["actors"][0]["xlines"],ycols: everything["actors"][0]["ycols"],blocked: everything["actors"][0]["blocked"],hp: everything["actors"][0]["hp"],hunger: everything["actors"][0]["hunger"],inventory: everything["actors"][0]["inventory"],timeday: everything["actors"][0]["timeday"])
   actors << player
   player.draw(game_window)
   everything["actors"].drop(1).each do |k|
@@ -248,6 +260,7 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
     Ncurses.refresh
     Ncurses.napms(1000)
   end
+  time_increase(player.timeday)
   hud_on(hud_window,player)
   borders(console_window) 
   Ncurses.wrefresh(hud_window)

@@ -34,7 +34,7 @@ class Actor
 end
 
 class Character < Actor
-  attr_accessor :hp, :symbcode, :hunger, :inventory
+  attr_accessor :hp, :symbcode, :hunger, :inventory, :timeday
   def initialize(options = {})
     self.symb = options[:symb] || '@'
     self.symbcode = options[:symbcode] || 64 # Should be whatever the ascii code for symb is 
@@ -45,7 +45,7 @@ class Character < Actor
     self.hp = options[:hp] || 3
     self.hunger = options[:hunger] || 9
     self.inventory = options[:inventory] || {"Radio" => 1, "Food" => 0, "Medkit" => 0, "Token" => 0}
-    self.time = options[:time] || "12:00"
+    self.timeday = options[:timeday] || [12,00]
   end
 end
 
