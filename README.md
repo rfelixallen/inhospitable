@@ -3,13 +3,14 @@ A simple game of survival in a cold wasteland.
 
 TODO
 Features2 Objectives
-* Add snow to cover tracks
+
 
 DONE
 * Add a clock to keep track of time
 * Replace blank trail with quotes and colons for footprints
 * Removed Position entry in HUD
 * Ability to turn off beacons
+* Add snow to cover tracks
 
 New Bug
 * Time will flash current HP
