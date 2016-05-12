@@ -249,6 +249,9 @@ Ncurses.wrefresh(console_window)                   # Refresh console_window wind
 hud_on(hud_window,player)
 center(viewport_window,game_window,player.xlines,player.ycols)        # Center map on player
 Ncurses.wrefresh(viewport_window)
+if @new == 1
+  message(console_window,"Snowfall covers your tracks")
+end
 #################################################################################
 # Game Loop                                                                     #
 #################################################################################
