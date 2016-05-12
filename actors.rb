@@ -45,6 +45,7 @@ class Character < Actor
     self.hp = options[:hp] || 3
     self.hunger = options[:hunger] || 9
     self.inventory = options[:inventory] || {"Radio" => 1, "Food" => 0, "Medkit" => 0, "Token" => 0}
+    self.time = options[:time] || "12:00"
   end
 end
 
