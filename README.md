@@ -1,21 +1,6 @@
 Inhospitable
 A simple game of survival in a cold wasteland.
 
-TODO
-Features2 Objectives
-
-
-DONE
-* Add a clock to keep track of time
-* Replace blank trail with quotes and colons for footprints
-* Removed Position entry in HUD
-* Ability to turn off beacons
-* Add snow to cover tracks
-
-New Bug
-* Time will flash current HP
-* Deactivated beacons disappear on reload.
-
 Log
 5/12/16
 - Today I implimented a couple small features. I added a clock to the character class to keep track of how many moves the character has taken, and it loops thru a 24 hour period. I removed the position HUD line because that was for earlier troubleshooting. I replaced the blank trail with footprints when any actor moves. I added the ability to deactivate beacons by walking into them. I also implimented a snow fall that partially covers tracks. I thought this would be too much if the game board was too big, but the board im working with is reasonable in size. The game has a 1% chance to snow each move, and even then it has a 50% chance of covering each footprint tile with snow.
