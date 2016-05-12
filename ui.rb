@@ -25,6 +25,7 @@ def main_menu(state,screen)
   # Main Menu
   menuitem = 0
   #menu = ["PLAY GAME", "INSTRUCTIONS", "SAVE GAME", "CONTINUE", "QUIT"]
+  
   if @game_initialized == 0
     menu = ["CONTINUE", "NEW GAME", "INSTRUCTIONS", "QUIT"]
   else 
@@ -45,7 +46,7 @@ def main_menu(state,screen)
         menuitem -= 1
         if (menuitem < 0) then menuitem = m end
       when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
-        if menuitem == 0 # First Spot: CONTINUE GAME
+        if menuitem == 0 && File.exist?("save.json") # First Spot: CONTINUE GAME
           @new = 1
           key = 113
         elsif menuitem == 1 # Second Spot: New Game
