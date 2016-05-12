@@ -33,6 +33,18 @@ def save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunke
   end
 end
 
+def time_increase(timed)  
+  if timed[1] < 59 && timed[0] < 24
+    timed[1] += 1
+  elsif timed[0] == 23 && timed[1] == 59
+    timed[0] == 0
+    timed[1] == 0
+  else
+    timed[0] += 1
+    timed[1] = 0
+  end 
+end
+
 def scr_message(message,bars)
   loading = "[" + "=" * bars + " " * (7 - bars) + "]"
   Ncurses.mvwaddstr(stdscr, 3, 3, "#{message}")
@@ -135,7 +147,7 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   scr_clear
 
   scr_message("Generating Actors",7)
-  player = Character.new(symb: everything["actors"][0]["symb"],symbcode: everything["actors"][0]["symbcode"],color: everything["actors"][0]["color"],xlines: everything["actors"][0]["xlines"],ycols: everything["actors"][0]["ycols"],blocked: everything["actors"][0]["blocked"],hp: everything["actors"][0]["hp"],hunger: everything["actors"][0]["hunger"],inventory: everything["actors"][0]["inventory"])
+  player = Character.new(symb: everything["actors"][0]["symb"],symbcode: everything["actors"][0]["symbcode"],color: everything["actors"][0]["color"],xlines: everything["actors"][0]["xlines"],ycols: everything["actors"][0]["ycols"],blocked: everything["actors"][0]["blocked"],hp: everything["actors"][0]["hp"],hunger: everything["actors"][0]["hunger"],inventory: everything["actors"][0]["inventory"],timeday: everything["actors"][0]["timeday"])
   actors << player
   player.draw(game_window)
   everything["actors"].drop(1).each do |k|
@@ -144,7 +156,7 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   end
   
   everything["beacons"].each do |b|
-    all_beacons << Beacon.new(symb: b["symb"], xlines: b["xlines"], ycols: b["ycols"], message: b["message"])    
+    all_beacons << Beacon.new(symb: b["symb"], xlines: b["xlines"], ycols: b["ycols"], message: b["message"], active: b["active"])    
     draw_to_map(game_window,b)
   end
 
@@ -182,7 +194,7 @@ else
   actors = []
   items = [42,102,109]
   all_items = []
-  walkable = [32,88,126,288,382]
+  walkable = [32,34,88,126,288,382]
   all_beacons = []
   all_bunkers = []
   scr_clear
@@ -196,6 +208,7 @@ else
   #counter = 0 #wander counter for monster
   direction_steps = rand(10..25) # Meander long distances
   player_visible = 1
+  random_number = Random.new(seed)
   scr_clear
 
   # Create game windows, then generate the world
@@ -235,8 +248,12 @@ menu_active = 0
 borders(console_window)                            # Add borders to the console_window
 Ncurses.wrefresh(console_window)                   # Refresh console_window window with message
 hud_on(hud_window,player)
+generate_snow(game_window)
 center(viewport_window,game_window,player.xlines,player.ycols)        # Center map on player
 Ncurses.wrefresh(viewport_window)
+if @new == 1
+  message(console_window,"Snowfall covers your tracks")
+end
 #################################################################################
 # Game Loop                                                                     #
 #################################################################################
@@ -248,6 +265,11 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
     Ncurses.refresh
     Ncurses.napms(1000)
   end
+  if random_number.rand(1..100) == 1
+    generate_snow(game_window) # what % of snow should be covered?
+    message(console_window, "It's snowing...")
+  end
+  time_increase(player.timeday)
   hud_on(hud_window,player)
   borders(console_window) 
   Ncurses.wrefresh(hud_window)
@@ -265,16 +287,16 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
-      check_space(game_window,hud_window,-1,0,player,walkable,items,actors,all_items) 
+      check_space(game_window,hud_window,-1,0,player,walkable,items,actors,all_items,all_beacons) 
       center(viewport_window,game_window,player.xlines,player.ycols)
     when KEY_DOWN, 115 # Move Down      
-      check_space(game_window,hud_window,1,0,player,walkable,items,actors,all_items)                  
+      check_space(game_window,hud_window,1,0,player,walkable,items,actors,all_items,all_beacons)                  
       center(viewport_window,game_window,player.xlines,player.ycols)   
     when KEY_RIGHT, 100 # Move Right 
-      check_space(game_window,hud_window,0,1,player,walkable,items,actors,all_items)     
+      check_space(game_window,hud_window,0,1,player,walkable,items,actors,all_items,all_beacons)     
       center(viewport_window,game_window,player.xlines,player.ycols)    
     when KEY_LEFT, 97 # Move Left   
-      check_space(game_window,hud_window,0,-1,player,walkable,items,actors,all_items)          
+      check_space(game_window,hud_window,0,-1,player,walkable,items,actors,all_items,all_beacons)          
       center(viewport_window,game_window,player.xlines,player.ycols)     
     when 32 # Spacebar, dont move
       center(viewport_window,game_window,player.xlines,player.ycols)
@@ -333,9 +355,9 @@ if menu_active == 0
       else
         distance_from_player = [(player.xlines - rawr.xlines).abs,(player.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
         if player_visible == 1 and ((distance_from_player[0] < (viewport_window_lines / 5) and distance_from_player[1] < viewport_window_columns / 5)) # if the monster is visible, chase player  
-          mode_hunt2(game_window,hud_window, rawr, player, walkable, items, actors, all_items)           
+          mode_hunt2(game_window,hud_window, rawr, player, walkable, items, actors, all_items,all_beacons)           
         else # If player is not visible, wander around
-          mode_wander2(game_window,hud_window, rawr, player, walkable, items, actors, all_items)       
+          mode_wander2(game_window,hud_window, rawr, player, walkable, items, actors, all_items,all_beacons)       
         end 
       end
     end

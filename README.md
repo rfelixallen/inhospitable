@@ -1,35 +1,27 @@
 Inhospitable
 A simple game of survival in a cold wasteland.
 
-Installation
-1. Clone the game locally to your computer. https://github.com/rfelixallen/inhospitable.git
-2. In Terminal, cd into the directory and run 'bundle install'
-3. Use Ruby version 2.1.5.
-
 TODO
-Features
-* Play test distance between bunkers and starvation
-* Ability to turn off beacons
+Features2 Objectives
+
+
+DONE
 * Add a clock to keep track of time
-* Add temperature that changes during day and night
-* Add z-levels
 * Replace blank trail with quotes and colons for footprints
+* Removed Position entry in HUD
+* Ability to turn off beacons
 * Add snow to cover tracks
-* End of the game (death or win) go back to main menu
-* Explore weapons and armor
-* Explore different windows for inventory, dialogue, logs, etc
-* Put this in a Rails server to work on a website
-* Ability to save and load
-* Add Colors
 
-
-Fixes
-* Fix screen flashes
-* Adjust amount and placement of food/meds in a bunker
-* Fix border on viewp
-* Dead monsters comes back as 'M' until the first move, and then change to 'X'
+New Bug
+* Time will flash current HP
+* Deactivated beacons disappear on reload.
 
 Log
+5/12/16
+- Today I implimented a couple small features. I added a clock to the character class to keep track of how many moves the character has taken, and it loops thru a 24 hour period. I removed the position HUD line because that was for earlier troubleshooting. I replaced the blank trail with footprints when any actor moves. I added the ability to deactivate beacons by walking into them. I also implimented a snow fall that partially covers tracks. I thought this would be too much if the game board was too big, but the board im working with is reasonable in size. The game has a 1% chance to snow each move, and even then it has a 50% chance of covering each footprint tile with snow.
+
+- Things get a little wonky when the game reloads. First, all footprints and trails are set back to default. Second, beacons disappear from the game board once they are set to inactive. The third bug I noticed is that the time will breifly flash HP when moving.
+
 5/11/16
 - I reworked all the items to be generated from a class that inherits from the actor class. Since they now have x and y coordinates, I also added a boolean value for if they had been picked up or not. I added a new array that saved all the items and worked that into my save game structure. I played around and tested the game to see if items would come back or not, and it seems to work as expected.
 
