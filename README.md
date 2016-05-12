@@ -3,15 +3,20 @@ A simple game of survival in a cold wasteland.
 
 TODO
 Features2 Objectives
-* Ability to turn off beacons
+:D
 
 DONE
 * Add a clock to keep track of time
 * Replace blank trail with quotes and colons for footprints
 * Removed Position entry in HUD
+* Ability to turn off beacons
 
 ABANDONED
 * Add snow to cover tracks (I dont want to bog down the game by iterating over the game map.)
+
+New Bug
+* Time will flash current HP
+* Deactivated beacons disappear on reload.
 
 Log
 5/11/16
