@@ -321,9 +321,12 @@ def generate_snow(window)
     for y in 1..(w_y[0] - 1)
       terrain = Ncurses.mvwinch(window, x, y)
       if terrain == 34 || terrain == 32
-        Ncurses.wattron(window,Ncurses.COLOR_PAIR(1))
-        Ncurses.mvwaddstr(window, x, y, "~")   
-        Ncurses.wattroff(window,Ncurses.COLOR_PAIR(1))   
+        flip = rand.round
+        if flip == 0
+          Ncurses.wattron(window,Ncurses.COLOR_PAIR(1))
+          Ncurses.mvwaddstr(window, x, y, "~")   
+          Ncurses.wattroff(window,Ncurses.COLOR_PAIR(1))
+        end  
       end
     end
   end

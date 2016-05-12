@@ -266,7 +266,7 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
     Ncurses.napms(1000)
   end
   if random_number.rand(1..100) == 1
-    generate_snow(game_window)
+    generate_snow(game_window) # what % of snow should be covered?
     message(console_window, "It's snowing...")
   end
   time_increase(player.timeday)
