@@ -310,6 +310,26 @@ def generate_perlin(window,seed)
   Ncurses.wattroff(window,Ncurses.COLOR_PAIR(1))
 end
 
+def generate_snow(window)  
+  w_y = []
+  w_x = []
+  Ncurses.getmaxyx(window,w_x,w_y)
+  
+  x = 1
+  y = 1
+  for x in 1..(w_x[0] - 1)
+    for y in 1..(w_y[0] - 1)
+      terrain = Ncurses.mvwinch(window, x, y)
+      if terrain == 34 || terrain == 32
+        Ncurses.wattron(window,Ncurses.COLOR_PAIR(1))
+        Ncurses.mvwaddstr(window, x, y, "~")   
+        Ncurses.wattroff(window,Ncurses.COLOR_PAIR(1))   
+      end
+    end
+  end
+end
+
+
 def generate_map(window,total_bunkers,all_items,all_beacons,all_bunkers,actors,seed)
   generate_perlin(window,seed)
   bunker_start = 0

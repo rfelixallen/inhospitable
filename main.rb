@@ -208,6 +208,7 @@ else
   #counter = 0 #wander counter for monster
   direction_steps = rand(10..25) # Meander long distances
   player_visible = 1
+  random_number = Random.new(seed)
   scr_clear
 
   # Create game windows, then generate the world
@@ -247,6 +248,7 @@ menu_active = 0
 borders(console_window)                            # Add borders to the console_window
 Ncurses.wrefresh(console_window)                   # Refresh console_window window with message
 hud_on(hud_window,player)
+generate_snow(game_window)
 center(viewport_window,game_window,player.xlines,player.ycols)        # Center map on player
 Ncurses.wrefresh(viewport_window)
 if @new == 1
@@ -262,6 +264,10 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
     Ncurses.mvwaddstr(stdscr, 2, 2, "Returning to game...")
     Ncurses.refresh
     Ncurses.napms(1000)
+  end
+  if random_number.rand(1..100) == 1
+    generate_snow(game_window)
+    message(console_window, "It's snowing...")
   end
   time_increase(player.timeday)
   hud_on(hud_window,player)
