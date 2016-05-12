@@ -225,7 +225,7 @@ def hud_on(hud,player)
   Ncurses.wclear(hud)
   borders(hud)                                
   Ncurses.mvwaddstr(hud, 1, 1, "Inhospitable")
-  Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{player.ycols},#{player.xlines}]") # Remove this in final game. 
+  #Ncurses.mvwaddstr(hud, 2, 1, "Pos: [#{player.ycols},#{player.xlines}]") # Remove this in final game. 
   Ncurses.mvwaddstr(hud, 3, 1, "Time: #{convert_time(player.timeday[0])}:#{convert_time(player.timeday[1])}")
   Ncurses.mvwaddstr(hud, 4, 1, "HP: #{player.hp}")
   Ncurses.mvwaddstr(hud, 5, 1, "Hunger: #{player.hunger}")
