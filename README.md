@@ -3,7 +3,7 @@ A simple game of survival in a cold wasteland.
 
 TODO
 Features2 Objectives
-:D
+* Add snow to cover tracks
 
 DONE
 * Add a clock to keep track of time
@@ -11,14 +11,16 @@ DONE
 * Removed Position entry in HUD
 * Ability to turn off beacons
 
-ABANDONED
-* Add snow to cover tracks (I dont want to bog down the game by iterating over the game map.)
-
 New Bug
 * Time will flash current HP
 * Deactivated beacons disappear on reload.
 
 Log
+5/12/16
+- Today I implimented a couple small features. I added a clock to the character class to keep track of how many moves the character has taken, and it loops thru a 24 hour period. I also removed the position HUD line because that was for earlier troubleshooting. I replaced the blank trail with footprints when any actor moves. I also added the ability to deactivate beacons by walking into them.
+
+- Things get a little wonky when the game reloads. First, all footprints and trails are set back to default. Second, beacons disappear from the game board once they are set to inactive. The third bug I noticed is that the time will breifly flash HP when moving.
+
 5/11/16
 - I reworked all the items to be generated from a class that inherits from the actor class. Since they now have x and y coordinates, I also added a boolean value for if they had been picked up or not. I added a new array that saved all the items and worked that into my save game structure. I played around and tested the game to see if items would come back or not, and it seems to work as expected.
 
