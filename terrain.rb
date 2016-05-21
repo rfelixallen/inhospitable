@@ -47,29 +47,7 @@ def demo_bunker(window, lines, cols, seed)
             " |          | ",
             " |== =======| ",
             "              "]
-  build(window, lines, cols, bunker)
-=begin  
-  med_count = chance.rand(0..1)
-  food_count = chance.rand(2..5)
-  i = 5
-  while i < 8
-    j = 2
-    d = chance.rand(1..3)
-    while j < 8
-      if d == 1 and med_count > 0
-        Ncurses.mvwaddstr(window, lines + i, cols + j, "m")
-        med_count -= 1
-      elsif d == 2 and food_count > 0
-        Ncurses.mvwaddstr(window, lines + i, cols + j, "f")
-        food_count -= 1
-      else
-        Ncurses.mvwaddstr(window, lines + i, cols + j, " ")
-      end
-      j += 1
-    end
-    i += 1
-  end
-=end  
+  build(window, lines, cols, bunker) 
 end
 
 def demo_bunker2(window, lines, cols, all_tiles)
@@ -135,7 +113,6 @@ def make_bunker(window,all_items,all_beacons,all_bunkers,actors,seed)
   if @new == 1
     all_bunkers.each do |x|
       demo_bunker(window,x[0],x[1],seed)
-      #make_beacon(window,all_beacons,x[0],x[1],seed)
     end
   else
     while success != 1
@@ -150,19 +127,8 @@ def make_bunker(window,all_items,all_beacons,all_bunkers,actors,seed)
       end
       if (test_bunker_coordinates & all_bunkers).any?
         success = 0 # Restart Loop
-      else
-=begin        
-        construction = []
-        for i in (bunker_x)..(bunker_x + 11)
-          for j in (bunker_y)..(bunker_y + 11)            
-            coordinates = [i,j]
-            #construction << coordinates
-            all_bunkers << coordinates
-          end
-        end
-=end                
+      else            
         success = 1
-        #all_bunkers << construction
         all_bunkers << [bunker_x,bunker_y]
         demo_bunker(window,bunker_x,bunker_y,seed)   # Adds a building to map. It overlays anything underneath it         
         make_beacon(window,all_beacons,bunker_x,bunker_y,seed)
@@ -199,14 +165,12 @@ def make_beacon(window,all_beacons,bunker_x,bunker_y,seed)
   variable_name = Beacon.new(xlines: bunker_x + 2, ycols: bunker_y + 6, message: message)
   Ncurses.mvwaddstr(window, variable_name.xlines, variable_name.ycols, variable_name.symb)
   all_beacons << variable_name
-  #all_beacons.merge!(variable_name.export_beacon)
 end
 
 def make_monster(monster_x,monster_y,actors)
       monster = cantor_pairing(monster_x,monster_y)
       monster = Character.new(symb: 'M', symbcode: 77, xlines: monster_x, ycols: monster_y, hp: 3)
       actors << monster
-      #actors.merge!(monster.export_character)
 end
 
 def make_item(window,all_items,bunker_x,bunker_y,seed,type)
@@ -223,7 +187,6 @@ def make_item(window,all_items,bunker_x,bunker_y,seed,type)
 end
 
 def draw_map(window)
-  #borders(window)
   w_y = []
   w_x = []
   Ncurses.getmaxyx(window,w_y,w_x)
