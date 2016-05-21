@@ -21,6 +21,36 @@ Ncurses.mvwaddstr(stdscr, 4, 2, "                                               
 Ncurses.refresh
 end
 
+def convert_nc_to_rgb(array)
+	r = array[0]
+	g = array[1]
+	b = array[2]
+	r = r * 0.255
+	g = g * 0.255
+	b = b * 0.255
+	array[0] = r.round
+	array[1] = g.round
+	array[2] = b.round
+end
+
+def convert_rgb_to_nc(array)
+	r = array[0]
+	g = array[1]
+	b = array[2]
+	r = r * 3.921568
+	g = g * 3.921568
+	b = b * 3.921568
+	array[0] = r.round
+	array[1] = g.round
+	array[2] = b.round
+end
+
+def message(c,x,y,message)
+	Ncurses.wattron(stdscr,Ncurses.COLOR_PAIR(c))
+	Ncurses.mvwaddstr(stdscr, x, y, "#{message}")
+	Ncurses.wattroff(stdscr,Ncurses.COLOR_PAIR(c))
+end
+
 Ncurses.initscr             # Start Ncurses
 Ncurses.noecho              # Do not show keyboard input at cursor location
 Ncurses.curs_set(0)         # Disable blinking cursor
@@ -72,8 +102,8 @@ grefresh
 erase
 
 if Ncurses.can_change_color?
-	Ncurses.init_color(240,1000,750,750)
-	Ncurses.init_pair(4, 240, COLOR_WHITE)
+	Ncurses.init_color(6,1000,500,0) # This didnt work for some reason
+	Ncurses.init_pair(4, 6, COLOR_BLACK)
 	Ncurses.wattron(stdscr,Ncurses.COLOR_PAIR(4))
 	Ncurses.mvwaddstr(stdscr, 2, 2, "Terminal is capable of creating custom RGB colors.")
 	Ncurses.mvwaddstr(stdscr, 3, 2, "Press any key to continue.")
@@ -87,7 +117,41 @@ else
 	erase
 end
 
+Ncurses.mvwaddstr(stdscr, 2, 2, "Testing color pairs.")
+Ncurses.mvwaddstr(stdscr, 3, 2, "Press any key to continue.")
+grefresh
+Ncurses.clear
 
+Ncurses.init_pair(1, 1, COLOR_BLACK)
+Ncurses.init_pair(2, 2, COLOR_BLACK)
+Ncurses.init_pair(3, 3, COLOR_BLACK)
+Ncurses.init_pair(4, 4, COLOR_BLACK)
+Ncurses.init_pair(5, 5, COLOR_BLACK)
+Ncurses.init_pair(6, 6, COLOR_BLACK)
+Ncurses.init_pair(7, 7, COLOR_BLACK)
+Ncurses.init_pair(8, 8, COLOR_BLACK)
+Ncurses.init_pair(9, 9, COLOR_BLACK)
+Ncurses.init_pair(10, 10, COLOR_BLACK)
+Ncurses.init_pair(11, 11, COLOR_BLACK)
+Ncurses.init_pair(12, 12, COLOR_BLACK)
+Ncurses.init_pair(13, 13, COLOR_BLACK)
+Ncurses.init_pair(14, 14, COLOR_BLACK)
+Ncurses.init_pair(15, 15, COLOR_BLACK)
+Ncurses.init_pair(16, 16, COLOR_BLACK)
+Ncurses.init_pair(17, 17, COLOR_BLACK)
+Ncurses.init_pair(18, 18, COLOR_BLACK)
+Ncurses.init_pair(19, 19, COLOR_BLACK)
+Ncurses.init_pair(20, 20, COLOR_BLACK)
+
+c = 1
+x = 1
+y = 1
+20.times do
+	message(c,x,y,"Color Pair: #{c}")	
+	x += 1
+	c += 1
+end
+grefresh
 
 Ncurses.endwin
 exit
