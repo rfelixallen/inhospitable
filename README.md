@@ -24,4 +24,10 @@ To deactivate a bunker's radio, walk into the 'A' icon.
 To heal yourself, press the 'm' key.
 To eat food, press the 'f' key.
 
+Current Feature Work
+The theme of this feature work is user interface. I have 3 big features I want to introduce.
+-Add colors
+-Have dynamic screen resize
+-Add dialogue windows
+
 Copyright 2015 Robert Allen
