@@ -1,5 +1,4 @@
-require_relative 'ui'
-require_relative 'actors'
+require_relative 'library'
 require 'perlin_noise'
 
 #index of tile types with character, colorcode
@@ -253,7 +252,7 @@ def generate_perlin(window,seed)
   random_seed = seed
   n3d = Perlin::Noise.new 3, :interval => 100, :seed => random_seed
   contrast = Perlin::Curve.contrast(Perlin::Curve::CUBIC, 3)
-  #Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
+  Ncurses.init_pair(1, COLOR_BLACK, COLOR_RED)
   Ncurses.wattron(window,Ncurses.COLOR_PAIR(1))
   1.step(w_x[0] - 2, 1.0) do |x| # x == whole integer, which will always give .5
     1.step(w_y[0] - 2, 1.0) do |y|

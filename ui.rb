@@ -1,4 +1,4 @@
-require_relative 'terrain'
+require_relative 'library'
 
 def drawmenu(item,menu)
   c = 0  
