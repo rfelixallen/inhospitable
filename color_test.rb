@@ -51,6 +51,22 @@ def message(c,x,y,message)
 	Ncurses.wattroff(stdscr,Ncurses.COLOR_PAIR(c))
 end
 
+def message_bold(c,x,y,message)
+	Ncurses.wattron(stdscr,A_BOLD)
+	Ncurses.wattron(stdscr,Ncurses.COLOR_PAIR(c))
+	Ncurses.mvwaddstr(stdscr, x, y, "#{message}")
+	Ncurses.wattroff(stdscr,Ncurses.COLOR_PAIR(c))
+	Ncurses.wattroff(stdscr,A_BOLD)
+end
+
+def message_bold_blink(c,x,y,message)
+	Ncurses.wattron(stdscr,A_BOLD | A_BLINK)
+	Ncurses.wattron(stdscr,Ncurses.COLOR_PAIR(c))
+	Ncurses.mvwaddstr(stdscr, x, y, "#{message}")
+	Ncurses.wattroff(stdscr,Ncurses.COLOR_PAIR(c))
+	Ncurses.wattroff(stdscr,A_BOLD | A_BLINK)
+end
+
 Ncurses.initscr             # Start Ncurses
 Ncurses.noecho              # Do not show keyboard input at cursor location
 Ncurses.curs_set(0)         # Disable blinking cursor
@@ -117,7 +133,7 @@ else
 	erase
 end
 
-Ncurses.mvwaddstr(stdscr, 2, 2, "Testing color pairs.")
+Ncurses.mvwaddstr(stdscr, 2, 2, "Testing color pairs - normal.")
 Ncurses.mvwaddstr(stdscr, 3, 2, "Press any key to continue.")
 grefresh
 Ncurses.clear
@@ -164,8 +180,40 @@ y = 1
 	c += 1
 end
 grefresh
+Ncurses.clear
 
-# Bold attribute example
+Ncurses.mvwaddstr(stdscr, 2, 2, "Testing color pairs - bold.")
+Ncurses.mvwaddstr(stdscr, 3, 2, "Press any key to continue.")
+grefresh
+Ncurses.clear
+
+c = 0
+x = 0
+y = 1
+30.times do
+	message_bold(c,x,y,"Color Pair: #{c}")	
+	x += 1
+	c += 1
+end
+grefresh
+Ncurses.clear
+
+Ncurses.mvwaddstr(stdscr, 2, 2, "Testing color pairs - bold & blink.")
+Ncurses.mvwaddstr(stdscr, 3, 2, "Press any key to continue.")
+grefresh
+Ncurses.clear
+
+c = 0
+x = 0
+y = 1
+30.times do
+	message_bold_blink(c,x,y,"Color Pair: #{c}")	
+	x += 1
+	c += 1
+end
+grefresh
+Ncurses.clear
+
 # Background color
 # Background color with pattern
 
