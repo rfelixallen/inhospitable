@@ -169,6 +169,7 @@ Ncurses.init_pair(27, 27, COLOR_BLACK)
 Ncurses.init_pair(28, 28, COLOR_BLACK)
 Ncurses.init_pair(29, 29, COLOR_BLACK)
 Ncurses.init_pair(30, 30, COLOR_BLACK)
+Ncurses.init_pair(31, COLOR_WHITE, 10)
 
 
 c = 0
@@ -214,8 +215,33 @@ end
 grefresh
 Ncurses.clear
 
-# Background color
-# Background color with pattern
+Ncurses.mvwaddstr(stdscr, 2, 2, "Background color test")
+Ncurses.mvwaddstr(stdscr, 3, 2, "Press any key to continue.")
+grefresh
+Ncurses.clear
+
+Ncurses.bkgd(Ncurses.COLOR_PAIR(31))
+Ncurses.wattron(stdscr,Ncurses.COLOR_PAIR(31))
+Ncurses.mvwaddstr(stdscr, 2, 2, "Background color")
+Ncurses.wattroff(stdscr,Ncurses.COLOR_PAIR(31))
+Ncurses.refresh
+Ncurses.getch
+
+Ncurses.bkgd(Ncurses.COLOR_PAIR(0))
+Ncurses.mvwaddstr(stdscr, 2, 2, "Test Screen Flash")
+Ncurses.mvwaddstr(stdscr, 3, 2, "Press Escape to exit the flash test")
+Ncurses.mvwaddstr(stdscr, 4, 2, "Press any key to continue.")
+grefresh
+Ncurses.clear
+
+while Ncurses.getch != 27
+	Ncurses.flash
+end
+
+Ncurses.mvwaddstr(stdscr, 2, 2, "Color Test Complete.")
+Ncurses.mvwaddstr(stdscr, 3, 2, "Press any key to continue.")
+grefresh
+Ncurses.clear
 
 
 Ncurses.endwin
