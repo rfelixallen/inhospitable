@@ -215,7 +215,7 @@ end
 grefresh
 Ncurses.clear
 
-Ncurses.mvwaddstr(stdscr, 2, 2, "Background color test")
+Ncurses.mvwaddstr(stdscr, 2, 2, "Background color test.")
 Ncurses.mvwaddstr(stdscr, 3, 2, "Press any key to continue.")
 grefresh
 Ncurses.clear
@@ -229,7 +229,7 @@ Ncurses.getch
 
 Ncurses.bkgd(Ncurses.COLOR_PAIR(0))
 Ncurses.mvwaddstr(stdscr, 2, 2, "Test Screen Flash")
-Ncurses.mvwaddstr(stdscr, 3, 2, "Press Escape to exit the flash test")
+Ncurses.mvwaddstr(stdscr, 3, 2, "Press Escape to exit the flash test.")
 Ncurses.mvwaddstr(stdscr, 4, 2, "Press any key to continue.")
 grefresh
 Ncurses.clear
