@@ -122,6 +122,7 @@ Ncurses.mvwaddstr(stdscr, 3, 2, "Press any key to continue.")
 grefresh
 Ncurses.clear
 
+Ncurses.init_pair(0, 0, COLOR_BLACK)
 Ncurses.init_pair(1, 1, COLOR_BLACK)
 Ncurses.init_pair(2, 2, COLOR_BLACK)
 Ncurses.init_pair(3, 3, COLOR_BLACK)
@@ -142,16 +143,32 @@ Ncurses.init_pair(17, 17, COLOR_BLACK)
 Ncurses.init_pair(18, 18, COLOR_BLACK)
 Ncurses.init_pair(19, 19, COLOR_BLACK)
 Ncurses.init_pair(20, 20, COLOR_BLACK)
+Ncurses.init_pair(21, 21, COLOR_BLACK)
+Ncurses.init_pair(22, 22, COLOR_BLACK)
+Ncurses.init_pair(23, 23, COLOR_BLACK)
+Ncurses.init_pair(24, 24, COLOR_BLACK)
+Ncurses.init_pair(25, 25, COLOR_BLACK)
+Ncurses.init_pair(26, 26, COLOR_BLACK)
+Ncurses.init_pair(27, 27, COLOR_BLACK)
+Ncurses.init_pair(28, 28, COLOR_BLACK)
+Ncurses.init_pair(29, 29, COLOR_BLACK)
+Ncurses.init_pair(30, 30, COLOR_BLACK)
 
-c = 1
-x = 1
+
+c = 0
+x = 0
 y = 1
-20.times do
+30.times do
 	message(c,x,y,"Color Pair: #{c}")	
 	x += 1
 	c += 1
 end
 grefresh
+
+# Bold attribute example
+# Background color
+# Background color with pattern
+
 
 Ncurses.endwin
 exit
