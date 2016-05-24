@@ -18,10 +18,10 @@ class Actor
   end
 
   def draw(window) # Class method for drawing objects to map.
-    #Ncurses.init_pair(1, self.color, 0)
-    #window.attron(Ncurses.COLOR_PAIR(1))
+    Ncurses.init_pair(1, 8, 15)
+    Ncurses.wattron(window,Ncurses.COLOR_PAIR(1))
     Ncurses.mvwaddstr(window, self.xlines, self.ycols, "#{self.symb}")
-    #window.attroff(Ncurses.COLOR_PAIR(1))
+    Ncurses.wattron(window,Ncurses.COLOR_PAIR(1))
     #Ncurses.wrefresh(window)
   end
 
@@ -29,7 +29,10 @@ class Actor
     self.xlines += lines
     self.ycols += cols    
     #Ncurses.mvwaddstr(window, self.xlines + -lines, self.ycols + -cols, " ")
-    Ncurses.mvwaddstr(window, self.xlines + -lines, self.ycols + -cols, "\"")
+    Ncurses.init_pair(1, 8, 15)
+    Ncurses.wattron(window,Ncurses.COLOR_PAIR(1))
+    Ncurses.mvwaddstr(window, self.xlines + -lines, self.ycols + -cols, "\"")    
+    Ncurses.wattroff(window,Ncurses.COLOR_PAIR(1))
     self.draw(window)
   end
 end

@@ -235,7 +235,10 @@ else
 
   # Place all Actors from array
   spiral(game_window,10,player,walkable) # Find legal starting position for player  
+  Ncurses.init_pair(1, 8, 15)
+  Ncurses.wattron(game_window,Ncurses.COLOR_PAIR(1))
   actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
+  Ncurses.wattroff(game_window,Ncurses.COLOR_PAIR(1))
 
   save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers,actors)
   scr_clear
