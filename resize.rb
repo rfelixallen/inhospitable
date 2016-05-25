@@ -36,20 +36,24 @@ Ncurses.keypad(stdscr,true) # Use expanded keyboard characters
 standard_screen_columns = []                # Standard Screen column aka y
 standard_screen_lines = []               # Standard Screen lines aka x
 Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines)
-
-game_window_lines = 200
-game_window_columns = 200
-viewport_window_lines = 25
-viewport_window_columns = 25
-
+game_window_lines = 1000
+game_window_columns = 1000
+viewport_window_lines = standard_screen_lines[0]
+viewport_window_columns = standard_screen_columns[0]
 game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
 viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0)
 
-generate_random(game_window)
-Ncurses.refresh
+#generate_random(game_window)
+Ncurses.mvwaddstr(game_window,1,1,"stdscr cols: #{standard_screen_columns[0]}, stdscr lines: #{standard_screen_lines[0]}")
+Ncurses.wrefresh(game_window)
 
 while Ncurses.getch != 27
-	
+	standard_screen_columns = []                # Standard Screen column aka y
+	standard_screen_lines = []               # Standard Screen lines aka x
+	Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines)
+	Ncurses.mvwaddstr(game_window,1,1,"stdscr cols: #{standard_screen_columns[0]}, stdscr lines: #{standard_screen_lines[0]}")
+	Ncurses.wrefresh(game_window)
+	Ncurses.getch
 end
 
 Ncurses.endwin
