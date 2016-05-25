@@ -113,7 +113,7 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors,all_items,all_b
           update_inventory(hud, step, character, 1)          
           character.move(window, xl, yc)
         end
-      elsif step == 65 && character.symb == "@"
+      elsif (step == 65 || step == 321) && character.symb == "@"
         check_beacons(hud,all_beacons,character,xl,yc)
       else 
         nil

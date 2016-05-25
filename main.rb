@@ -192,9 +192,9 @@ else
   scr_message("Loading Game Variables",3)
   total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space)
   actors = []
-  items = [42,102,109]
+  items = [42,102,109,298,358,365]
   all_items = []
-  walkable = [32,34,88,126,288,382]
+  walkable = [32,34,88,126,288,290,344,382]
   all_beacons = []
   all_bunkers = []
   scr_clear
@@ -226,8 +226,10 @@ else
   Ncurses.getmaxyx(game_window,game_window_max_columns,game_window_max_lines)   # Get Max Y,X of game_window
   player_start_lines = (game_window_max_lines[0] / 4)
   player_start_columns = (game_window_max_columns[0] / 4)
-  player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
+  player = Character.new(symb: '@', symbcode: 320, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
+  #monster = Character.new(symb: '@', symbcode: 333, xlines: player_start_lines + 1, ycols: player_start_columns + 1, hp: 3)
   actors << player
+  #actors << monster
   scr_clear
   
   scr_message("Generating Map",7)
@@ -235,10 +237,7 @@ else
 
   # Place all Actors from array
   spiral(game_window,10,player,walkable) # Find legal starting position for player  
-  Ncurses.init_pair(1, 8, 15)
-  Ncurses.wattron(game_window,Ncurses.COLOR_PAIR(1))
   actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
-  Ncurses.wattroff(game_window,Ncurses.COLOR_PAIR(1))
 
   save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers,actors)
   scr_clear
@@ -290,7 +289,8 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
-      check_space(game_window,hud_window,-1,0,player,walkable,items,actors,all_items,all_beacons) 
+      check_space(game_window,hud_window,-1,0,player,walkable,items,actors,all_items,all_beacons)
+      #message(console_window, "Step: #{Ncurses.mvwinch(game_window, player.xlines - 1, player.ycols + 0)}") 
       center(viewport_window,game_window,player.xlines,player.ycols)
     when KEY_DOWN, 115 # Move Down      
       check_space(game_window,hud_window,1,0,player,walkable,items,actors,all_items,all_beacons)                  
