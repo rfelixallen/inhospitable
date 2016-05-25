@@ -41,9 +41,8 @@ game_window_columns = 1000
 viewport_window_lines = standard_screen_lines[0]
 viewport_window_columns = standard_screen_columns[0]
 game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
-viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0)
+#viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0)
 
-#generate_random(game_window)
 Ncurses.mvwaddstr(game_window,1,1,"stdscr cols: #{standard_screen_columns[0]}, stdscr lines: #{standard_screen_lines[0]}")
 Ncurses.wrefresh(game_window)
 
@@ -54,6 +53,12 @@ while Ncurses.getch != 27
 	Ncurses.mvwaddstr(game_window,1,1,"stdscr cols: #{standard_screen_columns[0]}, stdscr lines: #{standard_screen_lines[0]}")
 	Ncurses.wrefresh(game_window)
 	Ncurses.getch
+end
+
+generate_random(game_window)
+Ncurses.wrefresh(game_window)
+while Ncurses.getch != 27
+	Ncurses.wrefresh(game_window)
 end
 
 Ncurses.endwin
