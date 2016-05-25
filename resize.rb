@@ -41,7 +41,7 @@ game_window_columns = 1000
 viewport_window_lines = standard_screen_lines[0]
 viewport_window_columns = standard_screen_columns[0]
 game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
-#viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0)
+viewport_window = Ncurses.derwin(game_window,standard_screen_lines[0], standard_screen_columns[0], 0, 0)
 
 Ncurses.mvwaddstr(game_window,1,1,"stdscr cols: #{standard_screen_columns[0]}, stdscr lines: #{standard_screen_lines[0]}")
 Ncurses.wrefresh(game_window)
@@ -53,12 +53,50 @@ while Ncurses.getch != 27
 	Ncurses.mvwaddstr(game_window,1,1,"stdscr cols: #{standard_screen_columns[0]}, stdscr lines: #{standard_screen_lines[0]}")
 	Ncurses.wrefresh(game_window)
 	Ncurses.getch
+	Ncurses.wclear(game_window)
 end
 
 generate_random(game_window)
 Ncurses.wrefresh(game_window)
-while Ncurses.getch != 27
+
+
+standard_screen_columns = []                # Standard Screen column aka y
+standard_screen_lines = []               # Standard Screen lines aka x
+Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines)
+parent_col = standard_screen_columns[0]
+parent_lines = standard_screen_lines[0]
+while 1
+	new_col = standard_screen_columns[0]
+	new_lines = standard_screen_lines[0]
+	if (new_col != parent_col || new_lines != parent_lines)
+		parent_lines = new_lines
+		parent_col = new_col
+		Ncurses.wclear(viewport_window)
+		Ncurses.wresize(viewport_window,new_lines,new_col)
+		Ncurses.wrefresh(viewport_window)
+	end
+	Ncurses.mvwaddstr(game_window,1,1,"stdscr cols: #{standard_screen_columns[0]}, stdscr lines: #{standard_screen_lines[0]}")
 	Ncurses.wrefresh(game_window)
 end
+=begin
+while 1
+	new_y = stdscr.maxy
+	new_x = stdscr.maxx
+
+	if (new_y != parent_y || new_x != parent_x)
+		field.clear
+
+		parent_x = new_x
+		parent_y = new_y
+
+		field.resize(new_y, new_x)
+		borders(field)
+		field.setpos(lines / 2, cols  / 2)
+		field.addstr("x = #{parent_x}, y = #{parent_y}")
+		field.refresh
+	end
+	field.refresh
+end
+=end
 
 Ncurses.endwin
