@@ -208,6 +208,10 @@ def center(subwin,parent,p_rows,p_cols)
   Ncurses.wrefresh(subwin)
 end
 
+def resize_window(window)
+
+end
+
 def message(window,message)
   Ncurses.wclear(window)
   borders(window)
