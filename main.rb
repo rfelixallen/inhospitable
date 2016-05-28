@@ -96,9 +96,11 @@ if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
   # Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
   # Screen and window variables
   scr_message("Prepare Window Variables",2)
-  standard_screen_columns = []                # Standard Screen column aka y
-  standard_screen_lines = []               # Standard Screen lines aka x
-  Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
+  #standard_screen_columns = []                # Standard Screen column aka y
+  #standard_screen_lines = []               # Standard Screen lines aka x
+  #Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
+  standard_screen_columns = Ncurses.COLS
+  standard_screen_lines = Ncurses.LINES
   game_window_lines = 200
   game_window_columns = 200
   viewport_window_lines = 25
@@ -174,9 +176,11 @@ else
   # Screen and window variables
   scr_message("Prepare Window Variables",2)
   seed = rand(1..1000000)
-  standard_screen_columns = []                # Standard Screen column aka y
-  standard_screen_lines = []               # Standard Screen lines aka x
-  Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
+  #standard_screen_columns = []                # Standard Screen column aka y
+  #standard_screen_lines = []               # Standard Screen lines aka x
+  #Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
+  standard_screen_columns = Ncurses.COLS
+  standard_screen_lines = Ncurses.LINES
   game_window_lines = 200
   game_window_columns = 200
   viewport_window_lines = 25
@@ -221,11 +225,13 @@ else
 
   # Create Player Actor
   scr_message("Generate Actors",6)
-  game_window_max_lines = []
-  game_window_max_columns = []
-  Ncurses.getmaxyx(game_window,game_window_max_columns,game_window_max_lines)   # Get Max Y,X of game_window
-  player_start_lines = (game_window_max_lines[0] / 4)
-  player_start_columns = (game_window_max_columns[0] / 4)
+  #game_window_max_lines = []
+  #game_window_max_columns = []
+  #Ncurses.getmaxyx(game_window,game_window_max_columns,game_window_max_lines)   # Get Max Y,X of game_window
+  #player_start_lines = (game_window_max_lines[0] / 4)
+  #player_start_columns = (game_window_max_columns[0] / 4)
+  player_start_lines = (game_window_lines / 4)
+  player_start_columns = (game_window_columns / 4)
   player = Character.new(symb: '@', symbcode: 320, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
   #monster = Character.new(symb: '@', symbcode: 333, xlines: player_start_lines + 1, ycols: player_start_columns + 1, hp: 3)
   actors << player
@@ -382,9 +388,9 @@ if player.hp == 0 || player.hunger == 0 || player.inventory["Token"] == 2
   # Starved or died
   if player.hp == 0 || player.hunger == 0
     Ncurses.clear
-    Ncurses.mvwaddstr(stdscr, standard_screen_columns[0] / 2, standard_screen_lines[0] / 2, "You have died in the cold wastes.")
-    Ncurses.mvwaddstr(stdscr, (standard_screen_columns[0] / 2) + 1, standard_screen_lines[0] / 2, "Abiit nemine salutato.")
-    Ncurses.mvwaddstr(stdscr, (standard_screen_columns[0] / 2) + 2, standard_screen_lines[0] / 2, "Press any key to quit") 
+    Ncurses.mvwaddstr(stdscr, Ncurses.COLS / 2, Ncurses.LINES / 2, "You have died in the cold wastes.")
+    Ncurses.mvwaddstr(stdscr, (Ncurses.COLS / 2) + 1, Ncurses.LINES / 2, "Abiit nemine salutato.")
+    Ncurses.mvwaddstr(stdscr, (Ncurses.COLS / 2) + 2, Ncurses.LINES / 2, "Press any key to quit") 
     Ncurses.wrefresh(stdscr)
     Ncurses.napms(1000)
     input = Ncurses.getch
@@ -395,9 +401,9 @@ if player.hp == 0 || player.hunger == 0 || player.inventory["Token"] == 2
   # Collected all the tokens
   if player.inventory["Token"] == total_bunkers # Change this to reflect total tokens
     Ncurses.clear
-    Ncurses.mvwaddstr(stdscr, standard_screen_columns[0] / 2, standard_screen_lines[0] / 2, "You collected all the tokens.")
-    Ncurses.mvwaddstr(stdscr, (standard_screen_columns[0] / 2) + 1, standard_screen_lines[0] / 2, "You have been rescued!") 
-    Ncurses.mvwaddstr(stdscr, (standard_screen_columns[0] / 2) + 2, standard_screen_lines[0] / 2, "Press 'q' to quit") 
+    Ncurses.mvwaddstr(stdscr, Ncurses.COLS / 2, Ncurses.LINES / 2, "You collected all the tokens.")
+    Ncurses.mvwaddstr(stdscr, (Ncurses.COLS / 2) + 1, Ncurses.LINES / 2, "You have been rescued!") 
+    Ncurses.mvwaddstr(stdscr, (Ncurses.COLS / 2) + 2, Ncurses.LINES / 2, "Press 'q' to quit") 
     Ncurses.wrefresh(stdscr)
     Ncurses.napms(1000)
     input = Ncurses.getch
@@ -408,7 +414,7 @@ if player.hp == 0 || player.hunger == 0 || player.inventory["Token"] == 2
 end
 
 Ncurses.clear
-Ncurses.mvwaddstr(stdscr, standard_screen_columns[0] / 2, standard_screen_lines[0] / 2, "Good Bye!")
+Ncurses.mvwaddstr(stdscr, Ncurses.COLS / 2, Ncurses.LINES / 2, "Good Bye!")
 Ncurses.wrefresh(stdscr)
 Ncurses.napms(1000)
 Ncurses.endwin
