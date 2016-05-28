@@ -183,8 +183,8 @@ else
   standard_screen_lines = Ncurses.LINES
   game_window_lines = 200
   game_window_columns = 200
-  viewport_window_lines = 25
-  viewport_window_columns = 25
+  viewport_window_lines = Ncurses.LINES
+  viewport_window_columns = Ncurses.COLS
   hud_window_lines = viewport_window_lines
   hud_window_columns = 15
   console_window_lines = 3
@@ -262,124 +262,134 @@ Ncurses.wrefresh(viewport_window)
 if @new == 1
   message(console_window,"Snowfall covers your tracks")
 end
+key = nil
 #################################################################################
 # Game Loop                                                                     #
 #################################################################################
-while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
-  if menu_active == 1
-    main_menu(@game_initialized, game_window)
-    menu_active = 0
-    Ncurses.mvwaddstr(stdscr, 2, 2, "Returning to game...")
-    Ncurses.refresh
-    Ncurses.napms(1000)
-  end
-  if random_number.rand(1..100) == 1
-    generate_snow(game_window) # what % of snow should be covered?
-    message(console_window, "It's snowing...")
-  end
-  time_increase(player.timeday)
-  hud_on(hud_window,player)
-  borders(console_window) 
-  Ncurses.wrefresh(hud_window)
-  Ncurses.wrefresh(console_window)
-  Ncurses.wrefresh(viewport_window) # Fixed Monster location
-  #temp_hash = {"seed" => "#{seed}"}
-  #File.open("game.json", "w") do |f|
-  #  f.puts temp_hash.to_json
-  #end
+while 1
+  if key == Ncurses::KEY_RESIZE
+    Ncurses.wclear(viewport_window)
+    borders(viewport_window)
+    Ncurses.mvwaddstr(viewport_window, Ncurses.LINES / 2, Ncurses.COLS / 2,"Cols: #{Ncurses.COLS}, Lines: #{Ncurses.LINES}")
+    Ncurses.wrefresh(viewport_window)
+  end 
+  Ncurses.wrefresh(game_window)
+  while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
+    if menu_active == 1
+      main_menu(@game_initialized, game_window)
+      menu_active = 0
+      Ncurses.mvwaddstr(stdscr, 2, 2, "Returning to game...")
+      Ncurses.refresh
+      Ncurses.napms(1000)
+    end
+    if random_number.rand(1..100) == 1
+      generate_snow(game_window) # what % of snow should be covered?
+      message(console_window, "It's snowing...")
+    end
+    time_increase(player.timeday)
+    hud_on(hud_window,player)
+    borders(console_window) 
+    Ncurses.wrefresh(hud_window)
+    Ncurses.wrefresh(console_window)
+    Ncurses.wrefresh(viewport_window) # Fixed Monster location
+    #temp_hash = {"seed" => "#{seed}"}
+    #File.open("game.json", "w") do |f|
+    #  f.puts temp_hash.to_json
+    #end
 
-  #inhospitableLog = File.open("inhospitableLog.txt", "w")
-  #actors.each { |a| inhospitableLog.puts "#{a}.to_yaml" }
-  #inhospitableLog.close
-  
-  input = Ncurses.getch
-  case input
-    when KEY_UP, 119 # Move Up
-      check_space(game_window,hud_window,-1,0,player,walkable,items,actors,all_items,all_beacons)
-      #message(console_window, "Step: #{Ncurses.mvwinch(game_window, player.xlines - 1, player.ycols + 0)}") 
-      center(viewport_window,game_window,player.xlines,player.ycols)
-    when KEY_DOWN, 115 # Move Down      
-      check_space(game_window,hud_window,1,0,player,walkable,items,actors,all_items,all_beacons)                  
-      center(viewport_window,game_window,player.xlines,player.ycols)   
-    when KEY_RIGHT, 100 # Move Right 
-      check_space(game_window,hud_window,0,1,player,walkable,items,actors,all_items,all_beacons)     
-      center(viewport_window,game_window,player.xlines,player.ycols)    
-    when KEY_LEFT, 97 # Move Left   
-      check_space(game_window,hud_window,0,-1,player,walkable,items,actors,all_items,all_beacons)          
-      center(viewport_window,game_window,player.xlines,player.ycols)     
-    when 32 # Spacebar, dont move
-      center(viewport_window,game_window,player.xlines,player.ycols)
-    when 104 # h
-      if player_visible == 1
-        player_visible = 0
-      elsif player_visible == 0
-        player_visible = 1
-      end    
-    when 114 # r      
-      the_beacon = get_distance_all_beacons(player,all_beacons)
-      if get_distance(player,the_beacon) < 101
-        message(console_window,"Radio: #{static(the_beacon, transmission(game_window,the_beacon,player))}")
+    #inhospitableLog = File.open("inhospitableLog.txt", "w")
+    #actors.each { |a| inhospitableLog.puts "#{a}.to_yaml" }
+    #inhospitableLog.close
+    
+    input = Ncurses.getch
+    case input
+      when KEY_UP, 119 # Move Up
+        check_space(game_window,hud_window,-1,0,player,walkable,items,actors,all_items,all_beacons)
+        #message(console_window, "Step: #{Ncurses.mvwinch(game_window, player.xlines - 1, player.ycols + 0)}") 
+        center(viewport_window,game_window,player.xlines,player.ycols)
+      when KEY_DOWN, 115 # Move Down      
+        check_space(game_window,hud_window,1,0,player,walkable,items,actors,all_items,all_beacons)                  
+        center(viewport_window,game_window,player.xlines,player.ycols)   
+      when KEY_RIGHT, 100 # Move Right 
+        check_space(game_window,hud_window,0,1,player,walkable,items,actors,all_items,all_beacons)     
+        center(viewport_window,game_window,player.xlines,player.ycols)    
+      when KEY_LEFT, 97 # Move Left   
+        check_space(game_window,hud_window,0,-1,player,walkable,items,actors,all_items,all_beacons)          
+        center(viewport_window,game_window,player.xlines,player.ycols)     
+      when 32 # Spacebar, dont move
+        center(viewport_window,game_window,player.xlines,player.ycols)
+      when 104 # h
+        if player_visible == 1
+          player_visible = 0
+        elsif player_visible == 0
+          player_visible = 1
+        end    
+      when 114 # r      
+        the_beacon = get_distance_all_beacons(player,all_beacons)
+        if get_distance(player,the_beacon) < 101
+          message(console_window,"Radio: #{static(the_beacon, transmission(game_window,the_beacon,player))}")
+        else
+          message(console_window,"..zz..zZ..Zzz..")
+        end
+      when 102 # f
+        food = player.inventory["Food"]
+        if food > 0
+          update_inventory(hud_window, 102, player, -1)
+          player.hunger += 1
+          Ncurses.mvwaddstr(hud_window, 4, 1, "Hunger: #{player.hunger}")
+          Ncurses.wrefresh(hud_window)
+        else
+          message(console_window, "You have no food to eat.")
+        end
+      when 109 # m
+        medkit = player.inventory["Medkit"]
+        if medkit > 0
+          player.hp += 1
+          update_inventory(hud_window, 109, player, -1)        
+          Ncurses.mvwaddstr(hud_window, 3, 1, "HP: #{player.hp}")
+          Ncurses.wrefresh(hud_window)
+        else
+          message(console_window, "You have no medkits.")
+        end
+      when 27 # ESC - Main Menu 
+        menu_active = 1
+      when 101 # e - Save Game
+        save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers,actors)
+        message(console_window, "Game saved!")
+      when KEY_F2, 113, 81 # Quit Game with F2, q or Q
+        break
       else
-        message(console_window,"..zz..zZ..Zzz..")
+        Ncurses.flash           # Flash screen if undefined input selected
+        message(console_window,"Move not valid")  # Display ascii decimal number of selected input
+        Ncurses.wrefresh(console_window) 
       end
-    when 102 # f
-      food = player.inventory["Food"]
-      if food > 0
-        update_inventory(hud_window, 102, player, -1)
-        player.hunger += 1
+
+    if menu_active == 0
+      # Monsters Move
+      actors.except(player).each do |rawr|  
+        if rawr.hp <= 0
+          Ncurses.mvwaddstr(game_window, rawr.xlines, rawr.ycols, "X") # Turn into dead body
+          Ncurses.wrefresh(viewport_window)
+        else
+          distance_from_player = [(player.xlines - rawr.xlines).abs,(player.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
+          if player_visible == 1 and ((distance_from_player[0] < (viewport_window_lines / 5) and distance_from_player[1] < viewport_window_columns / 5)) # if the monster is visible, chase player  
+            mode_hunt2(game_window,hud_window, rawr, player, walkable, items, actors, all_items,all_beacons)           
+          else # If player is not visible, wander around
+            mode_wander2(game_window,hud_window, rawr, player, walkable, items, actors, all_items,all_beacons)       
+          end 
+        end
+      end
+
+      # Starvation
+      if hunger_count <= 100
+        hunger_count += 1
+      else
+        player.hunger -= 1
+        hunger_count = 0
+        message(console_window,"Your stomach growls")
         Ncurses.mvwaddstr(hud_window, 4, 1, "Hunger: #{player.hunger}")
         Ncurses.wrefresh(hud_window)
-      else
-        message(console_window, "You have no food to eat.")
       end
-    when 109 # m
-      medkit = player.inventory["Medkit"]
-      if medkit > 0
-        player.hp += 1
-        update_inventory(hud_window, 109, player, -1)        
-        Ncurses.mvwaddstr(hud_window, 3, 1, "HP: #{player.hp}")
-        Ncurses.wrefresh(hud_window)
-      else
-        message(console_window, "You have no medkits.")
-      end
-    when 27 # ESC - Main Menu 
-      menu_active = 1
-    when 101 # e - Save Game
-      save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers,actors)
-      message(console_window, "Game saved!")
-    when KEY_F2, 113, 81 # Quit Game with F2, q or Q
-      break
-    else
-      Ncurses.flash           # Flash screen if undefined input selected
-      message(console_window,"Move not valid")  # Display ascii decimal number of selected input
-      Ncurses.wrefresh(console_window) 
-    end
-
-if menu_active == 0
-    # Monsters Move
-    actors.except(player).each do |rawr|  
-      if rawr.hp <= 0
-        Ncurses.mvwaddstr(game_window, rawr.xlines, rawr.ycols, "X") # Turn into dead body
-        Ncurses.wrefresh(viewport_window)
-      else
-        distance_from_player = [(player.xlines - rawr.xlines).abs,(player.ycols - rawr.ycols).abs] # Get positive value of distance between monster and player
-        if player_visible == 1 and ((distance_from_player[0] < (viewport_window_lines / 5) and distance_from_player[1] < viewport_window_columns / 5)) # if the monster is visible, chase player  
-          mode_hunt2(game_window,hud_window, rawr, player, walkable, items, actors, all_items,all_beacons)           
-        else # If player is not visible, wander around
-          mode_wander2(game_window,hud_window, rawr, player, walkable, items, actors, all_items,all_beacons)       
-        end 
-      end
-    end
-
-    # Starvation
-    if hunger_count <= 100
-      hunger_count += 1
-    else
-      player.hunger -= 1
-      hunger_count = 0
-      message(console_window,"Your stomach growls")
-      Ncurses.mvwaddstr(hud_window, 4, 1, "Hunger: #{player.hunger}")
-      Ncurses.wrefresh(hud_window)
     end
   end
 end
