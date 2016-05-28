@@ -28,11 +28,11 @@ Current Feature Work
 The theme of this feature work is user interface. I have 3 big features I want to introduce.
 
 TODO
--Add dialogue windows
 
 DONE
 -Add colors
 -Have dynamic screen resize (Incomplete)
+-Add dialogue windows (Incomplete)
 
 NOTES
 May 28 2016
