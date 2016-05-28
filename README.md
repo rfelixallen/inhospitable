@@ -26,8 +26,18 @@ To eat food, press the 'f' key.
 
 Current Feature Work
 The theme of this feature work is user interface. I have 3 big features I want to introduce.
--Add colors
+
+TODO
 -Have dynamic screen resize
 -Add dialogue windows
+
+DONE
+-Add colors
+
+NOTES
+May 28 2016
+-I finished work with colors, and they added some headaches. When you write characters with a color pair init, it changes the ascii number value of the characters. This is a little inconvenient based on how my game works. I have arrays that store the ascii character code for all walkable tiles, monsters and items. If I change the color, then it changes the ascii code of all that, and the arrays need to be updated with the new code. Moving forward, I just wouldnt use color in a game with how I currently have it working. However, a smarter way might be to print the map a different way, and give everything tags, and have the game logic function off of tags.
+
+-Im almost done with my resizing window work. I wrote a functional window resizer last year, but it was with the curses library. I found a script online that does what I want it to do in Ncurses, and got it working in 2resize.rb. I put the number first to make it quicker to call on the command line. Now all I need to do is convert the logic of that script for my viewport window.
 
 Copyright 2015 Robert Allen
