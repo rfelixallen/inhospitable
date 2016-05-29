@@ -56,13 +56,6 @@ def scr_message(message,bars)
 end
 
 =begin
-def scr_clear
-  Ncurses.mvwaddstr(stdscr, 3, 3, "                           ")
-  Ncurses.refresh
-end
-=end
-
-=begin
 inhospitableLog = File.open("inhospitableLog.txt", "w")
 inhospitableLog.puts "#{Time.now} - Game Launched"
 inhospitableLog.close
@@ -71,7 +64,9 @@ inhospitableLog.close
 #################################################################################
 # Initialize                                                                    #
 #################################################################################
-@new = 0
+
+inhospitable = Videogame.new
+
 Ncurses.initscr             # Start Ncurses
 Ncurses.noecho              # Do not show keyboard input at cursor location
 Ncurses.start_color
@@ -80,23 +75,16 @@ Ncurses.cbreak              # Only accept a single character of input
 Ncurses.stdscr              # Initialize Standard Screen, which uses dimensions of current Terminal window. Invoke with stdscr
 Ncurses.keypad(stdscr,true) # Use expanded keyboard characters
 Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
-
-@game_initialized = 0
-main_menu(@game_initialized, stdscr)
+main_menu(inhospitable.stateActive, stdscr)
 
 scr_message("Please wait...",0)
-=begin
-Ncurses.mvwaddstr(stdscr, 2, 2, "Initializing Game")
-Ncurses.mvwaddstr(stdscr, 3, 3, "Please wait...")
-Ncurses.mvwaddstr(stdscr, 4, 4, "[       ]")
-Ncurses.refresh
-=end
 
-if @new == 1 # Set to 1 when loading variables, located in ui.rb on line 44
+if inhospitable.stateActive == true # Set to 1 when loading variables, located in ui.rb on line 44
   # Load JSON File
   scr_message("Loading Saved Data",1)
   json = File.read('save.json')
   everything = JSON.parse(json)
+  Ncurses.getch
   
 
   # Instantiate Windows
@@ -255,7 +243,7 @@ else
 end
 
 menu_active = 0
-@game_initialized = 1
+
 
 # Set up hud_window and console_window
 borders(console_window)                            # Add borders to the console_window
@@ -264,15 +252,16 @@ hud_on(hud_window,player)
 generate_snow(game_window)
 center(viewport_window,game_window,player.xlines,player.ycols)        # Center map on player
 Ncurses.wrefresh(viewport_window)
-if @new == 1
+if inhospitable.stateActive == 1
   message(console_window,"Snowfall covers your tracks")
 end
+inhospitable.stateActive = 1
 #################################################################################
 # Game Loop                                                                     #
 #################################################################################
-while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
+while inhospitable.stateActive == 1 && player.hp > 0 && player.hunger > 0 && player.inventory["Token"] < total_bunkers  # While Player hit points and hunger are above 0, and tokens are less than total, keep playing
   if menu_active == 1
-    main_menu(@game_initialized, game_window)
+    main_menu(inhospitable.stateActive, game_window)
     menu_active = 0
     Ncurses.mvwaddstr(stdscr, 2, 2, "Returning to game...")
     Ncurses.refresh

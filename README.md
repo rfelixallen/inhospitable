@@ -24,6 +24,10 @@ To deactivate a bunker's radio, walk into the 'A' icon.
 To heal yourself, press the 'm' key.
 To eat food, press the 'f' key.
 
+TODO
+- Refactor Actors, Walkable, Items, Beacons into class variables
+- Consolidate extra methods into a videogame object
+- Fix bunker generation bug. Found a bunker that generated off the map
 
 
 Copyright 2015 Robert Allen

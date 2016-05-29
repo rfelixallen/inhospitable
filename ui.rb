@@ -26,7 +26,7 @@ def main_menu(state,screen)
   menuitem = 0
   #menu = ["PLAY GAME", "INSTRUCTIONS", "SAVE GAME", "CONTINUE", "QUIT"]
   
-  if @game_initialized == 0
+  if state == false
     menu = ["CONTINUE", "NEW GAME", "INSTRUCTIONS", "QUIT"]
   else 
     menu = ["CONTINUE", "INSTRUCTIONS", "QUIT"]
@@ -34,7 +34,7 @@ def main_menu(state,screen)
   drawmenu(menuitem,menu)
   key = 0
   m = menu.length - 1
-  if @game_initialized == 0
+  if state == false
     while key != 113
       drawmenu(menuitem,menu)
       key = Ncurses.getch
@@ -47,11 +47,13 @@ def main_menu(state,screen)
         if (menuitem < 0) then menuitem = m end
       when KEY_ENTER,012,013,015 # Had a problem with calling enter. One of these did it.
         if menuitem == 0 && File.exist?("save.json") # First Spot: CONTINUE GAME
-          @new = 1
+          state = true
           key = 113
+          return state
         elsif menuitem == 1 # Second Spot: New Game
-          @new == 0
+          state = false
           key = 113
+          return state
         elsif menuitem == 2 # Third Spot: Instructions
           menu_instructions 
         elsif menuitem == 3 # Fourth Spot: Quit Game
