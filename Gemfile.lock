@@ -1,10 +1,19 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    json (1.8.3)
     ncurses-ruby (1.2.4)
+    oj (2.15.0)
+    perlin_noise (0.1.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  json
   ncurses-ruby
+  oj
+  perlin_noise
+
+BUNDLED WITH
+   1.11.2

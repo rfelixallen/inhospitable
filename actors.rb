@@ -1,4 +1,4 @@
-require_relative 'ui'
+require_relative 'library'
 
 class Array
    def except(value)
@@ -18,10 +18,10 @@ class Actor
   end
 
   def draw(window) # Class method for drawing objects to map.
-    #Ncurses.init_pair(1, self.color, 0)
-    #window.attron(Ncurses.COLOR_PAIR(1))
+    Ncurses.init_pair(1, 8, 15)
+    Ncurses.wattron(window,Ncurses.COLOR_PAIR(1))
     Ncurses.mvwaddstr(window, self.xlines, self.ycols, "#{self.symb}")
-    #window.attroff(Ncurses.COLOR_PAIR(1))
+    Ncurses.wattron(window,Ncurses.COLOR_PAIR(1))
     #Ncurses.wrefresh(window)
   end
 
@@ -29,7 +29,10 @@ class Actor
     self.xlines += lines
     self.ycols += cols    
     #Ncurses.mvwaddstr(window, self.xlines + -lines, self.ycols + -cols, " ")
-    Ncurses.mvwaddstr(window, self.xlines + -lines, self.ycols + -cols, "\"")
+    Ncurses.init_pair(1, 8, 15)
+    Ncurses.wattron(window,Ncurses.COLOR_PAIR(1))
+    Ncurses.mvwaddstr(window, self.xlines + -lines, self.ycols + -cols, "\"")    
+    Ncurses.wattroff(window,Ncurses.COLOR_PAIR(1))
     self.draw(window)
   end
 end
@@ -110,7 +113,7 @@ def check_space(window,hud,xl,yc,character,walkable,items,actors,all_items,all_b
           update_inventory(hud, step, character, 1)          
           character.move(window, xl, yc)
         end
-      elsif step == 65 && character.symb == "@"
+      elsif (step == 65 || step == 321) && character.symb == "@"
         check_beacons(hud,all_beacons,character,xl,yc)
       else 
         nil

@@ -24,4 +24,23 @@ To deactivate a bunker's radio, walk into the 'A' icon.
 To heal yourself, press the 'm' key.
 To eat food, press the 'f' key.
 
+Current Feature Work
+The theme of this feature work is user interface. I have 3 big features I want to introduce.
+
+TODO
+-Add colors (DONE)
+-Have dynamic screen resize (Incomplete)
+-Add dialogue windows (Incomplete)
+
+NOTES
+May 28 2016
+- I finished work with colors, and they added some headaches. When you write characters with a color pair init, it changes the ascii number value of the characters. This is a little inconvenient based on how my game works. I have arrays that store the ascii character code for all walkable tiles, monsters and items. If I change the color, then it changes the ascii code of all that, and the arrays need to be updated with the new code. Moving forward, I just wouldnt use color in a game with how I currently have it working. However, a smarter way might be to print the map a different way, and give everything tags, and have the game logic function off of tags.
+
+- Im almost done with my resizing window work. I wrote a functional window resizer last year, but it was with the curses library. I found a script online that does what I want it to do in Ncurses, and got it working in 2resize.rb. I put the number first to make it quicker to call on the command line. Now all I need to do is convert the logic of that script for my viewport window.
+
+- I got window resizing to work with ruby Ncurses, but I dont know if it will work as intended. Window resizing works for both newwin, subwin and derwin, but on anything but newwin, it will leave artifacts that cant be easily cleared. I cant clear the game map and redraw it every time the terminal moves, because then I would need to redraw all the actors. Unfortunately, my Center method only works with derwin. I'm not sure how other games do it, so I may just stick with fixed widths for now.
+
+- I think this feature set is a wash. I learned a thing or two about colors, but I dont think they really add anything. Id only really want to utilize them if I developed a way that would ignore the changes to the ascii characters. Dynamic screen resizing didnt work so well because of the problems with resizing derwin and artifacts. I also decided I dont care too much about dialogue windows, because I dont currently have anything else that can use them. If I had NPCs or notes or something, maybe. But the game stands on its own as it is.
+
+
 Copyright 2015 Robert Allen

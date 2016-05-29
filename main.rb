@@ -192,9 +192,9 @@ else
   scr_message("Loading Game Variables",3)
   total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space)
   actors = []
-  items = [42,102,109]
+  items = [42,102,109,298,358,365]
   all_items = []
-  walkable = [32,34,88,126,288,382]
+  walkable = [32,34,88,126,288,290,344,382]
   all_beacons = []
   all_bunkers = []
   scr_clear
@@ -226,8 +226,10 @@ else
   Ncurses.getmaxyx(game_window,game_window_max_columns,game_window_max_lines)   # Get Max Y,X of game_window
   player_start_lines = (game_window_max_lines[0] / 4)
   player_start_columns = (game_window_max_columns[0] / 4)
-  player = Character.new(symb: '@', symbcode: 64, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
+  player = Character.new(symb: '@', symbcode: 320, xlines: player_start_lines, ycols: player_start_columns, hp: 9, color: 2)
+  #monster = Character.new(symb: '@', symbcode: 333, xlines: player_start_lines + 1, ycols: player_start_columns + 1, hp: 3)
   actors << player
+  #actors << monster
   scr_clear
   
   scr_message("Generating Map",7)
@@ -264,7 +266,7 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
     Ncurses.mvwaddstr(stdscr, 2, 2, "Returning to game...")
     Ncurses.refresh
     Ncurses.napms(1000)
-  end
+  end  
   if random_number.rand(1..100) == 1
     generate_snow(game_window) # what % of snow should be covered?
     message(console_window, "It's snowing...")
@@ -287,7 +289,8 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
-      check_space(game_window,hud_window,-1,0,player,walkable,items,actors,all_items,all_beacons) 
+      check_space(game_window,hud_window,-1,0,player,walkable,items,actors,all_items,all_beacons)
+      #message(console_window, "Step: #{Ncurses.mvwinch(game_window, player.xlines - 1, player.ycols + 0)}") 
       center(viewport_window,game_window,player.xlines,player.ycols)
     when KEY_DOWN, 115 # Move Down      
       check_space(game_window,hud_window,1,0,player,walkable,items,actors,all_items,all_beacons)                  
