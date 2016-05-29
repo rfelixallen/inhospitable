@@ -4,7 +4,7 @@ require 'oj'
 require 'json'
 include Ncurses                                                                
 
-def save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers,actors)
+def save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers)
   all_the_data = {}
   seed_json = {"seed" => seed}
   total_bunkers_json = {"total_bunkers" => total_bunkers}
@@ -13,7 +13,8 @@ def save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunke
   all_items_json = {"all_items" => all_items}
   all_beacons_json = {"beacons" => all_beacons}
   bunkers_json = {"bunkers" => all_bunkers}
-  actors_json = {"actors" => actors}
+  #actors_json = {"actors" => actors}
+  actors_json = {"actors" => Character.all_instances}
 
   all_the_data.merge!(seed_json)
   all_the_data.merge!(total_bunkers_json)
@@ -234,12 +235,14 @@ else
   
   scr_message("Generating Map",7)
   generate_map(game_window,total_bunkers,all_items,all_beacons,all_bunkers,actors,seed)
+  #generate_map(game_window,total_bunkers,all_items,all_beacons,all_bunkers,Characters.all_instances,seed)
 
   # Place all Actors from array
   spiral(game_window,10,player,walkable) # Find legal starting position for player  
-  actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
+  #actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
+  Character.all_instances.each { |actor| actor.draw(game_window)}  # Add all actors to the map
 
-  save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers,actors)
+  save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers)
   scr_clear
 end
 
@@ -339,7 +342,7 @@ while @game_initialized == 1 && player.hp > 0 && player.hunger > 0 && player.inv
     when 27 # ESC - Main Menu 
       menu_active = 1
     when 101 # e - Save Game
-      save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers,actors)
+      save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers)
       message(console_window, "Game saved!")
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
