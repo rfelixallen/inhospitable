@@ -1,6 +1,7 @@
 Inhospitable
 A simple game of survival in a cold wasteland.
 
+
 Installation
 OSX and Linux Instructions
 Windows is not currently supported
