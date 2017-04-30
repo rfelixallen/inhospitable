@@ -3,7 +3,7 @@ require 'ncurses'
 require 'oj'
 require 'json'
 include Ncurses                                                                
-
+=begin
 def save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers)
   all_the_data = {}
   seed_json = {"seed" => seed}
@@ -54,7 +54,7 @@ def scr_message(message,bars)
   Ncurses.napms(0500)
   Ncurses.clear
 end
-
+=end
 =begin
 inhospitableLog = File.open("inhospitableLog.txt", "w")
 inhospitableLog.puts "#{Time.now} - Game Launched"
@@ -77,11 +77,11 @@ Ncurses.keypad(stdscr,true) # Use expanded keyboard characters
 Ncurses.init_pair(1, COLOR_BLACK, COLOR_WHITE)
 main_menu(inhospitable.stateActive, stdscr)
 
-scr_message("Please wait...",0)
+inhospitable.scr_message("Please wait...",0)
 
 if inhospitable.stateActive == true # Set to 1 when loading variables, located in ui.rb on line 44
   # Load JSON File
-  scr_message("Loading Saved Data",1)
+  inhospitable.scr_message("Loading Saved Data",1)
   json = File.read('save.json')
   everything = JSON.parse(json)
   Ncurses.getch
@@ -91,7 +91,7 @@ if inhospitable.stateActive == true # Set to 1 when loading variables, located i
   # For each window, define lines,cols variables and work with those instead of direct numbers
   # Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
   # Screen and window variables
-  scr_message("Prepare Window Variables",2)
+  inhospitable.scr_message("Prepare Window Variables",2)
   standard_screen_columns = []                # Standard Screen column aka y
   standard_screen_lines = []               # Standard Screen lines aka x
   Ncurses.getmaxyx(stdscr,standard_screen_columns,standard_screen_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
@@ -107,7 +107,7 @@ if inhospitable.stateActive == true # Set to 1 when loading variables, located i
   
 
   # Load JSON Data
-  scr_message("Loading Game Variables",3)
+  inhospitable.scr_message("Loading Game Variables",3)
   total_bunkers = everything["total_bunkers"].to_i
   seed = everything["seed"].to_i
   actors_from_json = everything["actors"]
@@ -120,7 +120,7 @@ if inhospitable.stateActive == true # Set to 1 when loading variables, located i
   
 
   # Game Loop Variables
-  scr_message("Setting Loop Variables",4)
+  inhospitable.scr_message("Setting Loop Variables",4)
   direction_steps = 0
   counter = 0   
   dice_roll = false
@@ -131,18 +131,18 @@ if inhospitable.stateActive == true # Set to 1 when loading variables, located i
   
 
   # Create game windows, then generate the world
-  scr_message("Creating Game Windows",5)
+  inhospitable.scr_message("Creating Game Windows",5)
   game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
   viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
   console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
   hud_window = Ncurses.newwin(hud_window_lines, hud_window_columns, 0, viewport_window_lines) 
   
 
-  scr_message("Generating Map",6)
+  inhospitable.scr_message("Generating Map",6)
   generate_map(game_window,total_bunkers,all_items,all_beacons,all_bunkers,actors,seed)
   
 
-  scr_message("Generating Actors",7)
+  inhospitable.scr_message("Generating Actors",7)
   player = Character.new(symb: everything["actors"][0]["symb"],symbcode: everything["actors"][0]["symbcode"],color: everything["actors"][0]["color"],xlines: everything["actors"][0]["xlines"],ycols: everything["actors"][0]["ycols"],blocked: everything["actors"][0]["blocked"],hp: everything["actors"][0]["hp"],hunger: everything["actors"][0]["hunger"],inventory: everything["actors"][0]["inventory"],timeday: everything["actors"][0]["timeday"])
   actors << player
   player.draw(game_window)
@@ -168,8 +168,8 @@ else
   # For each window, define lines,cols variables and work with those instead of direct numbers
   # Demo game uses 4 windows: game_window (aka game map), Viewport (aka what the player sees), console_window and side hud_window.
   # Screen and window variables
-  scr_message("Please wait...",1)
-  scr_message("Prepare Window Variables",2)
+  inhospitable.scr_message("Please wait...",1)
+  inhospitable.scr_message("Prepare Window Variables",2)
   seed = rand(1..1000000)
   standard_screen_columns = []                # Standard Screen column aka y
   standard_screen_lines = []               # Standard Screen lines aka x
@@ -186,7 +186,7 @@ else
   
   
   # Define Actors, Items, Terrain, Bunkers and Beacons
-  scr_message("Loading Game Variables",3)
+  inhospitable.scr_message("Loading Game Variables",3)
   total_bunkers = ((game_window_lines * game_window_columns) / bunker_area_with_space)
   actors = []
   items = [42,102,109,298,358,365]
@@ -197,7 +197,7 @@ else
   
 
   # Game Loop Variables
-  scr_message("Setting Loop Variables",4)
+  inhospitable.scr_message("Setting Loop Variables",4)
   direction_steps = 0
   counter = 0   
   dice_roll = false
@@ -209,7 +209,7 @@ else
   
 
   # Create game windows, then generate the world
-  scr_message("Creating Game Windows",5)
+  inhospitable.scr_message("Creating Game Windows",5)
   game_window = Ncurses.newwin(game_window_lines, game_window_columns, 0, 0)
   viewport_window = Ncurses.derwin(game_window,viewport_window_lines, viewport_window_columns, 0, 0) # Must not exceed size of terminal or else crash
   console_window = Ncurses.newwin(console_window_lines, console_window_columns, viewport_window_lines, 0) 
@@ -217,7 +217,7 @@ else
   
 
   # Create Player Actor
-  scr_message("Generate Actors",6)
+  inhospitable.scr_message("Generate Actors",6)
   game_window_max_lines = []
   game_window_max_columns = []
   Ncurses.getmaxyx(game_window,game_window_max_columns,game_window_max_lines)   # Get Max Y,X of game_window
@@ -229,7 +229,7 @@ else
   #actors << monster
   
   
-  scr_message("Generating Map",7)
+  inhospitable.scr_message("Generating Map",7)
   generate_map(game_window,total_bunkers,all_items,all_beacons,all_bunkers,actors,seed)
   #generate_map(game_window,total_bunkers,all_items,all_beacons,all_bunkers,Characters.all_instances,seed)
 
@@ -238,7 +238,7 @@ else
   #actors.each { |actor| actor.draw(game_window)}  # Add all actors to the map
   Character.all_instances.each { |actor| actor.draw(game_window)}  # Add all actors to the map
 
-  save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers)
+  inhospitable.save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers)
   Ncurses.refresh
 end
 
@@ -271,7 +271,7 @@ while inhospitable.stateActive == 1 && player.hp > 0 && player.hunger > 0 && pla
     generate_snow(game_window) # what % of snow should be covered?
     message(console_window, "It's snowing...")
   end
-  time_increase(player.timeday)
+  inhospitable.time_increase(player.timeday)
   hud_on(hud_window,player)
   borders(console_window) 
   Ncurses.wrefresh(hud_window)
@@ -339,7 +339,7 @@ while inhospitable.stateActive == 1 && player.hp > 0 && player.hunger > 0 && pla
     when 27 # ESC - Main Menu 
       menu_active = 1
     when 101 # e - Save Game
-      save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers)
+      inhospitable.save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers)
       message(console_window, "Game saved!")
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break

@@ -35,4 +35,26 @@ class Videogame
 		    f.close
 		end
 	end
+
+	def time_increase(timed)  
+	  if timed[1] < 59 && timed[0] < 24
+	    timed[1] += 1
+	  elsif timed[0] == 23 && timed[1] == 59
+	    timed[0] == 0
+	    timed[1] == 0
+	  else
+	    timed[0] += 1
+	    timed[1] = 0
+	  end 
+	end
+
+	def scr_message(message,bars)
+	  loading = "[" + "=" * bars + " " * (7 - bars) + "]"
+	  Ncurses.mvwaddstr(stdscr, 2, 2, "Initializing Game")
+	  Ncurses.mvwaddstr(stdscr, 3, 3, "#{message}")
+	  Ncurses.mvwaddstr(stdscr, 4, 4, "#{loading}")
+	  Ncurses.refresh
+	  Ncurses.napms(0500)
+	  Ncurses.clear
+	end
 end
