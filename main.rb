@@ -4,11 +4,9 @@ require 'oj'
 require 'json'
 include Ncurses                                                                
 
-=begin
 inhospitableLog = File.open("inhospitableLog.txt", "w")
 inhospitableLog.puts "#{Time.now} - Game Launched"
 inhospitableLog.close
-=end
 
 #################################################################################
 # Initialize                                                                    #
@@ -189,6 +187,14 @@ else
 
   inhospitable.save_state(seed,total_bunkers,items,walkable,all_items,all_beacons,all_bunkers)
   Ncurses.refresh
+
+  inhospitableLog = File.open("inhospitableLog.txt", "w")
+  x = 0
+  all_items.each do |x|
+      inhospitableLog.puts "Item: #{x.name}"
+  end
+  inhospitableLog.close
+
 end
 
 menu_active = 0
