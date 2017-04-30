@@ -145,7 +145,7 @@ def borders(window)
     j += 1
   end
 end
-
+=begin
 def borders2(window)
   # Draws borders around the window
   i = 1
@@ -167,7 +167,7 @@ def borders2(window)
     j += 1
   end
 end
-
+=end
 def center(subwin,parent,p_rows,p_cols)
   rr = []   # Frame y Positions
   cc = []   # Frame x Positions
