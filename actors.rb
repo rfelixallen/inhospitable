@@ -38,7 +38,14 @@ class Actor
 end
 
 class Character < Actor
+  @@allCharacters = Array.new
+
   attr_accessor :hp, :symbcode, :hunger, :inventory, :timeday
+  
+  def self.all_instances
+    @@allCharacters
+  end
+
   def initialize(options = {})
     self.symb = options[:symb] || '@'
     self.symbcode = options[:symbcode] || 64 # Should be whatever the ascii code for symb is 
@@ -50,11 +57,18 @@ class Character < Actor
     self.hunger = options[:hunger] || 9
     self.inventory = options[:inventory] || {"Radio" => 1, "Food" => 0, "Medkit" => 0, "Token" => 0}
     self.timeday = options[:timeday] || [12,00]
+    @@allCharacters << self
   end
 end
 
 class Beacon < Actor  
+  @@allBeacons = Array.new
   attr_accessor :channel, :message, :active
+
+  def self.all_instances
+    @@allBeacons
+  end
+
   def initialize(options = {})        
     self.symb = options[:symb] || 'A'
     self.color = options[:color] || 2 # Green
@@ -63,11 +77,19 @@ class Beacon < Actor
     self.channel = options[:channel] || '1'
     self.message = options[:message] || "01234567890123456789"
     self.active = options[:active] || true
+    @@allBeacons << self
   end
 end
 
 class Item < Actor
+  @@allItems = Array.new
+
   attr_accessor :name, :type, :taken
+
+  def self.all_instances
+    @@allItems
+  end
+
   def initialize(options = {})
     self.symb = options[:symb]
     self.color = options[:color] || 2 # Green
@@ -75,20 +97,30 @@ class Item < Actor
     self.ycols = options[:ycols]    
     self.type = options[:type] # "Food", "Medkit"
     self.taken = options[:taken] || false    
+    @@allItems << self
   end
 end
 
+=begin
 class Tile < Actor
+  @@allTiles = Array.new
+
   attr_accessor :name, :symb, :code, :color, :blocked
+
+  def self.all_instances
+    @@allTiles
+  end
+
   def initialize(options = {})
     self.name = options[:name]
     self.symb = options[:symb]
     self.code = options[:code]
     self.color = options[:color] || 1
     self.blocked = options[:blocked] || true
+    @@allTiles << self
   end
 end
-
+=end
 def draw_to_map(window,actor) # Standalone method for drawing objects stored in a hash to the map.
   Ncurses.mvwaddstr(window, actor["xlines"], actor["ycols"], "#{actor["symb"]}")
 end
